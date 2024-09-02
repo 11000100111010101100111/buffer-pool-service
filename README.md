@@ -20,12 +20,12 @@
 
 &nbsp;&nbsp;前端先获取可视区域内所有城市的地理坐标，查询坐标后异步查询这些城市的天气并保存在reids里/同步到mysql，然后前端根据地理坐标懒加载查询对应的城市编号，再根据城市编号查询城市的天气，如果可视区域里面省/直辖市/省会城市数量大于5个，则只查询可视区域下的所有市级的天气，如果可视区域里地级市/市的数量小于50，则查询市/区/县的天气。查询每个地区天气前先判断redis是否有已经有这个城市的天气，如果有直接返回，如果没有，从数据库查询，如果有则异步更新redis并直接返回结果，否则去百度查询城市天气情况，查询结果异步保存到redis并设置3小时过期/保存到mysql，直接返回结果
 
-<h4 align="center">留给最后</h4>
+<h4 align="left">留给最后</h4>
 
 &nbsp;&nbsp;这意味着你可以提交任何代码，你觉得有意义的话，请把你的good idea和PR一起提交上来吧
 
-<h4 align="center">特别鸣谢</h4>
+<h4 align="left">特别鸣谢</h4>
 
 <div style="text-align: center;">
-  <img src="https://mapopen-website-wiki.cdn.bcebos.com/statics/%E5%AF%BC%E8%88%AA04%402x.png" alt="描述图片" style="width: 50px; height: 25px;" />
+  <img src="https://mapopen-website-wiki.cdn.bcebos.com/statics/%E5%AF%BC%E8%88%AA04%402x.png" alt="描述图片" style="width: 75px; height: 25px; padding: 5px;background-color: #fff;border-radius: 5px;" />
 </div>
