@@ -35,7 +35,7 @@
         <el-menu-item index="4" disabled>面向开发者</el-menu-item>
         <el-menu-item index="5" disabled>文档中心</el-menu-item>
         <el-menu-item index="6" disabled>实验室</el-menu-item>
-        <el-menu-item index="7" disabled>社区&共建</el-menu-item>
+        <el-menu-item index="7" @click="toGithub">社区&共建</el-menu-item>
         <el-menu-item index="8" disabled>意见&建议</el-menu-item>
         <el-menu-item index="9" disabled>Q&A</el-menu-item>
         <el-menu-item index="10"><a href="https://www.ele.me" target="_blank">关于我们</a></el-menu-item>
@@ -64,7 +64,6 @@
 
 <script>
     import BaiDuMap from '../views/wather/BaiDuMap.vue';
-    import {getToken}  from '@/utils/auth';
     import { getUserProfile } from "@/api/system/user";
     import store from "@/store";
 
@@ -90,6 +89,9 @@
         this.checkLoginStatus();
       },
       methods: {
+        toGithub() {
+          window.location.href = 'https://github.com/11000100111010101100111/SmallQuestionNotes'
+        },
         handleSelect(key, keyPath) {
           console.log(key, keyPath);
         },
@@ -99,7 +101,7 @@
         },
         checkLoginStatus() {
           // 检查用户是否登录，可以通过检查 token 或调用后端 API
-          const token = getToken();// 示例中从 localStorage 获取 token
+          const token = store.getters.token;// 示例中从 localStorage 获取 token
           console.log(token);
           if (token) {
             // 假设存在 token，则用户已登录，获取用户信息
