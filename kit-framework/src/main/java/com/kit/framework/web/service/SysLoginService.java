@@ -61,7 +61,7 @@ public class SysLoginService
      * @param uuid 唯一标识
      * @return 结果
      */
-    public String login(String username, String password, String code, String uuid)
+    public LoginInfo login(String username, String password, String code, String uuid)
     {
         // 验证码校验
         validateCaptcha(username, code, uuid);
@@ -97,7 +97,43 @@ public class SysLoginService
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         recordLoginInfo(loginUser.getUserId());
         // 生成token
-        return tokenService.createToken(loginUser);
+        SysUser user = loginUser.getUser();
+        LoginInfo loginInfo = new LoginInfo();
+        loginInfo.setAvatar(user.getAvatar());
+        loginInfo.setNickName(user.getNickName());
+        loginInfo.setToken(tokenService.createToken(loginUser));
+        return loginInfo;
+    }
+
+
+    public static class LoginInfo {
+        String token;
+        String avatar;
+        String nickName;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public String getNickName() {
+            return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
+        }
     }
 
     /**

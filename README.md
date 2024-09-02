@@ -26,6 +26,6 @@
 
 <h4 align="left">特别鸣谢</h4>
 
-<div style="text-align: center;">
-  <img src="https://mapopen-website-wiki.cdn.bcebos.com/statics/%E5%AF%BC%E8%88%AA04%402x.png" alt="描述图片" style="width: 75px; height: 25px; padding: 5px;background-color: #fff;border-radius: 5px;" />
+<div style="text-align: center;background-color: #fff;border-radius: 5px;padding: 5px;">
+  <img src="https://mapopen-website-wiki.cdn.bcebos.com/statics/%E5%AF%BC%E8%88%AA04%402x.png" alt="描述图片" style="width: 75px; height: 25px !important; padding: 5px !important;background-color: #fff !important;border-radius: 5px !important;" />
 </div>

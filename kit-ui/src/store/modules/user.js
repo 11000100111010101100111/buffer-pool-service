@@ -7,6 +7,7 @@ const user = {
     id: '',
     name: '',
     avatar: '',
+    nickName: '',
     roles: [],
     permissions: []
   },
@@ -24,6 +25,9 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
+    SET_NICK_NAME: (state, nickName) => {
+      state.nickName = nickName
+    },
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
@@ -35,14 +39,17 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      const password = userInfo.password
-      const code = userInfo.code
-      const uuid = userInfo.uuid
+      const username = userInfo.username.trim();
+      const password = userInfo.password;
+      const code = userInfo.code;
+      const uuid = userInfo.uuid;
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
-          setToken(res.token)
-          commit('SET_TOKEN', res.token)
+          setToken(res.token);
+          const avatar = (res.avatar == "" || res.avatar == null) ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + res.avatar;
+          commit('SET_TOKEN', res.token);
+          commit('SET_NICK_NAME', res.nickName);
+          commit('SET_AVATAR', avatar);
           resolve()
         }).catch(error => {
           reject(error)
@@ -64,6 +71,7 @@ const user = {
           }
           commit('SET_ID', user.userId)
           commit('SET_NAME', user.userName)
+          commit('SET_NICK_NAME', user.nickName)
           commit('SET_AVATAR', avatar)
           resolve(res)
         }).catch(error => {
@@ -79,6 +87,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
+          commit('SET_NICK_NAME', '')
           removeToken()
           resolve()
         }).catch(error => {
@@ -91,6 +100,7 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_NICK_NAME', '')
         removeToken()
         resolve()
       })
