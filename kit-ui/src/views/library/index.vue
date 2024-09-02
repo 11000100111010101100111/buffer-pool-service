@@ -61,6 +61,14 @@
           @click="handleImport"
           v-hasPermi="['library:file:import']"
         >导入题库</el-button>
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleSystemInfoImport"
+          v-hasPermi="['library:file:import']"
+        >导入系统信息</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -98,6 +106,7 @@
     />
 
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+      <el-input v-model="upload.tableName" placeholder="请系统表名称"/>
       <el-upload
         ref="upload"
         :limit="1"
@@ -213,6 +222,8 @@
         },
         // 用户导入参数
         upload: {
+          system: false,
+          tableName: '',
           // 是否显示弹出层（用户导入）
           open: false,
           // 弹出层标题（用户导入）
@@ -315,6 +326,14 @@
       handleImport() {
         this.upload.title = "题库导入";
         this.upload.open = true;
+        this.upload.system = true;
+        this.upload.url = process.env.VUE_APP_BASE_API + "/api/bank/upload"
+      },
+      handleSystemInfoImport() {
+        this.upload.title = "题库系统资源";
+        this.upload.open = true;
+        this.upload.system = true;
+        this.upload.url = process.env.VUE_APP_BASE_API + "/api/bank/upload/" + this.upload.tableName;
       },
       // 文件上传中处理
       handleFileUploadProgress(event, file, fileList) {

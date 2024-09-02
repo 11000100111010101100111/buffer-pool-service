@@ -22,6 +22,8 @@ public interface QuestionBankService {
      * */
     LibraryImportVo importLibrary(MultipartFile file, LoginUser user);
 
+    LibraryImportVo importSystemInfo(MultipartFile file, String tableName, LoginUser user);
+
     /**
      * 查询题库信息列表（分页）
      * */
