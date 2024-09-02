@@ -70,7 +70,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '天知道', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -84,10 +84,16 @@ export const constantRoutes = [
         path: 'profile',
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: { title: '天命人中心', icon: 'user' }
       }
     ]
-  }
+  },
+  {
+    path: '/home',
+    component: () => import('@/public/home'),
+    hidden: true,
+    meta: { requiresAuth: false }
+  },
 ]
 
 // 动态路由，基于用户权限动态去加载

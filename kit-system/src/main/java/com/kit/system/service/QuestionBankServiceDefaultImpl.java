@@ -71,6 +71,45 @@ public class QuestionBankServiceDefaultImpl implements QuestionBankService {
     }
 
     @Override
+    @Transactional
+    public LibraryImportVo importSystemInfo(MultipartFile file, String tableName, LoginUser user) {
+        try {
+            List<ReadResult> read = excelReader.read(file, user);
+            for (ReadResult result : read) {
+                List<String> names = Column.sql(result.getColumns()).stream()
+                        .filter(n -> !"create_time".equals(n.getName()) && !"update_time".equals(n.getName()))
+                        .map(Column::getName)
+                        .collect(Collectors.toList());
+                List<List<Object>> dataList = new ArrayList<>();
+                result.getCellData().forEach(data -> dataList.add(names.stream().map(data::get).collect(Collectors.toList())));
+
+                for (int i = names.size() - 1; i > 3; i--) {
+                    names.remove(i);
+                }
+                names.set(0, "code");
+                names.set(1, "name");
+                names.set(2, "day_name");
+                names.set(3, "night_name");
+                dataList.remove(0);
+                dataList.forEach(d ->{
+                    for (int i = d.size() - 1; i > 3; i--) {
+                        d.remove(i);
+                    }
+                });
+
+                if (!dataList.isEmpty()) {
+                    questionBankMapper.batchInsert(tableName, names, dataList);
+                }
+                break;
+            }
+            return new LibraryImportVo(read.stream().map(ReadResult::getTableName).collect(Collectors.toList()));
+        } catch (Exception e) {
+            //@todo log: can not read excel file
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<LibraryInfoVo> selectLibraryInfoList(LibraryInfo info) {
         List<LibraryInfoVo> result = Optional.ofNullable(libraryInfoMapper.selectLibraryInfoList(info))
                 .orElse(new ArrayList<>());

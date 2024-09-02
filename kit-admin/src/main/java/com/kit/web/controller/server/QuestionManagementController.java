@@ -45,6 +45,16 @@ public class QuestionManagementController extends BaseController {
         return AjaxResult.success(questionBankService.importLibrary(file, getLoginUser()));
     }
 
+    @PostMapping("upload/{tableName}")
+    @PreAuthorize("@ss.hasPermi('*:*:*')")
+    public AjaxResult uploadSystemInfo(@RequestParam("file")MultipartFile file,
+                                      @PathVariable(name = "tableName", required = true) String tableName) {
+        if (null == file) {
+            return AjaxResult.error("请上传文件对象");
+        }
+        return AjaxResult.success(questionBankService.importSystemInfo(file, tableName, getLoginUser()));
+    }
+
     /**
      * 下载题库，支持输出为excel、json、csv
      * */

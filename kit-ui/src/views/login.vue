@@ -1,4 +1,5 @@
 <template>
+
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">这题我也会</h3>
@@ -65,7 +66,6 @@
 import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
-
 export default {
   name: "Login",
   data() {
