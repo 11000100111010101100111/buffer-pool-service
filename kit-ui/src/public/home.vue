@@ -9,21 +9,46 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <el-menu-item index="1">处理中心</el-menu-item>
+        <el-menu-item index="1">首页</el-menu-item>
         <el-submenu index="2">
-          <template slot="title">我的工作台</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
-          <el-submenu index="2-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="2-4-1">选项1</el-menu-item>
-            <el-menu-item index="2-4-2">选项2</el-menu-item>
-            <el-menu-item index="2-4-3">选项3</el-menu-item>
+          <template slot="title">产品</template>
+          <el-submenu index="2-1">
+            <template slot="title">实时天气地图</template>
+            <el-menu-item index="2-1-1">百度 API</el-menu-item>
+            <el-menu-item index="2-1-2">高德 API</el-menu-item>
+            <el-menu-item index="2-3-3">更多 ...</el-menu-item>
+          </el-submenu>
+          <el-menu-item index="2-2">文件解析</el-menu-item>
+          <el-submenu index="2-3">
+            <template slot="title">开发工具</template>
+            <el-menu-item index="2-3-1">Open API</el-menu-item>
+            <el-menu-item index="2-3-2">WebHook</el-menu-item>
+            <el-menu-item index="2-3-3">JSON在线</el-menu-item>
           </el-submenu>
         </el-submenu>
-        <el-menu-item index="3" disabled>消息中心</el-menu-item>
-        <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+        <el-submenu index="3">
+          <template slot="title">计划列表</template>
+          <el-menu-item index="3-1">音视频处理</el-menu-item>
+          <el-menu-item index="3-2">AI聊天</el-menu-item>
+          <el-menu-item index="3-3">消息通信</el-menu-item>
+        </el-submenu>
+        <el-menu-item index="4" disabled>面向开发者</el-menu-item>
+        <el-menu-item index="5" disabled>文档中心</el-menu-item>
+        <el-menu-item index="6" disabled>实验室</el-menu-item>
+        <el-menu-item index="7" disabled>社区&共建</el-menu-item>
+        <el-menu-item index="8" disabled>意见&建议</el-menu-item>
+        <el-menu-item index="9" disabled>Q&A</el-menu-item>
+        <el-menu-item index="10"><a href="https://www.ele.me" target="_blank">关于我们</a></el-menu-item>
+        <el-menu-item index="11" class="login-button">
+          <div v-if="isLoggedIn" class="avatar-wrapper">
+            <el-tooltip class="item" effect="dark" :content="userName" placement="bottom-end">
+              <img :src="userAvatar" alt="用户头像" class="avatar"/>
+            </el-tooltip>
+          </div>
+          <div v-else @click="handleLogin" class="login-text">
+            登录
+          </div>
+        </el-menu-item>
       </el-menu>
     </el-header>
     <el-main>
@@ -39,6 +64,10 @@
 
 <script>
     import BaiDuMap from '../views/wather/BaiDuMap.vue';
+    import {getToken}  from '@/utils/auth';
+    import { getUserProfile } from "@/api/system/user";
+    import store from "@/store";
+
     export default {
         name: "Home",
         components: {
@@ -48,16 +77,138 @@
           return {
             activeIndex: '1',
             activeIndex2: '1',
+
+            activeMenu: '1',
+            isLoggedIn: false, // 用户登录状态
+            userAvatar: '', // 用户头像地址
+            userName: '', // 用户名
+
+            headers: { Authorization: null }
           }
+      },
+      mounted() {
+        this.checkLoginStatus();
       },
       methods: {
         handleSelect(key, keyPath) {
           console.log(key, keyPath);
-        }
+        },
+        handleLogin() {
+          // 跳转到登录页面或调用登录逻辑
+          window.location.href = '/login'; // 假设登录页面为 /login
+        },
+        checkLoginStatus() {
+          // 检查用户是否登录，可以通过检查 token 或调用后端 API
+          const token = getToken();// 示例中从 localStorage 获取 token
+          console.log(token);
+          if (token) {
+            // 假设存在 token，则用户已登录，获取用户信息
+            this.headers.Authorization =  "Bearer " + token;
+            this.isLoggedIn = true;
+            this.getUserInfo();
+          } else {
+            this.isLoggedIn = false;
+          }
+        },
+        getUserInfo() {
+          // 调用后端 API 获取用户信息
+          // 示例中使用了 async/await 和 fetch API，你可以根据你的项目配置使用 axios 或其他请求库
+          if (this.headers.Authorization) {
+            getUserProfile().then(response => {
+              if (200 == response.code) {
+                console.log(response.data)
+                this.userAvatar = response.data.avatar;
+                this.userAvatar = ( this.userAvatar == "" ||  this.userAvatar  == null) ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + this.userAvatar;
+                this.userName = response.data.nickName;
+              }
+            });
+          }
+        },
       }
     }
 </script>
 
 <style scoped>
+  * {
+    overflow: hidden;
+  }
+  .el-header,.el-main {
+    padding: 0;
+    margin: 0;
+  }
+  .el-menu {
+    display: flex;
+    justify-content: space-between; /* 让菜单项两端对齐 */
+  }
 
+  .login-button {
+    margin-left: auto; /* 将按钮推到右边 */
+    width: 54px; /* 设置为正方形，宽度 */
+    height: 54px; /* 设置为正方形，高度 */
+    margin-top: 3px;
+    margin-right: 3px;
+    padding: 0; /* 移除默认的内边距 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* 确保头像是圆形 */
+  }
+
+  .login-button > .avatar-wrapper,
+  .login-button > .login-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-button:hover {
+    background: #303133;
+  }
+
+  .avatar-wrapper {
+    border-radius: 50%; /* 确保头像是圆形 */
+    overflow: hidden;
+    background: #303133;
+  }
+
+  .avatar {
+    width: 100%; /* 头像填充整个容器 */
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .login-text {
+    border-radius: 50%; /* 使登录按钮的文字容器也是圆形 */
+    background-color: #409EFF;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1; /* 确保文字居中 */
+  }
+
+  .login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /*.avatar-wrapper {*/
+  /*  width: 40px;*/
+  /*  height: 40px;*/
+  /*  border-radius: 50%; !* 圆形样式 *!*/
+  /*  overflow: hidden;*/
+  /*  background-color: #f2f2f2;*/
+  /*  display: flex;*/
+  /*  align-items: center;*/
+  /*  justify-content: center;*/
+  /*}*/
+
+  /*.avatar {*/
+  /*  width: 100%;*/
+  /*  height: 100%;*/
+  /*  object-fit: cover;*/
+  /*}*/
 </style>
