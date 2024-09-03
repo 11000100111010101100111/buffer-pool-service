@@ -22,3 +22,10 @@ export function queryWeatherPicPath() {
     method: 'get'
   })
 }
+
+export function queryCityWeather(adCode) {
+  return request({
+    url: "/map/weather/" + adCode,
+    method: 'get'
+  })
+}

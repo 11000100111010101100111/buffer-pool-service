@@ -15,6 +15,7 @@ import java.net.URLConnection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
@@ -25,6 +26,36 @@ public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
     public static final String URL1 = "https://api.map.baidu.com/api_region_search/v1/?";
     public static final String URL2 = "https://api.map.baidu.com/reverse_geocoding/v3?";
     public static final String URL3 = "https://api.map.baidu.com/weather/v1/?";
+
+    private static final AtomicInteger countDownLatch = new AtomicInteger(25);
+
+    private void lock() {
+        while (true) {
+            if (countDownLatch.get() > 0) {
+                synchronized (countDownLatch) {
+                    if (countDownLatch.get() > 0) {
+                        countDownLatch.decrementAndGet();
+                        break;
+                    }
+                }
+            }
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+                //do nothing
+            }
+        }
+    }
+
+    private void unlock() {
+        if (countDownLatch.get() < 30) {
+            synchronized (countDownLatch) {
+                if (countDownLatch.get() < 30) {
+                    countDownLatch.addAndGet(1);
+                }
+            }
+        }
+    }
 
     public BaiDuWeatherResult.Result query(String adCode) throws Exception {
 
@@ -99,19 +130,24 @@ public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
                 .append("&"));
         queryString.deleteCharAt(queryString.length() - 1);
 
-        URL url = new URL(queryString.toString());
-        URLConnection httpConnection = url.openConnection();
-        httpConnection.connect();
+        try {
+            lock();
+            URL url = new URL(queryString.toString());
+            URLConnection httpConnection = url.openConnection();
+            httpConnection.connect();
 
-        try (InputStreamReader isr = new InputStreamReader(httpConnection.getInputStream());
-             BufferedReader reader = new BufferedReader(isr)) {
-            StringBuilder buffer = new StringBuilder();
-            String line;
-            while (null != (line = reader.readLine())) {
-                buffer.append(line);
+            try (InputStreamReader isr = new InputStreamReader(httpConnection.getInputStream());
+                 BufferedReader reader = new BufferedReader(isr)) {
+                StringBuilder buffer = new StringBuilder();
+                String line;
+                while (null != (line = reader.readLine())) {
+                    buffer.append(line);
+                }
+                //show(buffer.toString());
+                return buffer.toString();
             }
-            //show(buffer.toString());
-            return buffer.toString();
+        } finally {
+            unlock();
         }
     }
 

@@ -27,19 +27,22 @@
           </el-submenu>
         </el-submenu>
         <el-submenu index="3">
-          <template slot="title">计划列表</template>
+          <template slot="title">计划</template>
           <el-menu-item index="3-1">音视频处理</el-menu-item>
           <el-menu-item index="3-2">AI聊天</el-menu-item>
           <el-menu-item index="3-3">消息通信</el-menu-item>
         </el-submenu>
-        <el-menu-item index="4" disabled>面向开发者</el-menu-item>
-        <el-menu-item index="5" disabled>文档中心</el-menu-item>
-        <el-menu-item index="6" disabled>实验室</el-menu-item>
-        <el-menu-item index="7" @click="toGithub">社区&共建</el-menu-item>
-        <el-menu-item index="8" disabled>意见&建议</el-menu-item>
-        <el-menu-item index="9" disabled>Q&A</el-menu-item>
-        <el-menu-item index="10"><a href="https://www.ele.me" target="_blank">关于我们</a></el-menu-item>
-        <el-menu-item index="11" class="login-button">
+        <el-submenu index="4">
+          <template slot="title">开发人员</template>
+          <el-menu-item index="4-1">面向开发者</el-menu-item>
+          <el-menu-item index="4-2">文档中心</el-menu-item>
+          <el-menu-item index="4-3">实验室</el-menu-item>
+          <el-menu-item index="4-4" @click="toGithub">社区&共建</el-menu-item>
+          <el-menu-item index="4-5" disabled>意见&建议</el-menu-item>
+          <el-menu-item index="4-6" disabled>Q&A</el-menu-item>
+          <el-menu-item index="4-7"><a href="https://www.ele.me" target="_blank">关于我们</a></el-menu-item>
+        </el-submenu>
+        <el-menu-item index="5" class="login-button">
           <div v-if="isLoggedIn" class="avatar-wrapper">
             <el-tooltip class="item" effect="dark" :content="userName" placement="bottom-end">
               <img :src="userAvatar" alt="用户头像" class="avatar"/>
@@ -51,13 +54,9 @@
         </el-menu-item>
       </el-menu>
     </el-header>
-    <el-main>
-      <BaiDuMap :is-public="true"/>
+    <el-main style="padding: 0; overflow: hidden;">
+      <BaiDuMap :is-public="true" class="bai-du-map"/>
     </el-main>
-    <el-footer>
-
-
-    </el-footer>
   </el-container>
 
 </template>
@@ -102,7 +101,6 @@
         checkLoginStatus() {
           // 检查用户是否登录，可以通过检查 token 或调用后端 API
           const token = store.getters.token;// 示例中从 localStorage 获取 token
-          console.log(token);
           if (token) {
             // 假设存在 token，则用户已登录，获取用户信息
             this.headers.Authorization =  "Bearer " + token;
@@ -213,4 +211,16 @@
   /*  height: 100%;*/
   /*  object-fit: cover;*/
   /*}*/
+  /* 将 el-header 固定在顶部 */
+  /*.el-header{*/
+  /*  position: fixed;*/
+  /*  top: 0;*/
+  /*  left: 0;*/
+  /*  width: 100%;*/
+  /*  z-index: 1000; !* 确保 header 处于最上层 *!*/
+  /*}*/
+  .bai-du-map {
+    width: 100%;       /* 宽度占满父容器 */
+    height: calc(100vh - 60px); /* 高度为可视区高度减去 header 的高度 */
+  }
 </style>
