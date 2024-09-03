@@ -2,6 +2,7 @@ package com.kit.system.service.weather;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
+import com.kit.common.core.domain.model.LoginUser;
 import com.kit.system.domain.weather.baidu.emun.CityType;
 import com.kit.system.domain.weather.baidu.entity.CityInfo;
 import com.kit.system.domain.weather.baidu.param.QueryCityLocationParam;
@@ -10,7 +11,6 @@ import com.kit.system.domain.weather.baidu.vo.WeatherInfoVo;
 import com.kit.system.mapper.BaiDuWeatherMapper;
 import io.kit.map.baidu.BaiDuWeatherAPI;
 import io.kit.map.baidu.vo.BaiDuWeatherResult;
-import io.kit.map.baidu.vo.WeatherType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,27 +53,26 @@ public class BaiDuWeatherService {
     @Resource(name = "redisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
-    private static final AtomicInteger countDownLatch = new AtomicInteger(25);
-
     public List<CityInfo> queryCityLocation(QueryCityLocationParam param) {
         QueryCityLocationCountVo queryCityLocationCountVo = baiDuWeatherMapper.queryCityLocationCount(param);
         if (null == queryCityLocationCountVo) return new ArrayList<>();
-        List<String> queryTypes = null;
+        List<String> queryTypes = new ArrayList<>();
         ////省0（直辖市1），省会2，市3，县4（区5）
-        if (queryCityLocationCountVo.getProvinceCount() > 5) {
-            if (queryCityLocationCountVo.getCityCount() > 50) {
-                queryTypes = new ArrayList<>();
-                if (queryCityLocationCountVo.getCountyCount() <= 500) {
-                    queryTypes.add(CityType.COUNTRY.getType());
-                    queryTypes.add(CityType.DISTRICT.getType());
-                } else {
-                    queryTypes.add(CityType.PROVINCE.getType());
-                    queryTypes.add(CityType.MUNICIPALITY.getType());
-                    queryTypes.add(CityType.PROVINCIAL_CAPITAL.getType());
-                    queryTypes.add(CityType.CITY.getType());
-                }
+        if (queryCityLocationCountVo.getCountyCount() >= 100)  {
+            if (queryCityLocationCountVo.getCityCount() > 100) {
+                queryTypes.add(CityType.PROVINCE.getType());
+                queryTypes.add(CityType.MUNICIPALITY.getType());
+                queryTypes.add(CityType.PROVINCIAL_CAPITAL.getType());
+            } else {
+                queryTypes.add(CityType.COUNTRY.getType());
+                queryTypes.add(CityType.DISTRICT.getType());
+                queryTypes.add(CityType.CITY.getType());
             }
+        } else {
+            queryTypes.add(CityType.COUNTRY.getType());
+            queryTypes.add(CityType.DISTRICT.getType());
         }
+
         param.setQueryTypes(queryTypes);
         List<CityInfo> cityInfos = baiDuWeatherMapper.cityLocationInfo(param);
         findAndSaveWeatherAsync(cityInfos.stream().map(CityInfo::getAdCode).collect(Collectors.toSet()));
@@ -95,13 +95,7 @@ public class BaiDuWeatherService {
 
                 //查询天气
                 try {
-                    BaiDuWeatherResult.Result result;
-                    try {
-                        lock();
-                        result = weatherAPI.query(adCode);
-                    } finally {
-                        unlock();
-                    }
+                    BaiDuWeatherResult.Result result = weatherAPI.query(adCode);
                     update(redisKey, result);
                 } catch (Exception e) {
                     log.warn(e.getMessage());
@@ -110,43 +104,15 @@ public class BaiDuWeatherService {
         );
     }
 
-    private void lock() {
-        while (true) {
-            if (countDownLatch.get() > 0) {
-                synchronized (countDownLatch) {
-                    if (countDownLatch.get() > 0) {
-                        countDownLatch.decrementAndGet();
-                        break;
-                    }
-                }
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                //do nothing
-            }
-        }
-    }
-
-    private void unlock() {
-        if (countDownLatch.get() < 30) {
-            synchronized (countDownLatch) {
-                if (countDownLatch.get() < 30) {
-                    countDownLatch.addAndGet(1);
-                }
-            }
-        }
-    }
-
     private String genericRedisKey(String adCode) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        return String.format("%s_%s", adCode, dateFormat.format(new Date()));
+        return String.format("weather_city_%s_%s", adCode, dateFormat.format(new Date()));
     }
 
     private void update(String redisKey, BaiDuWeatherResult.Result result) {
         if (Objects.isNull(result)) return;
         //保存当前天气到redis，有效期6小时
-        redisTemplate.opsForValue().set(redisKey, result.getNow(), this.expire, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(redisKey, result, this.expire, TimeUnit.HOURS);
         //@todo 保存完整信息到mysql
         WeatherInfoVo weatherInfoVo = WeatherInfoVo.create()
                 .withForecasts(result.getForecasts())
@@ -163,43 +129,49 @@ public class BaiDuWeatherService {
     }
 
     public BaiDuWeatherResult.Now findSimple(String adCode) {
+        return (BaiDuWeatherResult.Now) find(adCode, true);
+    }
+
+    public BaiDuWeatherResult.AbstractResult find(String adCode, boolean simple) {
         //先在redis查，查到了返回
         final String redisKey = genericRedisKey(adCode);
         Object o = redisTemplate.opsForValue().get(redisKey);
         if (o instanceof Map) {
-            return JSONUtil.toBean(JSONUtil.toJsonStr(o),  BaiDuWeatherResult.Now.class);
+            BaiDuWeatherResult.Result result = JSONUtil.toBean(JSONUtil.toJsonStr(o), BaiDuWeatherResult.Result.class);
+            return simple ? result.getNow() : result;
         }
 
         //@todo 去数据库查，查到了更新到redis后返回
 
 
         //使用api查，异步更新到redis和MySQL，返回
-        CompletableFuture<BaiDuWeatherResult.Now> supplyAsync = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<BaiDuWeatherResult.Result> supplyAsync = CompletableFuture.supplyAsync(() -> {
             try {
-                lock();
                 BaiDuWeatherResult.Result query = weatherAPI.query(adCode);
-                if (Objects.nonNull(query)) return query.getNow();
+                if (Objects.nonNull(query)) {
+                    withIconPath(query);
+                    return query;
+                }
             } catch (Exception e) {
                 log.warn(e.getMessage());
-            } finally {
-                unlock();
             }
             return null;
         }, weatherQueryExecutor);
         try {
-            BaiDuWeatherResult.Now now = supplyAsync.get();
-            Optional.ofNullable(now).ifPresent(n -> {
+            BaiDuWeatherResult.Result result = supplyAsync.get();
+            Optional.ofNullable(result).ifPresent(n -> {
                 supplyAsync.thenAcceptAsync(action -> {
                     try {
-                        BaiDuWeatherResult.Result result = weatherAPI.query(adCode);
-                        if (Objects.isNull(result)) return;
-                        update(redisKey, result);
+                        BaiDuWeatherResult.Result r = weatherAPI.query(adCode);
+                        if (Objects.isNull(r)) return;
+                        withIconPath(r);
+                        update(redisKey, r);
                     } catch (Exception e) {
                         log.warn(e.getMessage());
                     }
                 });
             });
-            return now;
+            return simple ? result.getNow() : result;
         } catch (Exception e) {
             log.warn(e.getMessage());
             return null;
@@ -225,5 +197,23 @@ public class BaiDuWeatherService {
         if (CollectionUtil.isEmpty(weatherPicPath)) return mapping;
         weatherPicPath.stream().filter(Objects::nonNull).forEach(e -> mapping.put(e.get("code"), e.get("path")));
         return mapping;
+    }
+
+    public BaiDuWeatherResult.AbstractResult findMore(String adCode) {
+        return find(adCode, false);
+    }
+
+    public void withIconPath(BaiDuWeatherResult.AbstractResult result) {
+        if (Objects.isNull(result)) return;
+        Set<String> codes = new HashSet<>();
+        result.collectCodes(codes);
+        if (codes.isEmpty()) return;
+        String[] codeArr = new String[codes.size()];
+        String[] array = codes.toArray(codeArr);
+        List<Map<String, String>> pathByCodes = baiDuWeatherMapper.getWeatherPicPathByCodes(array);
+        if (CollectionUtil.isEmpty(pathByCodes)) return;
+        Map<String, String> mapping = new HashMap<>();
+        pathByCodes.stream().filter(Objects::nonNull).forEach(e -> mapping.put(e.get("code"), e.get("path")));
+        result.withUrl(mapping);
     }
 }

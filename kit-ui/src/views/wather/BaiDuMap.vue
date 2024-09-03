@@ -1,38 +1,44 @@
 <template>
-  <div id="map-card" ref="mapCard">
-    <baidu-map id="map"
-               :center="{lng: 113.89, lat: 22.555}"
-               @click="handleMapClick"
-               :scroll-wheel-zoom="true"
-               @zoomend="handleZoomEnd"
-               @ready="initializeMarker"
-               :zoom="initialZoom"></baidu-map>
-    <el-menu default-active="1-4-1"
-             class="el-menu-vertical-demo floating-menu"
-             :hidden="isPublic"
-             :collapse="true">
-      <el-submenu index="1">
-        <el-menu-item index="1" :disabled="!topPic.simple">
-          <i class="el-icon-menu"></i>
-          <span slot="title">简约图层</span>
-        </el-menu-item>
-        <el-menu-item index="2" :disabled="!topPic.realtime">
-          <i class="el-icon-document"></i>
-          <span slot="title">实时图层</span>
-        </el-menu-item>
-        <el-menu-item index="3">
-          <i class="el-icon-setting"></i>
-          <span slot="title">关闭天气图层</span>
-        </el-menu-item>
-      </el-submenu>
-    </el-menu>
-  </div>
+  <el-container>
+    <el-main>
+      <div id="map-card" ref="mapCard">
+        <baidu-map id="map"
+                   :center="{lng: 113.89, lat: 22.555}"
+                   @click="handleMapClick"
+                   :scroll-wheel-zoom="true"
+                   :dragging="true"
+                   :keyboard="true"
+                   :double-click-zoom="true"
+                   @zoomend="handleZoomEnd"
+                   @ready="initializeMarker"
+                   :zoom="initialZoom"></baidu-map>
+      </div>
+    </el-main>
+    <el-footer class="map-footer" v-show="showCityWeather">
+      <el-drawer
+        :title="cityName"
+        :show-close="false"
+        :with-header="false"
+        :visible.sync="showCityWeather"
+        style="opacity: 0.95;"
+        size="50%"
+        direction="btt">
+        <weather-group
+          :weather="weather"/>
+      </el-drawer>
+
+    </el-footer>
+  </el-container>
+
+
 </template>
 
 <script>
-  import { queryCityLocation, querySimpleWeather,queryWeatherPicPath } from "@/api/weather/cityLocation";
+  import { queryCityLocation, querySimpleWeather,queryCityWeather } from "@/api/weather/cityLocation";
+  import WeatherGroup from "./WeatherGroup";
 
   export default {
+    components: {WeatherGroup},
     props: {
       isPublic: {
         type: Boolean,
@@ -58,30 +64,32 @@
         points: [], // 所有点的列表
         visibleMarkers: [], // 可视区域内的标记
         sampleWeather: {},
-        weatherMapping: null
+
+        lastZooms: [12],
+        hasChangeZoom: false,
+        cacheMarkId:[],
+
+        showCityWeather: false,
+
+        weather: {},
+        cityName: "深圳"
       };
     },
     mounted() {
-      this.initWeatherMapping();
+      // let zoomLevel = window.innerWidth < 768 ? 12 : 15;  // 根据屏幕宽度调整缩放级别
+      // let point = this.map.getCenter();
+      // window.addEventListener('resize', function() {
+      //   map.centerAndZoom(point, 15);  // 重新调整地图中心和缩放级别
+      // });
+      // this.map.centerAndZoom(point, zoomLevel);
     },
     methods: {
       handleMapClick(e) {
         //let pt = e.point;
         //this.$message("经度: (" + pt.lon + "), 纬度: (" + pt.lat + ")");
       },
-      initWeatherMapping() {
-        queryWeatherPicPath().then(res => {
-          if (200 == res.code) {
-            this.weatherMapping = res.data;
-          }
-        })
-      },
-      createIcon(size, weatherInfo) {
-        if (!weatherInfo) return null;
-        if (!weatherInfo.text) return null;
-        if (null == this.weatherMapping) this.initWeatherMapping();
-        let iconPath = this.weatherMapping[weatherInfo.textCode];
-        console.log(iconPath);
+      createIcon(size, point) {
+        let iconPath = this.sampleWeather[point.adCode].weatherIcon;
         return new BMap.Icon(iconPath, new BMap.Size(size, size), {
           imageSize: new BMap.Size(size, size),
           anchor: new BMap.Size(size / 2, size), // 锚点设置为图标底部中心
@@ -90,8 +98,7 @@
       initializeMarker({ BMap, map }) {
         this.map = map; // 保存地图实例
         this.loadVisibleMarkers(); // 加载可视区域的标记
-        this.map.addEventListener("zoomend", this.loadVisibleMarkers); // 监听缩放事件
-        this.map.addEventListener("moveend", this.loadVisibleMarkers); // 监听移动事件
+        this.map.addEventListener("moveend", this.movedMap); // 监听移动事件
       },
       getBounds() {
         const bounds = this.map.getBounds(); // 获取当前可视区域
@@ -107,73 +114,100 @@
           "lonMax":lonMax
         };
       },
+      movedMap() {
+        this.hasChangeZoom = false;
+        this.loadVisibleMarkers();
+      },
       // 加载可视区域的标记
       loadVisibleMarkers() {
         if (!this.map) return;
-        // 清除之前的标记
+
         this.clearMarkers();
         const bounds = this.map.getBounds(); // 获取当前可视区域
+        this.lastZooms.push(this.map.getZoom());
         if (!bounds) return;
 
         let latMin = bounds.$d;
         let latMax = bounds.Yd;
         let lonMin = bounds.Ne;
         let lonMax = bounds.Je;
+
         queryCityLocation({
           "latMin":latMin,
           "latMax":latMax,
           "lonMin":lonMin,
           "lonMax":lonMax
         }).then(res => {
-          if (res.code == '200') {
-            this.points = res.data;
-          } else {
-            this.points = [{ lon: 113.89, lat: 22.555, adCode:"" }]
+          if (res.code == 200) {
+            res.data.forEach(item => this.points.push(item));
+
+            if (this.points.length <= 0) {
+              this.points.push({lon: 113.89, lat: 22.555, adCode: "440305"});
+            }
+
+            querySimpleWeather({adCode: this.points.map(item => item.adCode).join(','), split: ','})
+              .then(response => {
+                if (response.code === 200) {
+                  this.sampleWeather = response.data;
+
+                  this.visibleMarkers = this.points.filter((point) => {
+                    return point.lon <= lonMax && point.lon >= lonMin && point.lat <= latMax && point.lat >= latMin && !this.cacheMarkId.includes(point.adCode);
+                  });
+
+                  // 添加可视区域内的标记
+                  if (Array.isArray(this.visibleMarkers)) {
+                    const currentZoom = this.map.getZoom(); // 使用保存的地图实例
+                    const newSize = (currentZoom === this.initialZoom) ?
+                      this.initialIconSize
+                      : this.initialIconSize * (currentZoom / this.initialZoom);
+
+                    this.visibleMarkers.forEach((point) => {
+                      if (!this.sampleWeather[point.adCode]) return;
+                      let icon = this.createIcon(newSize, point);
+                      if (!icon) return;
+                      const marker = new BMap.Marker(new BMap.Point(point.lon, point.lat), {
+                        icon: icon,
+                      });
+                      // 为标注添加点击事件
+
+                      var self = this;
+                      marker.addEventListener('click', () => {
+                        queryCityWeather(point.adCode).then(rsk => {
+                          if (200 === rsk.code) {
+                            self.showCityWeather = true;
+                            self.weather = rsk.data;
+                            self.cityName = self.weather.location.name;
+                          }
+                        })
+                      });
+
+                      this.map.addOverlay(marker);
+                      this.markers.push(marker);
+                      this.cacheMarkId.push(point.adCode);
+                    });
+                  }
+                }
+              });
           }
         });
-
-        if (this.points.length > 0) {
-          querySimpleWeather({adCode: this.points.map(item => item.adCode).join(','), split: ','})
-            .then(response => {
-              if (response.code == '200') {
-                this.sampleWeather = response.data;
-              }
-            })
-        }
-
-
-        this.visibleMarkers = this.points.filter((point) => {
-          return point.lon <= lonMax && point.lon >= lonMin && point.lat <= latMax && point.lat >= latMin;
-        });
-        // 添加可视区域内的标记
-        if (Array.isArray(this.visibleMarkers)) {
-          const currentZoom = this.map.getZoom(); // 使用保存的地图实例
-          const newSize = (currentZoom === this.initialZoom) ?
-            this.initialIconSize
-            : this.initialIconSize * (currentZoom / this.initialZoom);
-
-          this.visibleMarkers.forEach((point) => {
-            let icon = this.createIcon(newSize, this.sampleWeather[point.adCode]);
-            if (!icon) return;
-            const marker = new BMap.Marker(new BMap.Point(point.lon, point.lat), {
-              icon: icon,
-            });
-            this.map.addOverlay(marker);
-            this.markers.push(marker);
-          });
-        }
       },
       // 清除之前的标记
       clearMarkers() {
-        if (Array.isArray(this.markers)) {
-          this.markers.forEach((marker) => {
-            this.map.removeOverlay(marker);
-          });
+        if (this.hasChangeZoom) {
+          if (Array.isArray(this.markers)) {
+            this.markers.forEach((marker) => {
+              this.map.removeOverlay(marker);
+            });
+          }
+          this.markers = []; // 清空标记数组
+          this.cacheMarkId = [];
+          this.lastZooms = [];
         }
-        this.markers = []; // 清空标记数组
+        this.points = [];
       },
       // 处理缩放事件
       handleZoomEnd() {
+        this.hasChangeZoom = true;
         // 重新加载可视区域的标记以更新图标大小
         this.loadVisibleMarkers();
       },
@@ -182,6 +216,10 @@
 </script>
 
 <style scoped>
+  *{
+    padding: 0;
+    margin: 0;
+  }
   #map {
     width: 100%;
     height: 100vh;
@@ -193,6 +231,7 @@
 
   #map-card {
     padding: 0;
+    margin: 0;
   }
   .el-popover {
     position: absolute;

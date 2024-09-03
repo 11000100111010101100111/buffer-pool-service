@@ -43,4 +43,11 @@
     <select id="getWeatherPicPath" parameterType="java.util.Set" resultType="java.util.Map">
         select code, path from weather_type_pic_mapping where `delete` = '0'
     </select>
+    <select id="getWeatherPicPathByCodes" parameterType="java.lang.String" resultType="java.util.Map">
+        select code, path from weather_type_pic_mapping where `delete` = '0' AND code in (
+            <foreach collection="array" item="item" separator=",">
+                ${item}
+            </foreach>
+        )
+    </select>
 </mapper>

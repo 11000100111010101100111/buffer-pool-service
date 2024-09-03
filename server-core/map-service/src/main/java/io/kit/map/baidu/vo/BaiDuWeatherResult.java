@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Data
 public class BaiDuWeatherResult {
@@ -14,11 +18,40 @@ public class BaiDuWeatherResult {
     private String message;
     int status;
 
+    public static abstract class AbstractResult implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        public abstract void collectCodes(Set<String> codes);
+
+        public abstract void withUrl(Map<String, String> urlMap);
+    }
+
     @Data
-    public static class Result {
+    public static class Result extends AbstractResult implements Serializable {
+        private static final long serialVersionUID = 1L;
         private Now now;
         private Location location;
         private List<Forecast> forecasts;
+        protected String weatherIcon;
+
+        @Override
+        public void collectCodes(Set<String> codes) {
+            Optional.ofNullable(now).ifPresent(n -> n.collectCodes(codes));
+            Optional.ofNullable(forecasts).ifPresent(f -> f.forEach(item -> item.collectCodes(codes)));
+        }
+
+        @Override
+        public void withUrl(Map<String, String> urlMap) {
+            Optional.ofNullable(now).ifPresent(n -> n.withUrl(urlMap));
+            Optional.ofNullable(forecasts).ifPresent(f -> f.forEach(item -> item.withUrl(urlMap)));
+        }
+        public String getWeatherIcon() {
+            return weatherIcon;
+        }
+
+        public void setWeatherIcon(String weatherIcon) {
+            this.weatherIcon = weatherIcon;
+        }
     }
 
     public boolean succeed() {
@@ -26,7 +59,7 @@ public class BaiDuWeatherResult {
     }
 
     @Data
-    public static class Now implements Serializable {
+    public static class Now extends AbstractResult implements Serializable {
         private static final long serialVersionUID = 1L;
         private int temp;
         private int rh;
@@ -39,7 +72,15 @@ public class BaiDuWeatherResult {
         @JsonProperty("feelsLike")
         private int feelsLikes;
         private String uptime;
+        protected String weatherIcon;
 
+        public String getWeatherIcon() {
+            return weatherIcon;
+        }
+
+        public void setWeatherIcon(String weatherIcon) {
+            this.weatherIcon = weatherIcon;
+        }
         public void setText(String text) {
             this.text = text;
             this.textCode = WeatherType.code(text);
@@ -48,10 +89,23 @@ public class BaiDuWeatherResult {
         public void setTextCode(String textCode) {
             //do nothing
         }
+
+        @Override
+        public void collectCodes(Set<String> codes) {
+            Optional.ofNullable(textCode).ifPresent(codes::add);
+        }
+
+        @Override
+        public void withUrl(Map<String, String> urlMap) {
+            Optional.ofNullable(textCode).ifPresent(code -> this.setWeatherIcon(urlMap.get(code)));
+        }
+
+
     }
 
     @Data
-    public static class Location {
+    public static class Location implements Serializable {
+        private static final long serialVersionUID = 1L;
         private String country;
         private String province;
         private String city;
@@ -60,7 +114,8 @@ public class BaiDuWeatherResult {
     }
 
     @Data
-    public static class Forecast {
+    public static class Forecast extends AbstractResult implements Serializable {
+        private static final long serialVersionUID = 1L;
         @JsonProperty("wd_night")
         private String wdNight;
         private String date;
@@ -80,6 +135,10 @@ public class BaiDuWeatherResult {
         @JsonProperty("wc_day")
         private String wcDay;
 
+        private String weatherDayIcon;
+        private String weatherNightIcon;
+
+
         public void setTextNight(String textNight) {
             this.textNight = textNight;
             this.textNightCode = WeatherType.code(textNight);
@@ -96,6 +155,26 @@ public class BaiDuWeatherResult {
 
         public void setTextDayCode(String textDayCode) {
             //do nothing
+        }
+
+        @Override
+        public void collectCodes(Set<String> codes) {
+            if (Objects.isNull(weatherDayIcon)) {
+                Optional.ofNullable(textDayCode).ifPresent(codes::add);
+            }
+            if (Objects.isNull(weatherNightIcon)) {
+                Optional.ofNullable(textNightCode).ifPresent(codes::add);
+            }
+        }
+
+        @Override
+        public void withUrl(Map<String, String> urlMap) {
+            if (Objects.isNull(weatherDayIcon)) {
+                Optional.ofNullable(textDayCode).ifPresent(code -> this.setWeatherDayIcon(urlMap.get(code)));
+            }
+            if (Objects.isNull(weatherNightIcon)) {
+                Optional.ofNullable(textNightCode).ifPresent(code -> this.setWeatherNightIcon(urlMap.get(code)));
+            }
         }
     }
 }

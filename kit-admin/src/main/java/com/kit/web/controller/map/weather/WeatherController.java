@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,22 @@ public class WeatherController extends BaseController {
     public R<Map<String, BaiDuWeatherResult.Now>> get(@RequestParam(name = "split", required = false) String split,
                                                       @RequestParam(name = "adCode", required = false) String adCode) {
         try {
-            return R.ok(baiDuWeatherService.findSimple(Stream.of(adCode.split(Optional.ofNullable(split).orElse(","))).collect(Collectors.toSet())));
+            Map<String, BaiDuWeatherResult.Now> simple = baiDuWeatherService.findSimple(Stream.of(adCode.split(Optional.ofNullable(split).orElse(","))).collect(Collectors.toSet()));
+            simple.forEach((k,s) -> baiDuWeatherService.withIconPath(s));
+            return R.ok(simple);
+        } catch (Exception e) {
+            return R.fail(e.getMessage());
+        }
+    }
+
+    @ApiOperation("根据adCode查询城市天气, 日查询限额5000, 默认英文逗号分割")
+    @GetMapping("/{adCode}")
+    public R<BaiDuWeatherResult.AbstractResult> getCityInfoByAdCode(
+                                                      @PathVariable(name = "adCode", required = false) String adCode) {
+        try {
+            BaiDuWeatherResult.AbstractResult more = baiDuWeatherService.findMore(adCode);
+            baiDuWeatherService.withIconPath(more);
+            return R.ok(more);
         } catch (Exception e) {
             return R.fail(e.getMessage());
         }
