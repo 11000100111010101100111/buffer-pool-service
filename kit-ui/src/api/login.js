@@ -58,3 +58,15 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+// 获取邮箱验证码
+export function getEmailCode(email) {
+  return request({
+    url: '/emailCode?email=' + email,
+    headers: {
+      isToken: false
+    },
+    method: 'get',
+    timeout: 20000
+  })
+}

@@ -94,6 +94,18 @@ export const constantRoutes = [
     hidden: true,
     meta: { requiresAuth: false }
   },
+  {
+    path: '/blog',
+    component: () => import('@/public/blog'),
+    hidden: true,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/weather-baidu',
+    component: () => import('@/public/BaiDuApiMap'),
+    hidden: true,
+    meta: { requiresAuth: false }
+  },
 ]
 
 // 动态路由，基于用户权限动态去加载

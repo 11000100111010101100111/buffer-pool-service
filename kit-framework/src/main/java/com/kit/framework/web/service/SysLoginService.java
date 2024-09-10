@@ -35,8 +35,7 @@ import com.kit.system.service.ISysUserService;
  * @author xiao
  */
 @Component
-public class SysLoginService
-{
+public class SysLoginService {
     @Autowired
     private TokenService tokenService;
 

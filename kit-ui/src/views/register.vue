@@ -1,9 +1,9 @@
 <template>
   <div class="register">
     <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form">
-      <h3 class="title">这题我也会~</h3>
+      <h3 class="title unable-select-element">注册</h3>
       <el-form-item prop="username">
-        <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="账号">
+        <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="您的电子邮箱，例如：xxx@xxx.xxx">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
@@ -12,7 +12,7 @@
           v-model="registerForm.password"
           type="password"
           auto-complete="off"
-          placeholder="密码"
+          placeholder="密码，必须包含大小写字母、数字、特殊字符"
           @keyup.enter.native="handleRegister"
         >
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
@@ -33,14 +33,15 @@
         <el-input
           v-model="registerForm.code"
           auto-complete="off"
-          placeholder="验证码"
+          placeholder="6位数字组成的验证码"
           style="width: 63%"
           @keyup.enter.native="handleRegister"
         >
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
         <div class="register-code">
-          <img :src="codeUrl" @click="getCode" class="register-code-img"/>
+          <el-button @click="getCode" type="primary">发送验证码</el-button>
+<!--          <img :src="codeUrl" @click="getCode" class="register-code-img"/>-->
         </div>
       </el-form-item>
       <el-form-item style="width:100%;">
@@ -55,13 +56,13 @@
           <span v-else>注 册 中...</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
+          <router-link class="link-type unable-select-element" :to="'/login'">使用已有账户登录</router-link>
         </div>
       </el-form-item>
     </el-form>
     <!--  底部  -->
-    <div class="el-register-footer">
-      <span>Copyright © 2018-2024 seeuagain.vip All Rights Reserved.</span>
+    <div class="el-register-footer unable-select-element">
+      <span>Copyright © 2024.8 ~ * seeuagain.vip All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -91,12 +92,27 @@ export default {
       registerRules: {
         username: [
           { required: true, trigger: "blur", message: "请输入您的账号" },
-          { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
+          {
+            type: 'email',
+            message: '请输入正确的邮箱格式',
+            trigger: ['blur', 'change']
+          }
         ],
         password: [
           { required: true, trigger: "blur", message: "请输入您的密码" },
-          { min: 5, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" },
-          { pattern: /^[^<>"'|\\]+$/, message: "不能包含非法字符：< > \" ' \\\ |", trigger: "blur" }
+          { min: 5, max: 20, message: "用户密码长度必须介于 8 和 20 之间", trigger: "blur" },
+          {
+            validator: (rule, value, callback) => {
+              const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/;
+
+              if (!strongPasswordPattern.test(value)) {
+                callback(new Error('密码必须包含大小写字母、数字和特殊字符，且长度介于 8 和 20 之间'));
+              } else {
+                callback();
+              }
+            },
+            trigger: ['blur', 'change']
+          }
         ],
         confirmPassword: [
           { required: true, trigger: "blur", message: "请再次输入您的密码" },
@@ -115,9 +131,11 @@ export default {
     getCode() {
       getCodeImg().then(res => {
         this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
+        if (this.code === 200) {
+          this.$message.success(res.data);
           this.registerForm.uuid = res.uuid;
+        } else {
+          this.$message.warning("验证码发送失败，请重试");
         }
       });
     },
@@ -152,7 +170,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  background-image: url("../assets/images/register-img.jpg");
   background-size: cover;
 }
 .title {
@@ -166,6 +184,7 @@ export default {
   background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
+  opacity: 0.85;
   .el-input {
     height: 38px;
     input {
@@ -203,8 +222,5 @@ export default {
   font-family: Arial;
   font-size: 12px;
   letter-spacing: 1px;
-}
-.register-code-img {
-  height: 38px;
 }
 </style>

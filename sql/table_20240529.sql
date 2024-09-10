@@ -720,28 +720,33 @@ create table library_table_info(
 
 
 drop table if exists weather_district_info;
-create table weather_district_info (
-    `id` int PRIMARY KEY AUTO_INCREMENT,
-    `province` varchar(20) not null DEFAULT '',
-    `city` varchar(15) not null default '',
-    `city_geo_code` varchar(6) DEFAULT '000000' COMMENT '创建人ID',
-    `district` varchar(15)  DEFAULT '' COMMENT '创建时间',
-    `district_geo_code` char(6) DEFAULT '000000' COMMENT '是否删除标记, 1:已删除，0：未删除',
-    `lon` DECIMAL DEFAULT 0,
-    `lat` DECIMAL DEFAULT 0,
-    `type` char(1) DEFAULT '0' COMMENT '省0（直辖市1），省会2，市3，县4（区5）',
-    `createBy`   varchar(64)  COMMENT '创建人ID',
-    `createTime` datetime  DEFAULT now() COMMENT '创建时间',
-    `delete`      char(1) DEFAULT '0' COMMENT '是否删除标记, 1:已删除，0：未删除',
-    `updateTime` datetime DEFAULT now() COMMENT '删除时间',
-    `updateBy`   varchar(64) COMMENT '删除人ID',
-    `remark`        varchar(200)  DEFAULT '' COMMENT '备注信息',
-    `status`      char(1) DEFAULT '1' COMMENT '状态，1:启用，0：停用'
+create table weather_district_info
+(
+    id                int auto_increment
+        primary key,
+    no                varchar(10)   default ''                not null,
+    province          varchar(20)   default ''                not null,
+    city              varchar(15)   default ''                not null,
+    city_geo_code     varchar(6)    default '000000'          null comment '创建人ID',
+    district          varchar(15)   default ''                null comment '创建时间',
+    district_geo_code char(6)       default '000000'          null comment '是否删除标记, 1:已删除，0：未删除',
+    lon               decimal(9, 6) default 0.000000          null,
+    lat               decimal(9, 6) default 0.000000          null,
+    type              char          default '0'               null comment '省0（直辖市1），省会2，市3，县4（区5）',
+    createBy          varchar(64)                             null comment '创建人ID',
+    createTime        datetime      default CURRENT_TIMESTAMP null comment '创建时间',
+    `delete`          char          default '0'               null comment '是否删除标记, 1:已删除，0：未删除',
+    updateTime        datetime      default CURRENT_TIMESTAMP null comment '删除时间',
+    updateBy          varchar(64)                             null comment '删除人ID',
+    remark            varchar(200)  default ''                null comment '备注信息',
+    status            char          default '1'               null comment '状态，1:启用，0：停用'
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT = '城市-经纬信息表'
   ROW_FORMAT = Dynamic;
+
+
 
 
 create table weather_type_pic_mapping (
