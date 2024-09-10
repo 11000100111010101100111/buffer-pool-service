@@ -1,7 +1,9 @@
 package com.kit.web.controller.map.weather;
 
+import com.kit.common.annotation.RateLimiter;
 import com.kit.common.core.controller.BaseController;
 import com.kit.common.core.domain.R;
+import com.kit.common.enums.LimitType;
 import com.kit.system.domain.weather.baidu.entity.CityInfo;
 import com.kit.system.domain.weather.baidu.param.QueryCityLocationParam;
 import com.kit.system.service.weather.BaiDuWeatherService;
@@ -30,6 +32,7 @@ public class WeatherController extends BaseController {
 
     @ApiOperation("根据adCode查询城市天气, 日查询限额5000, 默认英文逗号分割")
     @GetMapping
+    @RateLimiter(key = "#ip", count = 60, time = 60, limitType = LimitType.IP)
     public R<Map<String, BaiDuWeatherResult.Now>> get(@RequestParam(name = "split", required = false) String split,
                                                       @RequestParam(name = "adCode", required = false) String adCode) {
         try {
@@ -43,6 +46,7 @@ public class WeatherController extends BaseController {
 
     @ApiOperation("根据adCode查询城市天气, 日查询限额5000, 默认英文逗号分割")
     @GetMapping("/{adCode}")
+    @RateLimiter(key = "#ip", count = 60, time = 60, limitType = LimitType.IP)
     public R<BaiDuWeatherResult.AbstractResult> getCityInfoByAdCode(
                                                       @PathVariable(name = "adCode", required = false) String adCode) {
         try {
@@ -56,6 +60,7 @@ public class WeatherController extends BaseController {
 
     @ApiOperation("返回国内所有城市对应的经纬度(lng/lat)坐标和邮编(acCode)")
     @GetMapping("city-location")
+    @RateLimiter(key = "#ip", count = 60, time = 60, limitType = LimitType.IP)
     public R<List<CityInfo>> getCityLocation(@RequestParam(name = "lonMin", required = true) String lonMin,
                                              @RequestParam(name = "lonMax", required = true) String lonMax,
                                              @RequestParam(name = "latMin", required = true) String latMin,
@@ -70,6 +75,7 @@ public class WeatherController extends BaseController {
 
     @ApiOperation("返回天气类型对于的图片路径")
     @GetMapping("weather-code")
+    @RateLimiter(key = "#ip", count = 60, time = 60, limitType = LimitType.IP)
     public R<Map<String, String>> getWeatherPicPath() {
         return R.ok(baiDuWeatherService.getWeatherPicPath());
     }

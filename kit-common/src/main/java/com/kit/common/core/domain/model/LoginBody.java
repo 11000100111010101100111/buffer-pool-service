@@ -5,8 +5,7 @@ package com.kit.common.core.domain.model;
  * 
  * @author xiao
  */
-public class LoginBody
-{
+public class LoginBody {
     /**
      * 用户名
      */
@@ -26,6 +25,11 @@ public class LoginBody
      * 唯一标识
      */
     private String uuid;
+
+    /**
+     * 登陆类型
+     * */
+    private String type;
 
     public String getUsername()
     {
@@ -65,5 +69,13 @@ public class LoginBody
     public void setUuid(String uuid)
     {
         this.uuid = uuid;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

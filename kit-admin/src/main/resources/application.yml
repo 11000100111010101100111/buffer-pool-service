@@ -1,7 +1,7 @@
 # 项目相关配置
 kit:
   # 名称
-  name: 这题我也会
+  name: 天天查
   # 版本
   version: 1.0.0
   # 版权年份
@@ -76,7 +76,7 @@ spring:
     # 地址
     host: 127.0.0.1
     # 端口，默认为6379
-    port: 6379
+    port: 1968
     # 数据库索引
     database: 0
     # 密码
@@ -151,7 +151,7 @@ map:
   baidu:
     expire: 20
     async: 5
-    ak:
+    ak: 
 
 request:
   route:

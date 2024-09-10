@@ -2,14 +2,18 @@ package com.kit.web.controller.common;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kit.common.core.domain.entity.SysMenu;
+import com.kit.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.code.kaptcha.Producer;
 import com.kit.common.config.RuoYiConfig;
@@ -83,5 +87,19 @@ public class CaptchaController {
         ajax.put("uuid", uuid);
         ajax.put("img", Base64.encode(os.toByteArray()));
         return ajax;
+    }
+
+
+    /**
+     * 根据邮箱发送邮箱验证码
+     *
+     * */
+    @GetMapping("/emailCode")
+    public AjaxResult getEmailCode(@RequestParam(name = "email") String email) {
+
+        //@todo send email
+
+
+        return AjaxResult.success();
     }
 }
