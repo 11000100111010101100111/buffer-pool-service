@@ -6,94 +6,96 @@
     :style="topStyle"
   >
     <span v-if="visible" :class="['notification-text', 'unable-select-element']">{{ message }}</span>
-    <button v-if="visible" @click.stop="close" class="close-button el-icon-error" />
+    <button v-if="visible" @click.stop="close" class="close-button el-icon-error"/>
   </div>
 </template>
 
 <script>
-    export default {
-        name: "Top",
-        props: {
-          message: {
-            type: String,
-            default: '欢迎访问！部分功能维护中...'
-          },
-          duration: {
-            type: Number,
-            default: 3000 // 默认持续时间为5000毫秒
-          }
-        },
-        data() {
-          return {
-            visible: true, // 控制告示的显示与隐藏
-            isLeft: false, // 控制告示是否靠左
-            position: {
-              x: window.innerWidth - 240, // 默认位置（右侧）
-              y: window.innerHeight - 100 // 距离顶部20px
-            },
-            times: this.duration / 1000,
-            isDragging: false, // 控制拖动状态
-            dragOffset: { x: 0, y: 0 }, // 存储拖动的偏移量
-            topStyle: { left: `${window.innerWidth - 240}px`, top: `${window.innerHeight - 100}px` },
-          };
-        },
-        mounted() {
-          // 设置定时器在指定的持续时间后关闭告示
-          setTimeout(() => {
-            this.close();
-          }, this.duration);
-          // 添加鼠标抬起事件监听器
-          window.addEventListener('mouseup', this.stopDrag);
-          window.addEventListener('mousemove', this.onDrag);
-        },
-      beforeDestroy() {
-        // 移除事件监听器
-        window.removeEventListener('mouseup', this.stopDrag);
-        window.removeEventListener('mousemove', this.onDrag);
+  export default {
+    name: "Top",
+    props: {
+      message: {
+        type: String,
+        default: '欢迎访问！部分功能维护中...'
       },
-        methods: {
-          close() {
-            this.visible = false; // 关闭告示
-            this.isLeft = this.position.x < window.innerWidth / 2; // 判断停靠方向
+      duration: {
+        type: Number,
+        default: 3000 // 默认持续时间为5000毫秒
+      }
+    },
+    data() {
+      return {
+        visible: true, // 控制告示的显示与隐藏
+        isLeft: false, // 控制告示是否靠左
+        position: {
+          x: window.innerWidth - 240, // 默认位置（右侧）
+          y: window.innerHeight - 100 // 距离顶部20px
+        },
+        times: this.duration / 1000,
+        isDragging: false, // 控制拖动状态
+        dragOffset: {x: 0, y: 0}, // 存储拖动的偏移量
+        topStyle: {left: `${window.innerWidth - 240}px`, top: `${window.innerHeight - 100}px`},
+      };
+    },
+    mounted() {
+      // 设置定时器在指定的持续时间后关闭告示
+      setTimeout(() => {
+        this.close();
+      }, this.duration);
+      // 添加鼠标抬起事件监听器
+      window.addEventListener('mouseup', this.stopDrag);
+      window.addEventListener('mousemove', this.onDrag);
+    },
+    beforeDestroy() {
+      // 移除事件监听器
+      window.removeEventListener('mouseup', this.stopDrag);
+      window.removeEventListener('mousemove', this.onDrag);
+    },
+    methods: {
+      close() {
+        this.visible = false; // 关闭告示
+        this.isLeft = this.position.x < window.innerWidth / 2; // 判断停靠方向
 
-            let left = this.isLeft ? 0 : window.innerWidth - 10;
-            let radius = this.isLeft ? '0 8px 8px 0' : '8px 0 0 8px';
-            this.topStyle = {left: `${left}px`, top: `${this.position.y}px`, 'border-radius': radius};
-          },
-          toggle() {
-            if (!this.visible) {
-              this.visible = true; // 再次展开
-              this.times = this.duration / 1000;
-              this.position.x = this.isLeft ? 0 : window.innerWidth - 240; // 根据方向设置位置
-              this.topStyle = {left: `${this.position.x}px`, top: `${this.position.y}px`, 'border-radius': '4px'};
-            }
-          },
-          startDrag(event) {
-            this.isDragging = true; // 开始拖动
-            this.dragOffset.x = event.clientX - this.position.x; // 计算偏移量
-            this.dragOffset.y = event.clientY - this.position.y;
-          },
-          stopDrag() {
-            this.isDragging = false; // 停止拖动
-          },
-          onDrag(event) {
-            if (this.isDragging && this.visible) {
-              this.position.x = event.clientX - this.dragOffset.x; // 更新位置
-              this.position.y = event.clientY - this.dragOffset.y;
+        let left = this.isLeft ? 0 : window.innerWidth - 10;
+        let radius = this.isLeft ? '0 8px 8px 0' : '8px 0 0 8px';
+        this.topStyle = {left: `${left}px`, top: `${this.position.y}px`, 'border-radius': radius};
+      },
+      toggle() {
+        if (!this.visible) {
+          this.visible = true; // 再次展开
+          this.times = this.duration / 1000;
+          this.position.x = this.isLeft ? 0 : window.innerWidth - 240; // 根据方向设置位置
+          this.topStyle = {left: `${this.position.x}px`, top: `${this.position.y}px`, 'border-radius': '4px'};
+        }
+      },
+      startDrag(event) {
+        this.isDragging = true; // 开始拖动
+        this.dragOffset.x = event.clientX - this.position.x; // 计算偏移量
+        this.dragOffset.y = event.clientY - this.position.y;
+      },
+      stopDrag() {
+        this.isDragging = false; // 停止拖动
+      },
+      onDrag(event) {
+        if (this.isDragging && this.visible) {
+          this.position.x = event.clientX - this.dragOffset.x; // 更新位置
+          this.position.y = event.clientY - this.dragOffset.y;
 
-              // 限制告示位置在窗口内
-              this.position.x = Math.max(0, Math.min(this.position.x, window.innerWidth - 240));
-              this.position.y = Math.max(0, Math.min(this.position.y, window.innerHeight - 100));
+          // 限制告示位置在窗口内
+          this.position.x = Math.max(0, Math.min(this.position.x, window.innerWidth - 240));
+          this.position.y = Math.max(0, Math.min(this.position.y, window.innerHeight - 100));
 
-              this.topStyle = {left: `${this.position.x}px`, top: `${this.position.y}px`, 'border-radius': '4px'};
+          this.topStyle = {left: `${this.position.x}px`, top: `${this.position.y}px`, 'border-radius': '4px'};
 
-              if (this.position.x  <= 100 || this.position.y >= window.innerWidth - 100) {
-                setTimeout(() => {this.close()}, this.duration);
-              }
-            }
+          if (this.position.x <= 100 || this.position.y >= window.innerWidth - 100) {
+            setTimeout(() => {
+              this.close()
+            }, this.duration);
           }
         }
+      }
     }
+  }
 </script>
 
 <style scoped>

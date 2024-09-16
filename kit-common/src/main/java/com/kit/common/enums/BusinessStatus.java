@@ -2,12 +2,10 @@ package com.kit.common.enums;
 
 /**
  * 操作状态
- * 
- * @author xiao
  *
+ * @author xiao
  */
-public enum BusinessStatus
-{
+public enum BusinessStatus {
     /**
      * 成功
      */

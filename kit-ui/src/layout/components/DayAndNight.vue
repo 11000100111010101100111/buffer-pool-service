@@ -8,20 +8,20 @@
 </template>
 
 <script>
-    export default {
-        name: "DayAndNight",
-      data() {
-        return {
-          isNight: false // 初始状态为白天
-        };
-      },
-      methods: {
-        toggleMode() {
-          this.isNight = !this.isNight;
-          this.$emit('mode-changed', this.isNight ? 'night' : 'day'); // 触发事件，通知父组件
-        }
+  export default {
+    name: "DayAndNight",
+    data() {
+      return {
+        isNight: false // 初始状态为白天
+      };
+    },
+    methods: {
+      toggleMode() {
+        this.isNight = !this.isNight;
+        this.$emit('mode-changed', this.isNight ? 'night' : 'day'); // 触发事件，通知父组件
       }
     }
+  }
 </script>
 
 <style scoped>

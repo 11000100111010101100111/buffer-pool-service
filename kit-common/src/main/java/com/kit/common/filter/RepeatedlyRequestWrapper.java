@@ -9,12 +9,13 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
 import com.kit.common.utils.http.HttpHelper;
 import com.kit.common.constant.Constants;
 
 /**
  * 构建可重复读取inputStream的request
- * 
+ *
  * @author xiao
  */
 public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
@@ -48,14 +49,12 @@ public class RepeatedlyRequestWrapper extends HttpServletRequestWrapper {
             }
 
             @Override
-            public boolean isFinished()
-            {
+            public boolean isFinished() {
                 return false;
             }
 
             @Override
-            public boolean isReady()
-            {
+            public boolean isReady() {
                 return false;
             }
 

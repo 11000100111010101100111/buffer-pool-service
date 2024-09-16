@@ -8,14 +8,14 @@ public class CityInfo extends BaseEntity {
     int id;
     /**
      * 邮政编码
-     * */
+     */
     String adCode;
     String name;
     BigDecimal lon;
     BigDecimal lat;
     /**
      * @see com.kit.system.domain.weather.baidu.emun.CityType
-     * */
+     */
     String type;//省0（直辖市1），省会2，市3，县4（区5）
 
     public CityInfo() {

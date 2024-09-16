@@ -4,9 +4,9 @@
 
 <script>
   //评论
-    export default {
-        name: "Comment"
-    }
+  export default {
+    name: "Comment"
+  }
 </script>
 
 <style scoped>

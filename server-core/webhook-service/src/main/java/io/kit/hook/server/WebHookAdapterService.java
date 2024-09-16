@@ -17,7 +17,8 @@ public interface WebHookAdapterService {
         if (CollUtil.isEmpty(myOpenHookInfoList)) {
             return;
         }
-        CompletableFuture<Void> supplyAsync = CompletableFuture.runAsync(() -> {});
+        CompletableFuture<Void> supplyAsync = CompletableFuture.runAsync(() -> {
+        });
         myOpenHookInfoList.stream()
                 .filter(Objects::nonNull)
                 .forEach(webHookInfo -> supplyAsync.thenRunAsync(() -> sendAndSave(event, webHookInfo)));

@@ -18,12 +18,12 @@
 
 <script>
   import store from "@/store";
-  import { VueCropper } from "vue-cropper";
-  import { uploadLibrary } from "@/api/system/user";
-  import { debounce } from '@/utils'
+  import {VueCropper} from "vue-cropper";
+  import {uploadLibrary} from "@/api/system/user";
+  import {debounce} from '@/utils'
 
   export default {
-    components: { VueCropper },
+    components: {VueCropper},
     data() {
       return {
         // 是否显示弹出层
@@ -38,7 +38,7 @@
           autoCropWidth: 200,         // 默认生成截图框宽度
           autoCropHeight: 200,        // 默认生成截图框高度
           fixedBox: true,             // 固定截图框大小 不允许改变
-          outputType:"png",           // 默认生成截图为PNG格式
+          outputType: "png",           // 默认生成截图为PNG格式
           filename: 'avatar'          // 文件名称
         },
         previews: {},
@@ -83,7 +83,7 @@
       // 上传预处理
       beforeUpload(file) {
         if (file.type.indexOf("excel") == -1) {
-          this.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。"  + file.type);
+          this.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。" + file.type);
         } else {
           const reader = new FileReader();
           reader.readAsDataURL(file);

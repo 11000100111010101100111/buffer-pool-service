@@ -1,10 +1,10 @@
 ﻿<template>
   <el-container class="el-container">
     <el-header class="el-header">
-      <Head/>
+      <Head background-color="#545c64" active-text-color="#ffd04b" text-color="#fff"/>
     </el-header>
     <el-main class="el-main">
-      <Top />
+      <Top/>
       <BaiDuMap :is-public="true" class="bai-du-map"/>
     </el-main>
   </el-container>
@@ -30,6 +30,7 @@
     padding: 0 !important;
     overflow: hidden;
   }
+
   .el-container, .el-header, .el-main {
     padding: 0;
     overflow: hidden;
@@ -37,7 +38,7 @@
   }
 
   .bai-du-map {
-    width: 100%;       /* 宽度占满父容器 */
+    width: 100%; /* 宽度占满父容器 */
     height: calc(100vh - 60px); /* 高度为可视区高度减去 header 的高度 */
   }
 </style>

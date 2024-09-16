@@ -6,14 +6,20 @@
 <!---->
 <script>
   import store from "@/store";
-  import { VueCropper } from "vue-cropper";
-  import { uploadLibrary } from "@/api/library/library";
+  import {VueCropper} from "vue-cropper";
+  import {uploadLibrary} from "@/api/library/library";
+
   export default {
+    props: {
+      simple: {
+        type: Boolean,
+        required: true,
+        default: false
+      }
+    },
     data() {
       return {
-        fileList : [
-
-          ]
+        fileList: []
       };
     },
     methods: {
@@ -36,7 +42,7 @@
         this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
       beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
+        return this.$confirm(`确定移除 ${file.name}？`);
       },
       handleChange(file, fileList) {
         this.fileList = fileList.slice(-3);

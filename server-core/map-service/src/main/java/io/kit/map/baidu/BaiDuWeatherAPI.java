@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import io.kit.map.baidu.vo.BaiDuWeatherResult;
 import io.kit.map.core.WeatherAPI;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriUtils;
 
@@ -15,9 +16,11 @@ import java.net.URLConnection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import io.kit.limitting.LimitLock;
 
 @Service
+@Scope("singleton")
 public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
     @Value("${map.baidu.ak}")
     private String baiDuAk;
@@ -27,35 +30,7 @@ public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
     public static final String URL2 = "https://api.map.baidu.com/reverse_geocoding/v3?";
     public static final String URL3 = "https://api.map.baidu.com/weather/v1/?";
 
-    private static final AtomicInteger countDownLatch = new AtomicInteger(25);
-
-    private void lock() {
-        while (true) {
-            if (countDownLatch.get() > 0) {
-                synchronized (countDownLatch) {
-                    if (countDownLatch.get() > 0) {
-                        countDownLatch.decrementAndGet();
-                        break;
-                    }
-                }
-            }
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                //do nothing
-            }
-        }
-    }
-
-    private void unlock() {
-        if (countDownLatch.get() < 30) {
-            synchronized (countDownLatch) {
-                if (countDownLatch.get() < 30) {
-                    countDownLatch.addAndGet(1);
-                }
-            }
-        }
-    }
+    private static final LimitLock lock = new LimitLock(25);
 
     public BaiDuWeatherResult.Result query(String adCode) throws Exception {
 
@@ -131,7 +106,7 @@ public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
         queryString.deleteCharAt(queryString.length() - 1);
 
         try {
-            lock();
+            lock.lock();
             URL url = new URL(queryString.toString());
             URLConnection httpConnection = url.openConnection();
             httpConnection.connect();
@@ -147,7 +122,7 @@ public class BaiDuWeatherAPI implements WeatherAPI<BaiDuWeatherResult.Result> {
                 return buffer.toString();
             }
         } finally {
-            unlock();
+            lock.unlock();
         }
     }
 

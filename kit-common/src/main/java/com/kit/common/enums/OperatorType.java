@@ -2,11 +2,10 @@ package com.kit.common.enums;
 
 /**
  * 操作人类别
- * 
+ *
  * @author xiao
  */
-public enum OperatorType
-{
+public enum OperatorType {
     /**
      * 其它
      */

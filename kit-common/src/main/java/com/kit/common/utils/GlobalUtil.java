@@ -13,9 +13,10 @@ import java.util.Optional;
  * Time: 12:01
  **/
 public class GlobalUtil {
-    private GlobalUtil() {}
+    private GlobalUtil() {
+    }
 
-    public static <T> List<T> list(T ... ent) {
+    public static <T> List<T> list(T... ent) {
         List<T> list = new ArrayList<>();
         Optional.ofNullable(ent).ifPresent(entry -> {
             for (T e : entry) {

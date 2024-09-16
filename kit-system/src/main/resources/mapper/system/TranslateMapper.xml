@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.system.mapper.TranslateMapper">
+
+    <resultMap id="TranslateInfo" type="com.kit.system.domain.translate.entity.TranslateInfo">
+        <result property="from" column="from"/>
+        <result property="to" column="to"/>
+        <result property="trans_result_src" column="transResultSrc"/>
+        <result property="trans_result_dst" column="transResultDst"/>
+    </resultMap>
+
+    <select id="queryTranslateInfo"
+            parameterType="java.lang.String"
+            resultMap="TranslateInfo">
+        select
+        `from`,`to`,`trans_result_src`,`trans_result_dst`
+        from translate_info_cache as ci
+        where delete = '0' and hahs = ${hash}
+    </select>
+
+    <update id="upsertTranslateInfo" parameterType="com.kit.system.domain.translate.entity.TranslateInfo">
+        INSERT INTO table_name
+        (`hash`, `from`, `to`, `trans_result_src`,`trans_result_dst`)
+        VALUES
+        (${hash}, ${from}, ${to}, ${trans_result_src}, ${trans_result_dst})
+        ON DUPLICATE KEY UPDATE hahs = ${hash}
+    </update>
+
+    <select id="queryLang" resultType="com.kit.system.domain.translate.vo.LangVo">
+        select `name`,`code`,`tag`,`sort`,`from_hot` AS fromHot, `to_hot` AS toHot from translate_lan
+    </select>
+
+    <select id="increaseHeat" parameterType="com.kit.system.domain.translate.param.IncreaseHot">
+        UPDATE translate_lan
+        SET
+        from_hot = from_hot + CASE WHEN code = ${fromCode} THEN 1 ELSE 0 END,
+        to_hot = to_hot + CASE WHEN code = ${toCode} THEN 1 ELSE 0 END
+        WHERE code IN (${fromCode}, ${toCode});
+    </select>
+</mapper>

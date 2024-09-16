@@ -51,8 +51,24 @@
 
         <dependency>
             <groupId>com.kit</groupId>
+            <artifactId>translate-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>message-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kit</groupId>
             <artifactId>webhook-service</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
         </dependency>
     </dependencies>
 

@@ -31,7 +31,7 @@ public interface Converter<O> {
         return head;
     }
 
-    default void asValueWhenCustomKeyNotExists(String key ,Map<String, Object> map, Value value) {
+    default void asValueWhenCustomKeyNotExists(String key, Map<String, Object> map, Value value) {
         if (!value.contains) {
             map.put(key, null);
         }
@@ -47,7 +47,7 @@ public interface Converter<O> {
                 Object value = template.get(key);
                 Object replaceValue = replaceValue(key, value, result);
                 if (replaceValue instanceof Value) {
-                    asValueWhenCustomKeyNotExists(key, template, (Value)replaceValue);
+                    asValueWhenCustomKeyNotExists(key, template, (Value) replaceValue);
                     return;
                 }
                 template.put(key, replaceValue);
@@ -71,15 +71,15 @@ public interface Converter<O> {
                 return replaceManyCustomKey(fullKey, value, map);
             }
         } else if (value instanceof Map) {
-           return replaceMap(key, (Map<String, Object>) value, map);
-        } else if(value instanceof Collection) {
+            return replaceMap(key, (Map<String, Object>) value, map);
+        } else if (value instanceof Collection) {
             return replaceCollection(key, (Collection<Object>) value, map);
         }
         return value;
     }
 
     default Object replaceMap(String key, Map<String, Object> valueMap, Map<String, Object> map) {
-        Map<String,Object> afterMap = new HashMap<>();
+        Map<String, Object> afterMap = new HashMap<>();
         if (CollUtil.isEmpty(valueMap)) return afterMap;
         for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
             String mapKey = entry.getKey();
@@ -87,6 +87,7 @@ public interface Converter<O> {
         }
         return afterMap;
     }
+
     default Object replaceCollection(String key, Collection<Object> valueCollection, Map<String, Object> map) {
         List<Object> afterCollection = new ArrayList<>();
         if (CollUtil.isEmpty(valueCollection)) return afterCollection;
@@ -112,7 +113,6 @@ public interface Converter<O> {
         }
         return value;
     }
-
 
 
     default boolean containsKeyInMap(String key, Map<String, Object> map) {
@@ -190,6 +190,7 @@ public interface Converter<O> {
     default boolean isOnlyOneCustomKeys(String key) {
         return key.startsWith("${") && key.endsWith("}");
     }
+
     default boolean isManyCustomKeys(String key) {
         int pif = key.indexOf("${");
         int suf = key.indexOf("}");
@@ -247,7 +248,7 @@ public interface Converter<O> {
     default Object fixObject(Object obj) {
         if (obj instanceof Map) {
             Map<String, Object> newMap = new HashMap<>();
-            fixMap((Map<String, Object>)obj, newMap);
+            fixMap((Map<String, Object>) obj, newMap);
             return newMap;
         } else if (obj instanceof Collection) {
             List<Object> newCollection = new ArrayList<>();
@@ -288,7 +289,8 @@ public interface Converter<O> {
     static class Value {
         boolean contains;
         Object actualValue;
-        Value( boolean contains, Object value) {
+
+        Value(boolean contains, Object value) {
             this.contains = contains;
             this.actualValue = value;
         }

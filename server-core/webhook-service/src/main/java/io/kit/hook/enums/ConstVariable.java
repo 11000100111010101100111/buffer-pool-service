@@ -1,7 +1,9 @@
 package io.kit.hook.enums;
 
 public class ConstVariable {
-    private ConstVariable() {}
+    private ConstVariable() {
+    }
+
     public static final String HOOK_ID = "hookId";
     public static final String HOOK_EVENT = "hookEvent";
     public static final String DELETED = "deleted";

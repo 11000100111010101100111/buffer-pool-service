@@ -3,7 +3,7 @@
     <div class="weather-container" style="background-color: #f0f0f0;">
       <day-and-night @mode-changed="onModeChanged" style="opacity: 0;" class="ignore"/>
       <div class="weather-icon-container">
-        <img :src="now.weatherIcon" alt="天气图标" class="weather-icon" />
+        <img :src="now.weatherIcon" alt="天气图标" class="weather-icon"/>
       </div>
       <div>
         <p class="city-name">{{ location.province }}{{location.city}}{{location.name}}</p>
@@ -19,11 +19,12 @@
 
 <script>
   import DayAndNight from "../../layout/components/DayAndNight";
+
   export default {
     name: "WeatherNow",
     components: {DayAndNight},
     props: {
-      location:{
+      location: {
         type: Object,
         required: true,
       },
@@ -32,12 +33,12 @@
         required: true,
       },
     },
-    data(){
-      return {
-      }
+    data() {
+      return {}
     },
-    methods:{
-      onModeChanged() {}
+    methods: {
+      onModeChanged() {
+      }
     }
   };
 </script>
@@ -54,7 +55,6 @@
     max-width: 300px;
     margin: 0 auto;
   }
-
 
 
   .weather-info {
@@ -85,11 +85,10 @@
     object-fit: contain;
   }
 
-  .el-header,.el-footer {
+  .el-header, .el-footer {
     padding: 0;
     margin: 0;
   }
-
 
 
   .time {
@@ -123,7 +122,8 @@
   .clearfix:after {
     clear: both
   }
+
   .ignore:hover {
-cursor: default;
+    cursor: default;
   }
 </style>

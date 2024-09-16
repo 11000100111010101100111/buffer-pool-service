@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { parseStrEmpty } from "@/utils/kit";
+import {parseStrEmpty} from "@/utils/kit";
 
 // 用户头像上传
 export function uploadLibrary(data) {

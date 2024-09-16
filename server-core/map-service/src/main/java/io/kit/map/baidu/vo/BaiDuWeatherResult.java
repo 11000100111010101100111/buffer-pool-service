@@ -45,6 +45,7 @@ public class BaiDuWeatherResult {
             Optional.ofNullable(now).ifPresent(n -> n.withUrl(urlMap));
             Optional.ofNullable(forecasts).ifPresent(f -> f.forEach(item -> item.withUrl(urlMap)));
         }
+
         public String getWeatherIcon() {
             return weatherIcon;
         }
@@ -81,6 +82,7 @@ public class BaiDuWeatherResult {
         public void setWeatherIcon(String weatherIcon) {
             this.weatherIcon = weatherIcon;
         }
+
         public void setText(String text) {
             this.text = text;
             this.textCode = WeatherType.code(text);

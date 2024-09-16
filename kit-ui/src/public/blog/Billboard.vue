@@ -4,9 +4,9 @@
 
 <script>
   //右侧榜单
-    export default {
-        name: "Billboard"
-    }
+  export default {
+    name: "Billboard"
+  }
 </script>
 
 <style scoped>

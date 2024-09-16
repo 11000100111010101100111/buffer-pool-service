@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @Primary
-public class WebHookHistoryServiceImpl  implements WebHookHistoryService<WebHookHistoryInfoVo> {
+public class WebHookHistoryServiceImpl implements WebHookHistoryService<WebHookHistoryInfoVo> {
     @Autowired
     WebHookPostSender webHookPostSender;
     @Autowired

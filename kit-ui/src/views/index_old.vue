@@ -4,37 +4,42 @@
       <el-col :sm="24" :lg="24">
         <blockquote class="text-warning" style="font-size: 14px">
           领取阿里云通用云产品1888优惠券
-          <br />
+          <br/>
           <el-link
             href="https://www.aliyun.com/minisite/goods?userCode=brki8iof"
             type="primary"
             target="_blank"
-            >https://www.aliyun.com/minisite/goods?userCode=brki8iof</el-link
+          >https://www.aliyun.com/minisite/goods?userCode=brki8iof
+          </el-link
           >
-          <br />
+          <br/>
           领取腾讯云通用云产品2860优惠券
-          <br />
+          <br/>
           <el-link
             href="https://cloud.tencent.com/redirect.php?redirect=1025&cps_key=198c8df2ed259157187173bc7f4f32fd&from=console"
             type="primary"
             target="_blank"
-            >https://cloud.tencent.com/redirect.php?redirect=1025&cps_key=198c8df2ed259157187173bc7f4f32fd&from=console</el-link
+          >https://cloud.tencent.com/redirect.php?redirect=1025&cps_key=198c8df2ed259157187173bc7f4f32fd&from=console
+          </el-link
           >
-          <br />
+          <br/>
           阿里云服务器折扣区
           <el-link href="http://aly.kit.vip" type="primary" target="_blank"
-            >>☛☛点我进入☚☚</el-link
+          >>☛☛点我进入☚☚
+          </el-link
           >
           &nbsp;&nbsp;&nbsp; 腾讯云服务器秒杀区
           <el-link href="http://txy.kit.vip" type="primary" target="_blank"
-            >>☛☛点我进入☚☚</el-link
-          ><br />
+          >>☛☛点我进入☚☚
+          </el-link
+          >
+          <br/>
           <h4 class="text-danger">
             云产品通用红包，可叠加官网常规优惠使用。(仅限新用户)
           </h4>
         </blockquote>
 
-        <hr />
+        <hr/>
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -56,14 +61,16 @@
             icon="el-icon-cloudy"
             plain
             @click="goTarget('https://gitee.com/y_project/Kit-Vue')"
-            >访问码云</el-button
+          >访问码云
+          </el-button
           >
           <el-button
             size="mini"
             icon="el-icon-s-home"
             plain
             @click="goTarget('http://seeuagain.vip')"
-            >访问主页</el-button
+          >访问主页
+          </el-button
           >
         </p>
       </el-col>
@@ -102,7 +109,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-divider />
+    <el-divider/>
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="12" :lg="8">
         <el-card class="update-log">
@@ -111,10 +118,12 @@
           </div>
           <div class="body">
             <p>
-              <i class="el-icon-s-promotion"></i> 官网：<el-link
+              <i class="el-icon-s-promotion"></i> 官网：
+              <el-link
                 href="http://www.seeuagain.vip"
                 target="_blank"
-                >http://www.seeuagain.vip</el-link
+              >http://www.seeuagain.vip
+              </el-link
               >
             </p>
             <p>
@@ -123,20 +132,22 @@
               <s> 满101456076 </s> <s> 满101539465 </s> <s> 满264312783 </s> <s> 满167385320 </s>
               <s> 满104748341 </s> <s> 满160110482 </s> <s> 满170801498 </s> <s> 满108482800 </s>
               <s> 满101046199 </s> <s> 满136919097 </s> <s> 满143961921 </s> <s> 满174951577 </s>
-              <s> 满161281055 </s> <s> 满138988063 </s> <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=SUc-msaypcqB2UTFif4eqGlBHkKcvMNP&authKey=JdQBouY2PG%2BS%2BCzAfIgbCGNgxyahpfh24IW%2F03rPxGilhqVbisLma%2FFFnt79DHNh&noverify=0&group_code=151450850" target="_blank">151450850</a>
+              <s> 满161281055 </s> <s> 满138988063 </s> <a
+              href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=SUc-msaypcqB2UTFif4eqGlBHkKcvMNP&authKey=JdQBouY2PG%2BS%2BCzAfIgbCGNgxyahpfh24IW%2F03rPxGilhqVbisLma%2FFFnt79DHNh&noverify=0&group_code=151450850"
+              target="_blank">151450850</a>
             </p>
             <p>
               <i class="el-icon-chat-dot-round"></i> 微信：<a
-                href="javascript:;"
-                >/ *若依</a
-              >
+              href="javascript:;"
+            >/ *若依</a
+            >
             </p>
             <p>
               <i class="el-icon-money"></i> 支付宝：<a
-                href="javascript:;"
-                class="支付宝信息"
-                >/ *若依</a
-              >
+              href="javascript:;"
+              class="支付宝信息"
+            >/ *若依</a
+            >
             </p>
           </div>
         </el-card>
@@ -975,7 +986,7 @@
               width="100%"
             />
             <span style="display: inline-block; height: 30px; line-height: 30px"
-              >你可以请作者喝杯咖啡表示鼓励</span
+            >你可以请作者喝杯咖啡表示鼓励</span
             >
           </div>
         </el-card>
@@ -985,83 +996,85 @@
 </template>
 
 <script>
-export default {
-  name: "Index",
-  data() {
-    return {
-      // 版本号
-      version: "3.8.7"
-    };
-  },
-  methods: {
-    goTarget(href) {
-      window.open(href, "_blank");
+  export default {
+    name: "Index",
+    data() {
+      return {
+        // 版本号
+        version: "3.8.7"
+      };
+    },
+    methods: {
+      goTarget(href) {
+        window.open(href, "_blank");
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped lang="scss">
-.home {
-  blockquote {
-    padding: 10px 20px;
-    margin: 0 0 20px;
-    font-size: 17.5px;
-    border-left: 5px solid #eee;
-  }
-  hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 0;
-    border-top: 1px solid #eee;
-  }
-  .col-item {
-    margin-bottom: 20px;
-  }
+  .home {
+    blockquote {
+      padding: 10px 20px;
+      margin: 0 0 20px;
+      font-size: 17.5px;
+      border-left: 5px solid #eee;
+    }
 
-  ul {
-    padding: 0;
-    margin: 0;
-  }
+    hr {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border: 0;
+      border-top: 1px solid #eee;
+    }
 
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  color: #676a6c;
-  overflow-x: hidden;
+    .col-item {
+      margin-bottom: 20px;
+    }
 
-  ul {
-    list-style-type: none;
-  }
+    ul {
+      padding: 0;
+      margin: 0;
+    }
 
-  h4 {
-    margin-top: 0px;
-  }
+    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #676a6c;
+    overflow-x: hidden;
 
-  h2 {
-    margin-top: 10px;
-    font-size: 26px;
-    font-weight: 100;
-  }
+    ul {
+      list-style-type: none;
+    }
 
-  p {
-    margin-top: 10px;
+    h4 {
+      margin-top: 0px;
+    }
 
-    b {
-      font-weight: 700;
+    h2 {
+      margin-top: 10px;
+      font-size: 26px;
+      font-weight: 100;
+    }
+
+    p {
+      margin-top: 10px;
+
+      b {
+        font-weight: 700;
+      }
+    }
+
+    .update-log {
+      ol {
+        display: block;
+        list-style-type: decimal;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+        padding-inline-start: 40px;
+      }
     }
   }
-
-  .update-log {
-    ol {
-      display: block;
-      list-style-type: decimal;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 0;
-      margin-inline-end: 0;
-      padding-inline-start: 40px;
-    }
-  }
-}
 </style>
 
