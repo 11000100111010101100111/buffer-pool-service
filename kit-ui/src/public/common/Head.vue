@@ -9,38 +9,37 @@
     :active-text-color="activeTextColor">
     <el-menu-item index="1" class="el-icon-s-home" @click="homePage">首页</el-menu-item>
     <el-submenu index="2">
-      <template slot="title">产品</template>
-      <el-menu-item index="2-1" slot="title" class="el-icon-map-location" @click="handleBaiDuAPIMap">实时天气地图</el-menu-item>
-      <el-menu-item index="2-2" disabled class="el-icon-folder-checked">文件解析</el-menu-item>
-      <el-submenu index="2-3">
+      <template slot="title">工具包</template>
+      <el-submenu index="2-1">
         <template slot="title" class="iconfont icon-kaifagongju">开发工具</template>
-        <el-menu-item index="2-3-1" disabled class="iconfont icon-api">Open API</el-menu-item>
-        <el-menu-item index="2-3-2" disabled class="iconfont icon-webhook">WebHook</el-menu-item>
-        <el-menu-item index="2-3-3" disabled class="iconfont icon-json">JSON在线</el-menu-item>
-        <el-menu-item index="2-3-4" class="iconfont icon-json" @click="handleTranslate">翻译</el-menu-item>
-        <el-menu-item index="2-3-5" disabled class="iconfont icon-fuwu">消息通信</el-menu-item>
+        <el-menu-item index="2-1-1" class="iconfont el-icon-map-location" @click="handleBaiDuAPIMap">实时天气地图</el-menu-item>
+        <el-menu-item index="2-1-2" class="iconfont icon-json" @click="handleTranslate">翻译</el-menu-item>
+        <el-menu-item index="2-1-1" disabled class="iconfont icon-api">Open API</el-menu-item>
+        <el-menu-item index="2-1-2" disabled class="iconfont icon-webhook">WebHook</el-menu-item>
+        <el-menu-item index="2-1-3" disabled class="iconfont icon-json">JSON在线</el-menu-item>
+        <el-menu-item index="2-1-4" disabled class="iconfont icon-fuwu">消息通信</el-menu-item>
       </el-submenu>
-      <el-submenu index="2-4">
+      <el-submenu index="2-2">
         <template slot="title" class="iconfont icon-kaifagongju">AIGC</template>
-        <el-menu-item index="2-4-1" disabled class="iconfont icon-rtcyinshipintongxin">图像生成</el-menu-item>
-        <el-menu-item index="2-4-1" disabled class="iconfont icon-rtcyinshipintongxin">音视频处理</el-menu-item>
-        <el-menu-item index="2-4-2" disabled class="iconfont icon-ailiaotian_AIliaotian">AI聊天</el-menu-item>
+        <el-menu-item index="2-2-1" class="iconfont icon-rtcyinshipintongxin" @click="toAIGCImg">图像生成</el-menu-item>
+        <el-menu-item index="2-2-1" disabled class="iconfont icon-rtcyinshipintongxin">音视频处理</el-menu-item>
+        <el-menu-item index="2-2-2" disabled class="iconfont icon-ailiaotian_AIliaotian">AI聊天</el-menu-item>
       </el-submenu>
-      <el-submenu index="2-5">
+      <el-submenu index="2-3">
         <template slot="title" class="iconfont icon-kaifarenyuan">开发者</template>
-        <el-menu-item index="2-7-1" disabled class="iconfont icon-fuwu">面向开发者</el-menu-item>
-        <el-menu-item index="2-7-2" disabled class="iconfont icon-shuomingwendang">文档中心</el-menu-item>
-        <el-menu-item index="2-7-3" disabled class="iconfont icon-dc-icon-guojiazhongdianshiyanshi">实验室</el-menu-item>
-        <el-menu-item index="2-7-4" @click="toGithub" class="iconfont icon-guanli-1111">社区&共建</el-menu-item>
-        <el-menu-item index="2-7-5" disabled disabled class="iconfont icon-yijianyujianyifankui">意见&建议</el-menu-item>
-        <el-menu-item index="2-7-6" disabled disabled class="iconfont icon-QAyanshou">Q&A</el-menu-item>
-        <el-menu-item index="2-7-7" disabled><a href="https://www.ele.me" target="_blank"
+        <el-menu-item index="2-3-1" @click="toGithub" class="iconfont icon-guanli-1111">社区&共建</el-menu-item>
+        <el-menu-item index="2-3-2" disabled class="iconfont icon-fuwu">面向开发者</el-menu-item>
+        <el-menu-item index="2-3-3" disabled class="iconfont icon-shuomingwendang">文档中心</el-menu-item>
+        <el-menu-item index="2-3-4" disabled class="iconfont icon-dc-icon-guojiazhongdianshiyanshi">实验室</el-menu-item>
+        <el-menu-item index="2-3-5" disabled disabled class="iconfont icon-yijianyujianyifankui">意见&建议</el-menu-item>
+        <el-menu-item index="2-3-6" disabled disabled class="iconfont icon-QAyanshou">Q&A</el-menu-item>
+        <el-menu-item index="2-3-7" disabled><a href="https://www.ele.me" target="_blank"
                                                 class="iconfont icon-guanyuwomen">关于我们</a>
         </el-menu-item>
       </el-submenu>
     </el-submenu>
-    <el-menu-item index="5" class="iconfont icon-blog1" @click="blog">博客</el-menu-item>
-    <el-menu-item index="6" class="login-button">
+    <el-menu-item index="3" class="iconfont icon-blog1" @click="blog">博客</el-menu-item>
+    <el-menu-item index="4" class="login-button">
       <div v-if="isLoggedIn" class="right-menu">
         <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">
@@ -159,6 +158,9 @@
 
       blog() {
         window.open('/blog', '_blank');
+      },
+      toAIGCImg() {
+        window.open('/ai-gc/image', '_blank');
       },
       handleTranslate() {
         window.location.href = '/translate';

@@ -29,6 +29,13 @@
         WHERE `process_id` = #{processId} AND `ip_or_user_id` = #{ipOrUserId} AND `delete` = '0'
     </select>
 
+    <select id="countMyProcess" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count(`id`)
+        FROM `ai_img_wait_queue_info`
+        WHERE `ip_or_user_id` = #{ipOrUserId} AND `delete` = '0' AND DATE(`createTime`) = CURDATE();
+    </select>
+
 
     <resultMap id="ProcessStepInfoSimple" type="com.kit.system.domain.ai.img.entity.ProcessStepInfo">
         <result property="processId" column="process_id"/>

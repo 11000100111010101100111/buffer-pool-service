@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface AIImageGeneratorMapper {
 
+    public int countMyProcess(@Param("ipOrUserId") String ipOrUserId);
+
     public void saveProcessInfo(ProcessInfoEntity processInfo);
 
     public ProcessInfoEntity findByProcessId(@Param("processId") String processId, @Param("ipOrUserId") String ipOrUserId);

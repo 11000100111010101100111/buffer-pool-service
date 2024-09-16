@@ -11,7 +11,10 @@ import com.kit.system.domain.ai.img.entity.ProcessInfoEntity;
 import com.kit.system.domain.ai.img.entity.ProcessStepInfo;
 import com.kit.system.domain.ai.img.param.GeneratorParam;
 import com.kit.system.domain.ai.img.vo.GeneratorVo;
+import com.kit.system.domain.translate.param.Search;
 import com.kit.system.mapper.AIImageGeneratorMapper;
+import com.kit.system.service.translate.BaiDuTranslate;
+import io.kit.translate.vo.TranslateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,22 @@ public class AiImgGeneratorService {
     @Value("${mq.routing}")
     String routing;
 
+    @Value("${mq.generator.maxTimes:5}")
+    int maxTimes;
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private AIImageGeneratorMapper imageGeneratorMapper;
+
+    @Autowired
+    private BaiDuTranslate translate;
+
+    public boolean isChinese(String text) {
+        String regex = "[\\u4e00-\\u9fa5]+";
+        return text.matches(regex);
+    }
 
     public GeneratorVo generator(GeneratorParam param, String userIdOrIp, LoginUser loginUser) {
         String hash = Md5Utils.hash(param.getText());
@@ -52,6 +66,10 @@ public class AiImgGeneratorService {
             return new GeneratorVo()
                     .withText(param.getText())
                     .withProcessId(Convert.toStr(redisCache.getCacheObject(redisKey)));
+        }
+
+        if (imageGeneratorMapper.countMyProcess(userIdOrIp) > maxTimes) {
+            throw new RuntimeException("服务器资源有限，每天最多只能生成" + maxTimes + "次哦，明天再来吧！");
         }
 
         String processId = UUID.randomUUID().toString();
@@ -68,8 +86,22 @@ public class AiImgGeneratorService {
                         .orElse(""))
                 .build());
         redisCache.setCacheObject(redisKey, processId, 1, TimeUnit.DAYS);
+        String text = param.getText();
+        if (isChinese(text)) {
+            try {
+                Search search = new Search();
+                search.setFrom("auto");
+                search.setQuery(text);
+                search.setTo("en");
+                TranslateResult translate = this.translate.translate(search);
+                text = Optional.ofNullable(translate.getFirstTransResult().getDst()).orElse(text);
+            } catch (Exception e) {
+                log.warn(e.getMessage());
+            }
+        }
+
         Map<String, String> message = MapUtil.builder("processId", processId)
-                .put("text", param.getText())
+                .put("text", text)
                 .put("width", String.valueOf(param.getWidth()))
                 .put("height", String.valueOf(param.getHeight()))
                 .build();

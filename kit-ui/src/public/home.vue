@@ -1,7 +1,7 @@
 <template>
   <el-container class="el-container">
     <el-header class="el-header">
-      <Head/>
+      <Head />
     </el-header>
     <el-main class="el-main">
       <ul class="infinite-list" style="overflow:auto">
@@ -10,18 +10,6 @@
 
           </div>
           <div class="top-li-sub top-li-bottom"></div>
-        </li>
-        <li class="infinite-list-item second-li">
-
-        </li>
-        <li class="infinite-list-item third-li">
-
-        </li>
-        <li class="infinite-list-item fou-li">
-
-        </li>
-        <li class="infinite-list-item bottom-li">
-
         </li>
       </ul>
       <Top/>
@@ -95,21 +83,4 @@
     top: 50%;
     background-color: #fff;
   }
-
-  .second-li {
-    background-color: #b3420d;
-  }
-
-  .third-li {
-    background-color: #b31474;
-  }
-
-  .fou-li {
-    background-color: #0c55b3;
-  }
-
-  .bottom-li {
-    background-color: #48b30f;
-  }
-
 </style>

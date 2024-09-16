@@ -98,6 +98,12 @@ export const constantRoutes = [
     hidden: true,
     meta: {requiresAuth: true}
   },
+  {
+    path: '/ai-gc/image',
+    component: () => import('@/public/aigc/img/index'),
+    hidden: true,
+    meta: {requiresAuth: false}
+  },
 ]
 
 // 动态路由，基于用户权限动态去加载

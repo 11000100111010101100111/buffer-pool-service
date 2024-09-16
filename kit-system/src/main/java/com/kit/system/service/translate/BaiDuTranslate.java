@@ -10,6 +10,7 @@ import io.kit.translate.MD5;
 import io.kit.translate.TranslateApi;
 import io.kit.translate.param.TranslateParam;
 import io.kit.translate.vo.TranslateResult;
+import io.kit.translate.vo.TranslateResultEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,12 +113,13 @@ public class BaiDuTranslate {
     }
 
     private void updateToMysql(String hash, TranslateResult fromApi) {
-        if (Objects.nonNull(fromApi) && Objects.nonNull(fromApi.getTransResult())) {
+        if (Objects.nonNull(fromApi) && Objects.nonNull(fromApi.getFirstTransResult())) {
+            TranslateResultEntry firstTransResult = fromApi.getFirstTransResult();
             translateMapper.upsertTranslateInfo(new TranslateInfo()
                     .to(fromApi.getTo())
                     .hash(hash)
-                    .transResultDst(fromApi.getTransResult().getDst())
-                    .transResultSrc(fromApi.getTransResult().getSrc())
+                    .transResultDst(firstTransResult.getDst())
+                    .transResultSrc(firstTransResult.getSrc())
                     .from(fromApi.getFrom()));
         }
     }

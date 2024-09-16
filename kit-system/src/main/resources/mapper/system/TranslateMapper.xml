@@ -17,15 +17,15 @@
         select
         `from`,`to`,`trans_result_src`,`trans_result_dst`
         from translate_info_cache as ci
-        where delete = '0' and hahs = ${hash}
+        where delete = '0' and hahs = #{hash}
     </select>
 
     <update id="upsertTranslateInfo" parameterType="com.kit.system.domain.translate.entity.TranslateInfo">
         INSERT INTO table_name
         (`hash`, `from`, `to`, `trans_result_src`,`trans_result_dst`)
         VALUES
-        (${hash}, ${from}, ${to}, ${trans_result_src}, ${trans_result_dst})
-        ON DUPLICATE KEY UPDATE hahs = ${hash}
+        (#{hash}, #{from}, #{to}, #{trans_result_src}, #{trans_result_dst})
+        ON DUPLICATE KEY UPDATE hahs = #{hash}
     </update>
 
     <select id="queryLang" resultType="com.kit.system.domain.translate.vo.LangVo">
@@ -35,8 +35,8 @@
     <select id="increaseHeat" parameterType="com.kit.system.domain.translate.param.IncreaseHot">
         UPDATE translate_lan
         SET
-        from_hot = from_hot + CASE WHEN code = ${fromCode} THEN 1 ELSE 0 END,
-        to_hot = to_hot + CASE WHEN code = ${toCode} THEN 1 ELSE 0 END
-        WHERE code IN (${fromCode}, ${toCode});
+        from_hot = from_hot + CASE WHEN code = #{fromCode} THEN 1 ELSE 0 END,
+        to_hot = to_hot + CASE WHEN code = #{toCode} THEN 1 ELSE 0 END
+        WHERE code IN (#{fromCode}, #{toCode});
     </select>
 </mapper>

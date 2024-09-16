@@ -38,7 +38,7 @@ public class AiImgGeneratorController extends BaseController {
     private ServerConfig serverConfig;
 
     @PostMapping("/open-api/generator")
-    //@RateLimiter(key = "#ip", count = 3, time = 24*60*60)
+    //@RateLimiter(key = "#ip", count = 1, time = 60)
     public R<GeneratorVo> generator(HttpServletRequest request, @RequestBody GeneratorParam text) {
         return R.ok(aiImgGeneratorService.generator(text, IpUtils.getIpAddr(request), null));
     }
@@ -95,7 +95,7 @@ public class AiImgGeneratorController extends BaseController {
             String filePath = SystemConfig.getAiImgUploadPath();
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
-            aiImgGeneratorService.updateUrl(processId, url);
+            aiImgGeneratorService.updateUrl(processId, fileName);
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", url);
             ajax.put("fileName", fileName);
