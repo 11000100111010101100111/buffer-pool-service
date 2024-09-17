@@ -4,9 +4,9 @@
 
 <script>
   //MD文件的博客文章
-    export default {
-        name: "Md5File"
-    }
+  export default {
+    name: "Md5File"
+  }
 </script>
 
 <style scoped>

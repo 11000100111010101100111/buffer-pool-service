@@ -2,7 +2,7 @@ package com.kit.common.core.domain.model;
 
 /**
  * 用户登录对象
- * 
+ *
  * @author xiao
  */
 public class LoginBody {
@@ -28,46 +28,40 @@ public class LoginBody {
 
     /**
      * 登陆类型
-     * */
+     */
     private String type;
 
-    public String getUsername()
-    {
+    private EmailLoginBody emailLoginBody;
+
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(String code)
-    {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getUuid()
-    {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid)
-    {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
@@ -77,5 +71,13 @@ public class LoginBody {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public EmailLoginBody getEmailLoginBody() {
+        return emailLoginBody;
+    }
+
+    public void setEmailLoginBody(EmailLoginBody emailLoginBody) {
+        this.emailLoginBody = emailLoginBody;
     }
 }

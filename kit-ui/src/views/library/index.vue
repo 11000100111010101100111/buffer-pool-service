@@ -60,7 +60,8 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['library:file:import']"
-        >导入题库</el-button>
+        >导入题库
+        </el-button>
         <el-button
           type="primary"
           plain
@@ -68,24 +69,25 @@
           size="mini"
           @click="handleSystemInfoImport"
           v-hasPermi="['library:file:import']"
-        >导入系统信息</el-button>
+        >导入系统信息
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="LibraryList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" prop="id" width="120" />
-      <el-table-column label="文件名称" prop="originName" :show-overflow-tooltip="true" width="300" />
-      <el-table-column label="总题数" prop="count" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="文件导入人" prop="createUserName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="文件修改人" prop="updateUserName" width="100" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="编号" prop="id" width="120"/>
+      <el-table-column label="文件名称" prop="originName" :show-overflow-tooltip="true" width="300"/>
+      <el-table-column label="总题数" prop="count" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="文件导入人" prop="createUserName" :show-overflow-tooltip="true" width="150"/>
+      <el-table-column label="文件修改人" prop="updateUserName" width="100"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注信息" prop="remark" :show-overflow-tooltip="true" width="300" />
+      <el-table-column label="备注信息" prop="remark" :show-overflow-tooltip="true" width="300"/>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <el-switch
@@ -134,8 +136,9 @@
 </template>
 
 <script>
-  import { listLibrary, uploadLibrary} from '@/api/library/library'
-  import { getToken } from "@/utils/auth";
+  import {listLibrary, uploadLibrary} from '@/api/library/library'
+  import {getToken} from "@/utils/auth";
+
   export default {
     name: "Library",
     dicts: ['sys_normal_disable'],
@@ -211,13 +214,13 @@
         // 表单校验
         rules: {
           roleName: [
-            { required: true, message: "角色名称不能为空", trigger: "blur" }
+            {required: true, message: "角色名称不能为空", trigger: "blur"}
           ],
           roleKey: [
-            { required: true, message: "权限字符不能为空", trigger: "blur" }
+            {required: true, message: "权限字符不能为空", trigger: "blur"}
           ],
           roleSort: [
-            { required: true, message: "角色顺序不能为空", trigger: "blur" }
+            {required: true, message: "角色顺序不能为空", trigger: "blur"}
           ]
         },
         // 用户导入参数
@@ -233,7 +236,7 @@
           // 是否更新已经存在的用户数据
           updateSupport: 0,
           // 设置上传的请求头部
-          headers: { Authorization: "Bearer " + getToken() },
+          headers: {Authorization: "Bearer " + getToken()},
           // 上传的地址
           url: process.env.VUE_APP_BASE_API + "/api/bank/upload"
         },
@@ -300,7 +303,7 @@
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.ids = selection.map(item => item.roleId)
-        this.single = selection.length!=1
+        this.single = selection.length != 1
         this.multiple = !selection.length
       },
       // 更多操作触发
@@ -344,7 +347,7 @@
         this.upload.open = false;
         this.upload.isUploading = false;
         this.$refs.upload.clearFiles();
-        this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
+        this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", {dangerouslyUseHTMLString: true});
         this.getList();
       },
       // 提交上传文件

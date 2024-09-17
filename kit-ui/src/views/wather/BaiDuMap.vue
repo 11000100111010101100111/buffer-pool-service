@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import { queryCityLocation, querySimpleWeather,queryCityWeather } from "@/api/weather/cityLocation";
+  import {queryCityLocation, querySimpleWeather, queryCityWeather} from "@/api/weather/cityLocation";
   import WeatherGroup from "./WeatherGroup";
 
   export default {
@@ -52,7 +52,7 @@
         customMapStyle: {
           styleId: '654b890d11d6aed32a595398821d3e0d'
         },
-        topPic:{
+        topPic: {
           "simple": true,
           "realtime": false
         },
@@ -67,7 +67,7 @@
 
         lastZooms: [12],
         hasChangeZoom: false,
-        cacheMarkId:[],
+        cacheMarkId: [],
 
         showCityWeather: false,
 
@@ -95,7 +95,7 @@
           anchor: new BMap.Size(size / 2, size), // 锚点设置为图标底部中心
         });
       },
-      initializeMarker({ BMap, map }) {
+      initializeMarker({BMap, map}) {
         this.map = map; // 保存地图实例
         this.loadVisibleMarkers(); // 加载可视区域的标记
         this.map.addEventListener("moveend", this.movedMap); // 监听移动事件
@@ -108,10 +108,10 @@
         let lonMin = bounds.Ne;
         let lonMax = bounds.Je;
         return {
-          "latMin":latMin,
-          "latMax":latMax,
-          "lonMin":lonMin,
-          "lonMax":lonMax
+          "latMin": latMin,
+          "latMax": latMax,
+          "lonMin": lonMin,
+          "lonMax": lonMax
         };
       },
       movedMap() {
@@ -133,10 +133,10 @@
         let lonMax = bounds.Je;
 
         queryCityLocation({
-          "latMin":latMin,
-          "latMax":latMax,
-          "lonMin":lonMin,
-          "lonMax":lonMax
+          "latMin": latMin,
+          "latMax": latMax,
+          "lonMin": lonMin,
+          "lonMax": lonMax
         }).then(res => {
           if (res.code == 200) {
             res.data.forEach(item => this.points.push(item));
@@ -216,10 +216,11 @@
 </script>
 
 <style scoped>
-  *{
+  * {
     padding: 0;
     margin: 0;
   }
+
   #map {
     width: 100%;
     height: 100vh;
@@ -233,18 +234,21 @@
     padding: 0;
     margin: 0;
   }
+
   .el-popover {
     position: absolute;
   }
+
   .floating-menu {
-     position: absolute;
-     top: 10px;
-     right: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     width: 50px;
     border-radius: 20px; /* 设置圆角 */
     overflow: hidden; /* 防止内容溢出 */
     z-index: 99999;
   }
+
   .custom-icon {
     opacity: 1; /* 50% 透明度 */
   }

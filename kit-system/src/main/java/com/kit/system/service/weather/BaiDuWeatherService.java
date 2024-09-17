@@ -2,7 +2,6 @@ package com.kit.system.service.weather;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.kit.common.core.domain.model.LoginUser;
 import com.kit.system.domain.weather.baidu.emun.CityType;
 import com.kit.system.domain.weather.baidu.entity.CityInfo;
 import com.kit.system.domain.weather.baidu.param.QueryCityLocationParam;
@@ -33,7 +32,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,7 +56,7 @@ public class BaiDuWeatherService {
         if (null == queryCityLocationCountVo) return new ArrayList<>();
         List<String> queryTypes = new ArrayList<>();
         ////省0（直辖市1），省会2，市3，县4（区5）
-        if (queryCityLocationCountVo.getCountyCount() >= 100)  {
+        if (queryCityLocationCountVo.getCountyCount() >= 100) {
             if (queryCityLocationCountVo.getCityCount() > 100) {
                 queryTypes.add(CityType.PROVINCE.getType());
                 queryTypes.add(CityType.MUNICIPALITY.getType());
@@ -81,26 +79,27 @@ public class BaiDuWeatherService {
 
     @Async("weatherQueryExecutor")
     public void findAndSaveWeatherAsync(Set<String> adCodes) {
-        CompletableFuture<Void> supplyAsync = CompletableFuture.runAsync(() -> {}, weatherQueryExecutor);
+        CompletableFuture<Void> supplyAsync = CompletableFuture.runAsync(() -> {
+        }, weatherQueryExecutor);
         adCodes.forEach(adCode ->
-            supplyAsync.thenAcceptAsync((action) -> {
-                final String redisKey = genericRedisKey(adCode);
-                //判断redis是否存在当天的天气，存在则返回，不存在异步获取
-                if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) {
-                    Long expireTime = redisTemplate.getExpire(redisKey, TimeUnit.SECONDS);
-                    if (expireTime != null && expireTime > 0) {
-                        return;
+                supplyAsync.thenAcceptAsync((action) -> {
+                    final String redisKey = genericRedisKey(adCode);
+                    //判断redis是否存在当天的天气，存在则返回，不存在异步获取
+                    if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) {
+                        Long expireTime = redisTemplate.getExpire(redisKey, TimeUnit.SECONDS);
+                        if (expireTime != null && expireTime > 0) {
+                            return;
+                        }
                     }
-                }
 
-                //查询天气
-                try {
-                    BaiDuWeatherResult.Result result = weatherAPI.query(adCode);
-                    update(redisKey, result);
-                } catch (Exception e) {
-                    log.warn(e.getMessage());
-                }
-            })
+                    //查询天气
+                    try {
+                        BaiDuWeatherResult.Result result = weatherAPI.query(adCode);
+                        update(redisKey, result);
+                    } catch (Exception e) {
+                        log.warn(e.getMessage());
+                    }
+                })
         );
     }
 

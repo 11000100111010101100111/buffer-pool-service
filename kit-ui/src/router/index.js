@@ -63,48 +63,46 @@ export const constantRoutes = [
   },
   {
     path: '',
-    component: Layout,
-    redirect: 'index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/index'),
-        name: 'Index',
-        meta: { title: '天知道', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
+    redirect: '/home',
+    component: () => import('@/public/home'),
     hidden: true,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'profile',
-        component: () => import('@/views/system/user/profile/index'),
-        name: 'Profile',
-        meta: { title: '天命人中心', icon: 'user' }
-      }
-    ]
+    meta: {requiresAuth: false}
   },
   {
     path: '/home',
     component: () => import('@/public/home'),
     hidden: true,
-    meta: { requiresAuth: false }
+    meta: {requiresAuth: false}
   },
   {
     path: '/blog',
     component: () => import('@/public/blog'),
     hidden: true,
-    meta: { requiresAuth: false }
+    meta: {requiresAuth: false}
   },
   {
     path: '/weather-baidu',
     component: () => import('@/public/BaiDuApiMap'),
     hidden: true,
-    meta: { requiresAuth: false }
+    meta: {requiresAuth: false}
+  },
+  {
+    path: '/translate',
+    component: () => import('@/public/translate/LangTranslate'),
+    hidden: true,
+    meta: {requiresAuth: false}
+  },
+  {
+    path: '/user',
+    component: () => import('@/views/system/user/userPage'),
+    hidden: true,
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/ai-gc/image',
+    component: () => import('@/public/aigc/img/index'),
+    hidden: true,
+    meta: {requiresAuth: false}
   },
 ]
 
@@ -120,7 +118,7 @@ export const dynamicRoutes = [
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
+        meta: {title: '分配角色', activeMenu: '/system/user'}
       }
     ]
   },
@@ -134,7 +132,7 @@ export const dynamicRoutes = [
         path: 'user/:roleId(\\d+)',
         component: () => import('@/views/system/role/authUser'),
         name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
+        meta: {title: '分配用户', activeMenu: '/system/role'}
       }
     ]
   },
@@ -148,7 +146,7 @@ export const dynamicRoutes = [
         path: 'index/:dictId(\\d+)',
         component: () => import('@/views/system/dict/data'),
         name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
+        meta: {title: '字典数据', activeMenu: '/system/dict'}
       }
     ]
   },
@@ -162,7 +160,7 @@ export const dynamicRoutes = [
         path: 'index/:jobId(\\d+)',
         component: () => import('@/views/monitor/job/log'),
         name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
+        meta: {title: '调度日志', activeMenu: '/monitor/job'}
       }
     ]
   },
@@ -176,10 +174,24 @@ export const dynamicRoutes = [
         path: 'index/:tableId(\\d+)',
         component: () => import('@/views/tool/gen/editTable'),
         name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
+        meta: {title: '修改生成配置', activeMenu: '/tool/gen'}
       }
     ]
-  }
+  },
+  {
+    path: '/manager',
+    component: Layout,
+    redirect: '/index',
+    roles: ['admin'],
+    children: [
+      {
+        path: '/index',
+        component: () => import('@/views/index'),
+        name: 'Index',
+        meta: {title: '天知道', icon: 'dashboard', affix: true}
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错
@@ -196,6 +208,6 @@ Router.prototype.replace = function push(location) {
 
 export default new Router({
   mode: 'history', // 去掉url中的#
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })

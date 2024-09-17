@@ -6,6 +6,7 @@
 
 <script>
   import BaiDuMap from './wather/BaiDuMap.vue';
+
   export default {
     name: "Index",
     components: {

@@ -1,6 +1,7 @@
 package com.kit.common.enums;
 
 import java.util.function.Function;
+
 import com.kit.common.utils.DesensitizedUtil;
 
 /**
@@ -8,8 +9,7 @@ import com.kit.common.utils.DesensitizedUtil;
  *
  * @author xiao
  */
-public enum DesensitizedType
-{
+public enum DesensitizedType {
     /**
      * 姓名，第2位星号替换
      */
@@ -47,13 +47,11 @@ public enum DesensitizedType
 
     private final Function<String, String> desensitizer;
 
-    DesensitizedType(Function<String, String> desensitizer)
-    {
+    DesensitizedType(Function<String, String> desensitizer) {
         this.desensitizer = desensitizer;
     }
 
-    public Function<String, String> desensitizer()
-    {
+    public Function<String, String> desensitizer() {
         return desensitizer;
     }
 }

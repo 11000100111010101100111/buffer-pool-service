@@ -13,7 +13,10 @@ import java.util.Set;
 @Repository
 public interface BaiDuWeatherMapper {
     public QueryCityLocationCountVo queryCityLocationCount(QueryCityLocationParam param);
+
     public List<CityInfo> cityLocationInfo(QueryCityLocationParam param);
+
     public List<Map<String, String>> getWeatherPicPath();
+
     public List<Map<String, String>> getWeatherPicPathByCodes(String[] codes);
 }

@@ -8,7 +8,7 @@ import com.kit.common.core.domain.BaseEntity;
  * @author xjh
  * @since 2024/8/4
  * Time: 17:15
- *
+ * <p>
  * table name: library_table_info
  **/
 public class LibraryInfo extends BaseEntity {

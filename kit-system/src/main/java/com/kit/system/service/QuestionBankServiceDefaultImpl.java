@@ -91,7 +91,7 @@ public class QuestionBankServiceDefaultImpl implements QuestionBankService {
                 names.set(2, "day_name");
                 names.set(3, "night_name");
                 dataList.remove(0);
-                dataList.forEach(d ->{
+                dataList.forEach(d -> {
                     for (int i = d.size() - 1; i > 3; i--) {
                         d.remove(i);
                     }
@@ -128,18 +128,18 @@ public class QuestionBankServiceDefaultImpl implements QuestionBankService {
         //查询表记录行
         Optional.ofNullable(questionBankMapper.findTableCountByTableIds(new ArrayList<>(collect.keySet())))
                 .ifPresent(infos -> {
-            if (infos.isEmpty()) {
-                return;
-            }
-            infos.forEach(countTableMap -> Optional.ofNullable(collect.get(countTableMap.getTableName()))
-                    .ifPresent(vo -> vo.setCountInfo(countTableMap)));
-        });
-        return  this.hiddenTableName(result);
+                    if (infos.isEmpty()) {
+                        return;
+                    }
+                    infos.forEach(countTableMap -> Optional.ofNullable(collect.get(countTableMap.getTableName()))
+                            .ifPresent(vo -> vo.setCountInfo(countTableMap)));
+                });
+        return this.hiddenTableName(result);
     }
 
     /**
      * 返回结果中隐藏表名称信息
-     * */
+     */
     public LibraryInfoVo hiddenTableName(LibraryInfoVo vo) {
         Optional.ofNullable(vo).ifPresent(v -> vo.setTableName(""));
         return vo;
@@ -147,7 +147,7 @@ public class QuestionBankServiceDefaultImpl implements QuestionBankService {
 
     /**
      * 返回结果中隐藏表名称信息
-     * */
+     */
     public List<LibraryInfoVo> hiddenTableName(List<LibraryInfoVo> vo) {
         Optional.ofNullable(vo)
                 .ifPresent(vos -> vos.stream()

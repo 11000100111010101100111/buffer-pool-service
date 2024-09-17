@@ -19,13 +19,13 @@ public interface QuestionBankService {
 
     /**
      * 导入题库，动态生成题库表，保存题库信息
-     * */
+     */
     LibraryImportVo importLibrary(MultipartFile file, LoginUser user);
 
     LibraryImportVo importSystemInfo(MultipartFile file, String tableName, LoginUser user);
 
     /**
      * 查询题库信息列表（分页）
-     * */
+     */
     List<LibraryInfoVo> selectLibraryInfoList(LibraryInfo info);
 }

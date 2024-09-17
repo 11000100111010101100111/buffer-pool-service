@@ -18,6 +18,7 @@ public class WebHookEvent {
         this.type = type;
         return this;
     }
+
     public WebHookEvent withMetric(String metric) {
         this.metric = metric;
         return this;

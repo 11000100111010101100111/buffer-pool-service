@@ -46,9 +46,9 @@ public abstract class WebHookAbstractSender {
     }
 
     public abstract HookOneHistory send(String url,
-                        Map<String, Object> head,
-                        Map<String, Object> urlParam,
-                        Object body);
+                                        Map<String, Object> head,
+                                        Map<String, Object> urlParam,
+                                        Object body);
 
     public abstract HookOneHistory send(HookOneHistory history);
 

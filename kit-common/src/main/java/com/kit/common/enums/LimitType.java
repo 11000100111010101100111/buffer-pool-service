@@ -6,8 +6,7 @@ package com.kit.common.enums;
  * @author xiao
  */
 
-public enum LimitType
-{
+public enum LimitType {
     /**
      * 默认策略全局限流
      */

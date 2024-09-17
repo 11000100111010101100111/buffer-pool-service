@@ -15,6 +15,9 @@
     <modules>
         <module>webhook-service</module>
         <module>map-service</module>
+        <module>translate-core</module>
+        <module>service-common</module>
+        <module>message-core</module>
     </modules>
 
     <dependencies>

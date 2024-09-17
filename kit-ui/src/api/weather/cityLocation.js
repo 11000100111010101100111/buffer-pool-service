@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function queryCityLocation(query) {
   return request({
-    url: '/map/weather/city-location',
+    url: '/open/map/weather/city-location',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function queryCityLocation(query) {
 
 export function querySimpleWeather(query) {
   return request({
-    url: "/map/weather",
+    url: "/open/map/weather",
     method: 'get',
     params: query
   })
@@ -18,14 +18,14 @@ export function querySimpleWeather(query) {
 
 export function queryWeatherPicPath() {
   return request({
-    url: "/map/weather/weather-code",
+    url: "/open/map/weather/weather-code",
     method: 'get'
   })
 }
 
 export function queryCityWeather(adCode) {
   return request({
-    url: "/map/weather/" + adCode,
+    url: "/open/map/weather/" + adCode,
     method: 'get'
   })
 }

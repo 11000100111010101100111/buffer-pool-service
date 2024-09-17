@@ -32,13 +32,14 @@ import java.util.List;
 public class QuestionManagementController extends BaseController {
     @Autowired
     QuestionBankService questionBankService;
+
     /**
      * 系统资源有限，管理员才能上传题库，个人上传方式暂不开启
      * 上传题库-->解析--->新建表-->插入题
-     * */
+     */
     @PostMapping("upload")
     @PreAuthorize("@ss.hasPermi('*:*:*')")
-    public AjaxResult uploadQuestions(@RequestParam("file")MultipartFile file) {
+    public AjaxResult uploadQuestions(@RequestParam("file") MultipartFile file) {
         if (null == file) {
             return AjaxResult.error("请上传文件对象");
         }
@@ -47,8 +48,8 @@ public class QuestionManagementController extends BaseController {
 
     @PostMapping("upload/{tableName}")
     @PreAuthorize("@ss.hasPermi('*:*:*')")
-    public AjaxResult uploadSystemInfo(@RequestParam("file")MultipartFile file,
-                                      @PathVariable(name = "tableName", required = true) String tableName) {
+    public AjaxResult uploadSystemInfo(@RequestParam("file") MultipartFile file,
+                                       @PathVariable(name = "tableName", required = true) String tableName) {
         if (null == file) {
             return AjaxResult.error("请上传文件对象");
         }
@@ -57,7 +58,7 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 下载题库，支持输出为excel、json、csv
-     * */
+     */
     @PostMapping("download/{bankId}")
     public void downloadQuestions(@PathVariable(name = "bankId") String bankId,
                                   @RequestParam(name = "type", required = false, defaultValue = "excel") String type) {
@@ -66,7 +67,7 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 分页查询题库列表
-     * */
+     */
     @GetMapping("find/page")
     public TableDataInfo findQuestionPage(LibraryInfo info) {
         startPage();
@@ -76,7 +77,7 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 根据ID查询题库信息
-     * */
+     */
     @GetMapping("find/{bankId}")
     public void findQuestionInfoByID(@PathVariable("bankId") String bankId) {
 
@@ -84,7 +85,7 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 收藏题库
-     * */
+     */
     @GetMapping("collect/{bankId}")
     public void collectQuestionBank(@PathVariable("bankId") String bankId) {
 
@@ -92,17 +93,16 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 取消收藏题库
-     * */
+     */
     @GetMapping("remove-collect/{bankId}")
     public void removeCollectQuestionBank(@PathVariable("bankId") String bankId) {
 
     }
 
 
-
     /**
      * 启用题库
-     * */
+     */
     @GetMapping("enable/{bankId}")
     public void enableQuestionBank(@PathVariable("bankId") String bankId) {
 
@@ -110,7 +110,7 @@ public class QuestionManagementController extends BaseController {
 
     /**
      * 停用题库
-     * */
+     */
     @GetMapping("remove-enable/{bankId}")
     public void unEnableQuestionBank(@PathVariable("bankId") String bankId) {
 

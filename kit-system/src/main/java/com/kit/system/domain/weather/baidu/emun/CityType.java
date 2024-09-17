@@ -2,7 +2,7 @@ package com.kit.system.domain.weather.baidu.emun;
 
 /**
  * 省0（直辖市1），省会2，市3，县4（区5）
- * */
+ */
 public enum CityType {
     PROVINCE("0"),
     MUNICIPALITY("1"),//municipality directly under the Central Government
@@ -13,6 +13,7 @@ public enum CityType {
     ;
 
     String type;
+
     CityType(String t) {
         this.type = t;
     }

@@ -11,102 +11,103 @@
 <script>
   import Cookies from "js-cookie";
   import LoginType from "./LoginType";
-    export default {
-        name: "ByGoogle",
-      components: {LoginType},
-      data() {
-        return {
-          codeUrl: "",
-          loginForm: {
-            username: "admin",
-            password: "admin123",
-            rememberMe: false,
-            code: "",
-            uuid: ""
-          },
-          loginRules: {
-            username: [
-              {required: true, trigger: "blur", message: "请输入您的账号"}
-            ],
-            password: [
-              {required: true, trigger: "blur", message: "请输入您的密码"}
-            ],
-            code: [{required: true, trigger: "change", message: "请输入验证码"}]
-          },
-          loading: false,
-          // 验证码开关
-          captchaEnabled: true,
-          // 注册开关
-          register: true,
-          redirect: undefined
+
+  export default {
+    name: "ByGoogle",
+    components: {LoginType},
+    data() {
+      return {
+        codeUrl: "",
+        loginForm: {
+          username: "admin",
+          password: "admin123",
+          rememberMe: false,
+          code: "",
+          uuid: ""
+        },
+        loginRules: {
+          username: [
+            {required: true, trigger: "blur", message: "请输入您的账号"}
+          ],
+          password: [
+            {required: true, trigger: "blur", message: "请输入您的密码"}
+          ],
+          code: [{required: true, trigger: "change", message: "请输入验证码"}]
+        },
+        loading: false,
+        // 验证码开关
+        captchaEnabled: true,
+        // 注册开关
+        register: true,
+        redirect: undefined
+      };
+    },
+    watch: {
+      $route: {
+        handler: function (route) {
+          this.redirect = route.query && route.query.redirect;
+        },
+        immediate: true
+      }
+    },
+    created() {
+      this.getCode();
+      this.getCookie();
+    },
+    methods: {
+      getCode() {
+        getCodeImg().then(res => {
+          this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+          if (this.captchaEnabled) {
+            this.codeUrl = "data:image/gif;base64," + res.img;
+            this.loginForm.uuid = res.uuid;
+          }
+        });
+      },
+      getCookie() {
+        const username = Cookies.get("username");
+        const password = Cookies.get("password");
+        const rememberMe = Cookies.get('rememberMe')
+        this.loginForm = {
+          username: username === undefined ? this.loginForm.username : username,
+          password: password === undefined ? this.loginForm.password : decrypt(password),
+          rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
         };
       },
-      watch: {
-        $route: {
-          handler: function (route) {
-            this.redirect = route.query && route.query.redirect;
-          },
-          immediate: true
-        }
-      },
-      created() {
-        this.getCode();
-        this.getCookie();
-      },
-      methods: {
-        getCode() {
-          getCodeImg().then(res => {
-            this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-            if (this.captchaEnabled) {
-              this.codeUrl = "data:image/gif;base64," + res.img;
-              this.loginForm.uuid = res.uuid;
+      handleLogin() {
+        this.$refs.loginForm.validate(valid => {
+          if (valid) {
+            this.loading = true;
+            if (this.loginForm.rememberMe) {
+              Cookies.set("username", this.loginForm.username, {expires: 30});
+              Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
+              Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
+            } else {
+              Cookies.remove("username");
+              Cookies.remove("password");
+              Cookies.remove('rememberMe');
             }
-          });
-        },
-        getCookie() {
-          const username = Cookies.get("username");
-          const password = Cookies.get("password");
-          const rememberMe = Cookies.get('rememberMe')
-          this.loginForm = {
-            username: username === undefined ? this.loginForm.username : username,
-            password: password === undefined ? this.loginForm.password : decrypt(password),
-            rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
-          };
-        },
-        handleLogin() {
-          this.$refs.loginForm.validate(valid => {
-            if (valid) {
-              this.loading = true;
-              if (this.loginForm.rememberMe) {
-                Cookies.set("username", this.loginForm.username, {expires: 30});
-                Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
-                Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
-              } else {
-                Cookies.remove("username");
-                Cookies.remove("password");
-                Cookies.remove('rememberMe');
-              }
-              this.$store.dispatch("Login", this.loginForm).then(() => {
-                this.$router.push({path: this.redirect || "/"}).catch(() => {
-                });
-              }).catch(() => {
-                this.loading = false;
-                if (this.captchaEnabled) {
-                  this.getCode();
-                }
+            this.$store.dispatch("Login", this.loginForm).then(() => {
+              this.$router.push({path: this.redirect || "/"}).catch(() => {
               });
-            }
-          });
-        },
-        readLoginType(data) {
-          this.$emit('login-type', data); // 将数据传递给祖先组件
-        }
+            }).catch(() => {
+              this.loading = false;
+              if (this.captchaEnabled) {
+                this.getCode();
+              }
+            });
+          }
+        });
+      },
+      readLoginType(data) {
+        this.$emit('login-type', data); // 将数据传递给祖先组件
       }
     }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  *{
+  * {
     padding: 0;
     margin: 0;
   }

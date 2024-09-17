@@ -46,96 +46,96 @@
   import Cookies from "js-cookie";
   import LoginType from "./LoginType";
   import {getEmailCode} from '@/api/login'
-    export default {
-        name: "ByEmali",
-      components: {LoginType},
-      data() {
-        return {
-          codeUrl: "",
-          loginForm: {
-            username: "",
-            code: "",
-            uuid: "",
-            type: 'email'
-          },
-          loginRules: {
-            username: [
-              {required: true, trigger: "blur", message: "请输入您的账号"},{
-                type: 'email',
-                message: '请输入正确的邮箱格式',
-                trigger: ['blur', 'change']
-              }
-            ],
-            code: [{required: true, trigger: "change", message: "请输入验证码"}]
-          },
-          loading: false,
-          // 验证码开关
-          captchaEnabled: true,
-          // 注册开关
-          register: true,
-          redirect: undefined
+
+  export default {
+    name: "ByEmali",
+    components: {LoginType},
+    data() {
+      return {
+        codeUrl: "",
+        loginForm: {
+          username: "",
+          code: "",
+          uuid: "",
+          type: 'email',
+          emailLoginBody: {
+            emailCode: ""
+          }
+        },
+        loginRules: {
+          username: [
+            {required: true, trigger: "blur", message: "请输入您的账号"}, {
+              type: 'email',
+              message: '请输入正确的邮箱格式',
+              trigger: ['blur', 'change']
+            }
+          ],
+          code: [{required: true, trigger: "change", message: "请输入验证码"}]
+        },
+        loading: false,
+        // 验证码开关
+        captchaEnabled: true,
+        // 注册开关
+        register: true,
+        redirect: undefined
+      };
+    },
+    watch: {
+      $route: {
+        handler: function (route) {
+          this.redirect = route.query && route.query.redirect;
+        },
+        immediate: true
+      }
+    },
+    created() {
+      this.getCookie();
+    },
+    methods: {
+      getCode() {
+        getEmailCode(this.loginForm.username).then(res => {
+          this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+          if (res.code === 200) {
+            this.$message.success("验证码发送成功");
+            this.registerForm.uuid = res.uuid;
+          } else {
+            this.$message.warning("验证码发送失败，请重试");
+          }
+        });
+      },
+      getCookie() {
+        const username = Cookies.get("username");
+        this.loginForm = {
+          username: username === undefined ? this.loginForm.username : username,
         };
       },
-      watch: {
-        $route: {
-          handler: function (route) {
-            this.redirect = route.query && route.query.redirect;
-          },
-          immediate: true
-        }
-      },
-      created() {
-        this.getCookie();
-      },
-      methods: {
-        getCode() {
-          this.$refs.loginForm.validate(valid => {
-            if (valid) {
-              getEmailCode(this.loginForm.username).then(res => {
-                this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-                if (this.code === 200) {
-                  this.$message.success(res.data);
-                  this.registerForm.uuid = res.uuid;
-                } else {
-                  this.$message.warning("验证码发送失败，请重试");
-                }
+      handleLogin() {
+        this.$refs.loginForm.validate(valid => {
+          if (valid) {
+            this.loading = true;
+            Cookies.set("username", this.loginForm.username, {expires: 30});
+            this.loginForm.type = 'email';
+            this.$store.dispatch("Login", this.loginForm).then(() => {
+              this.$router.push({path: this.redirect || "/home"}).catch(() => {
               });
-            }
-          });
-        },
-        getCookie() {
-          const username = Cookies.get("username");
-          this.loginForm = {
-            username: username === undefined ? this.loginForm.username : username,
-          };
-        },
-        handleLogin() {
-          this.$refs.loginForm.validate(valid => {
-            if (valid) {
-              this.loading = true;
-              Cookies.set("username", this.loginForm.username, {expires: 30});
-
-              this.$store.dispatch("Login", this.loginForm).then(() => {
-                this.$router.push({path: this.redirect || "/"}).catch(() => {
-                });
-              }).catch(() => {
-                this.loading = false;
-                if (this.captchaEnabled) {
-                  this.$message.warning("验证码有误，请重试");
-                }
-              });
-            }
-          });
-        },
-        readLoginType(data) {
-          this.$emit('login-type', data); // 将数据传递给祖先组件
-        }
+            }).catch(() => {
+              this.loading = false;
+              if (this.captchaEnabled) {
+                this.$message.warning("验证码有误，请重试");
+              }
+            });
+          }
+        });
+      },
+      readLoginType(data) {
+        this.$emit('login-type', data); // 将数据传递给祖先组件
       }
     }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  *{
+  * {
     padding: 0;
     margin: 0;
   }

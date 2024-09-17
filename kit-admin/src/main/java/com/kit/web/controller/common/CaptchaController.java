@@ -1,22 +1,7 @@
 package com.kit.web.controller.common;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-
-import com.kit.common.core.domain.entity.SysMenu;
-import com.kit.common.utils.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.FastByteArrayOutputStream;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import com.google.code.kaptcha.Producer;
-import com.kit.common.config.RuoYiConfig;
+import com.kit.common.config.SystemConfig;
 import com.kit.common.constant.CacheConstants;
 import com.kit.common.constant.Constants;
 import com.kit.common.core.domain.AjaxResult;
@@ -24,6 +9,19 @@ import com.kit.common.core.redis.RedisCache;
 import com.kit.common.utils.sign.Base64;
 import com.kit.common.utils.uuid.IdUtils;
 import com.kit.system.service.ISysConfigService;
+import com.kit.system.service.message.email.EmailServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FastByteArrayOutputStream;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 验证码操作处理
@@ -43,6 +41,9 @@ public class CaptchaController {
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private EmailServiceImpl emailService;
 
     /**
      * 生成验证码
@@ -64,7 +65,7 @@ public class CaptchaController {
         BufferedImage image = null;
 
         // 生成验证码
-        String captchaType = RuoYiConfig.getCaptchaType();
+        String captchaType = SystemConfig.getCaptchaType();
         if ("math".equals(captchaType)) {
             String capText = captchaProducerMath.createText();
             capStr = capText.substring(0, capText.lastIndexOf("@"));
@@ -92,14 +93,10 @@ public class CaptchaController {
 
     /**
      * 根据邮箱发送邮箱验证码
-     *
-     * */
+     */
     @GetMapping("/emailCode")
     public AjaxResult getEmailCode(@RequestParam(name = "email") String email) {
-
-        //@todo send email
-
-
+        emailService.sendCode(email);
         return AjaxResult.success();
     }
 }

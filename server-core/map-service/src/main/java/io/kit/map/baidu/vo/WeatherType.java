@@ -49,13 +49,13 @@ public enum WeatherType {
     EXTRA_HEAVY_DENSE_FOG("58", "特强浓雾", "Extra-heavy dense fog", "Extra-heavy dense fog"),
     RAIN("301", "雨", "Rain", "Rain"),
     SNOW("302", "雪", "Snow", "Snow"),
-    UN_KNOW("000", "未知", "Unknow", "Unknow")
-    ;
+    UN_KNOW("000", "未知", "Unknow", "Unknow");
     String type;
     String typeName;
     String dayEn;
     String nightEn;
-    WeatherType(String ... chars) {
+
+    WeatherType(String... chars) {
         this.type = chars[0];
         this.typeName = chars[1];
         this.dayEn = chars[2];

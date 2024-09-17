@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 @Api("地图-天气")
 @RestController
-@RequestMapping("/map/weather")
+@RequestMapping("/open/map/weather")
 public class WeatherController extends BaseController {
     @Autowired
     private BaiDuWeatherService baiDuWeatherService;
@@ -37,7 +37,7 @@ public class WeatherController extends BaseController {
                                                       @RequestParam(name = "adCode", required = false) String adCode) {
         try {
             Map<String, BaiDuWeatherResult.Now> simple = baiDuWeatherService.findSimple(Stream.of(adCode.split(Optional.ofNullable(split).orElse(","))).collect(Collectors.toSet()));
-            simple.forEach((k,s) -> baiDuWeatherService.withIconPath(s));
+            simple.forEach((k, s) -> baiDuWeatherService.withIconPath(s));
             return R.ok(simple);
         } catch (Exception e) {
             return R.fail(e.getMessage());
@@ -48,7 +48,7 @@ public class WeatherController extends BaseController {
     @GetMapping("/{adCode}")
     @RateLimiter(key = "#ip", count = 60, time = 60, limitType = LimitType.IP)
     public R<BaiDuWeatherResult.AbstractResult> getCityInfoByAdCode(
-                                                      @PathVariable(name = "adCode", required = false) String adCode) {
+            @PathVariable(name = "adCode", required = false) String adCode) {
         try {
             BaiDuWeatherResult.AbstractResult more = baiDuWeatherService.findMore(adCode);
             baiDuWeatherService.withIconPath(more);

@@ -24,7 +24,8 @@ public class HttpSenderUtil {
     protected static final String CONTENT_TYPE_JSON = "application/json";
     protected static final String CONTENT_TYPE = "Content-Type";
 
-    private HttpSenderUtil(){}
+    private HttpSenderUtil() {
+    }
 
     public static String genericHookId() {
         return UUID.randomUUID().toString();

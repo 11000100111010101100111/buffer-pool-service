@@ -1,24 +1,25 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" style="border-radius: 10px;margin: 5px;">
-      <div class="weather-container" :style="styleDayNight">
-        <day-and-night @mode-changed="onModeChanged"/>
-        <div class="weather-icon-container">
-          <img :src="weatherIcon" alt="天气图标" class="weather-icon" />
-        </div>
-        <div>
-          <p class="city-name">{{ cityName }} {{ date }} {{day}}</p>
-          <h2 class="weather-name">{{ weatherName }}</h2>
-          <p class="temperature">{{ temperatureMin }}°C ~ {{temperatureMax}}°C</p>
-        </div>
-        <div class="weather-info bottom clearfix">
-          <p class="last-updated" style="font-size: 6px;color: gray;">数据来源: 百度天气</p>
-        </div>
+    <div class="weather-container" :style="styleDayNight">
+      <day-and-night @mode-changed="onModeChanged"/>
+      <div class="weather-icon-container">
+        <img :src="weatherIcon" alt="天气图标" class="weather-icon"/>
       </div>
+      <div>
+        <p class="city-name">{{ cityName }} {{ date }} {{day}}</p>
+        <h2 class="weather-name">{{ weatherName }}</h2>
+        <p class="temperature">{{ temperatureMin }}°C ~ {{temperatureMax}}°C</p>
+      </div>
+      <div class="weather-info bottom clearfix">
+        <p class="last-updated" style="font-size: 6px;color: gray;">数据来源: 百度天气</p>
+      </div>
+    </div>
   </el-card>
 </template>
 
 <script>
   import DayAndNight from "../../layout/components/DayAndNight";
+
   export default {
     name: "WeatherBar",
     components: {DayAndNight},
@@ -56,16 +57,16 @@
         required: true,
       },
     },
-    data(){
+    data() {
       return {
         styleDayNight: {'background-color': '#ffffff'}
       }
     },
-    methods:{
+    methods: {
       onModeChanged(mode) {
         if (mode === 'night') {
           this.weatherIcon = this.forecast.weatherNightIcon;
-          this.weatherName =  this.forecast.text_night;
+          this.weatherName = this.forecast.text_night;
           this.styleDayNight = {'background-color': '##000'};
           return;
         }
@@ -118,11 +119,10 @@
     object-fit: contain;
   }
 
-  .el-header,.el-footer {
+  .el-header, .el-footer {
     padding: 0;
     margin: 0;
   }
-
 
 
   .time {

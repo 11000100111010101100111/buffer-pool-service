@@ -20,14 +20,17 @@ public class Column {
     Boolean isPk;
     String defaultValue;
     String mark;
+
     public Column setPk() {
         this.isPk = true;
         return this;
     }
+
     public Column setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
+
     public Column setMark(String mark) {
         this.mark = mark;
         return this;
@@ -38,6 +41,7 @@ public class Column {
         this.sqlType = sqlType;
         this.length = length;
     }
+
     public Column() {
 
     }

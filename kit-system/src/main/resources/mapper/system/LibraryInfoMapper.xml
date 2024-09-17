@@ -17,39 +17,40 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
-    <select id="selectLibraryInfoList" parameterType="com.kit.system.domain.entity.LibraryInfo" resultMap="libraryInfoVo">
+    <select id="selectLibraryInfoList" parameterType="com.kit.system.domain.entity.LibraryInfo"
+            resultMap="libraryInfoVo">
         select
-            library.id as id,
-            library.originName as originName,
-            library.status as status,
-            library.tableName as tableName,
-            library.createBy as createBy,
-            suc.nick_name as createUserName,
-            library.createTime as createTime,
-            library.updateTime as updateTime,
-            library.updateBy as updateBy,
-            suu.nick_name as updateUserName,
-            library.remark as remark
+        library.id as id,
+        library.originName as originName,
+        library.status as status,
+        library.tableName as tableName,
+        library.createBy as createBy,
+        suc.nick_name as createUserName,
+        library.createTime as createTime,
+        library.updateTime as updateTime,
+        library.updateBy as updateBy,
+        suu.nick_name as updateUserName,
+        library.remark as remark
         from library_table_info library
-            left join sys_user suc ON suc.user_name = library.createBy
-            left join sys_user suu ON suu.user_name = library.updateBy
-            where `delete` = '0'
-            <if test="id != null and id != 0">
-                AND library.id = #{id}
-            </if>
-            <if test="originName != null and originName != ''">
-                AND library.originName like concat('%', #{originName}, '%')
-            </if>
-            <if test="status != null and status != ''">
-                AND library.status = #{status}
-            </if>
+        left join sys_user suc ON suc.user_name = library.createBy
+        left join sys_user suu ON suu.user_name = library.updateBy
+        where `delete` = '0'
+        <if test="id != null and id != 0">
+            AND library.id = #{id}
+        </if>
+        <if test="originName != null and originName != ''">
+            AND library.originName like concat('%', #{originName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND library.status = #{status}
+        </if>
     </select>
 
     <insert id="addLibraryInfo" parameterType="com.kit.system.domain.entity.LibraryInfo" useGeneratedKeys="true">
         insert into `library_table_info` (
-            `tableName`, `originName`,`createBy`,`updateBy`,`remark`
+        `tableName`, `originName`,`createBy`,`updateBy`,`remark`
         ) value (
-            #{tableName},#{originName},#{createBy},#{updateBy},#{remark}
+        #{tableName},#{originName},#{createBy},#{updateBy},#{remark}
         )
     </insert>
 

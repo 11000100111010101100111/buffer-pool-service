@@ -53,7 +53,7 @@ public class WebHookAdapter implements WebHookAdapterService {
         try {
             send = send(event, myOpenHookInfo);
             if (Objects.isNull(send)) return null;
-           //@todo webHookHistoryService.pushHistory(hookId, Lists.newArrayList(send));
+            //@todo webHookHistoryService.pushHistory(hookId, Lists.newArrayList(send));
             WebHookInfoDto updatePingResult = new WebHookInfoDto();
             //@todo updatePingResult.setId(MongoUtils.toObjectId(hookId));
             updatePingResult.setPingResult(PingResult.valueOf(send.getStatus()));

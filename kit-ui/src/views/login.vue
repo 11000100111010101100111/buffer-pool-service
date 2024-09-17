@@ -1,8 +1,8 @@
 <template>
   <div class="login">
-    <ByDefault v-show="'default' === this.loginType"  @login-type="readLoginType"/>
-    <ByEmali v-show="'email' === this.loginType"  @login-type="readLoginType"/>
-    <ByCSDN v-show="'csdn' === this.loginType"  @login-type="readLoginType"/>
+    <ByDefault v-show="'default' === this.loginType" @login-type="readLoginType"/>
+    <ByEmali v-show="'email' === this.loginType" @login-type="readLoginType"/>
+    <ByCSDN v-show="'csdn' === this.loginType" @login-type="readLoginType"/>
     <ByGoogle v-show="'google' === this.loginType" @login-type="readLoginType"/>
     <ByGitHub v-show="'github' === this.loginType" @login-type="readLoginType"/>
     <ByWeChat v-show="'wechat' === this.loginType" @login-type="readLoginType"/>
@@ -27,30 +27,36 @@
     components: {ByWeChat, ByGoogle, ByGitHub, ByCSDN, ByEmali, ByDefault},
     data() {
       return {
+        supported: ['default', 'email'],
         loginType: 'default'
       };
     },
     created() {
       const type = Cookies.get("type");
-      if (type) {
+      if (this.supported.includes(type)) {
         this.loginType = type;
       } else {
-        this.loginType = 'default';
+        return this.supported[0];
       }
     },
-    methods:{
+    methods: {
       readLoginType(type) {
-        this.loginType = type;
+        if (this.supported.includes(type)) {
+          this.loginType = type;
+        } else {
+          return this.supported[0];
+        }
       }
     }
   };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  *{
+  * {
     padding: 0;
     margin: 0;
   }
+
   .login {
     display: flex;
     justify-content: center;
