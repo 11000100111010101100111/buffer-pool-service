@@ -43,6 +43,17 @@ public class AiImgGeneratorController extends BaseController {
         return R.ok(aiImgGeneratorService.generator(text, IpUtils.getIpAddr(request), null));
     }
 
+    @GetMapping("/open-api/remaining-usage-times")
+    @RateLimiter(key = "#ip", count = 20)
+    public R<Object> generatorTimes(HttpServletRequest request) {
+        return R.ok(aiImgGeneratorService.remainingUsageTimes(IpUtils.getIpAddr(request)));
+    }
+
+    @GetMapping("/remaining-usage-times")
+    public R<Object> generatorTimesSelf() {
+        return R.ok(aiImgGeneratorService.remainingUsageTimes(String.valueOf(getLoginUser().getUserId())));
+    }
+
     @PostMapping("/avatar")
     @RateLimiter(key = "#ip", count = 3, time = 24*60*60)
     public R<GeneratorVo> generatorAvatar(@RequestParam(name = "text") String text) {
@@ -64,7 +75,7 @@ public class AiImgGeneratorController extends BaseController {
 
     @GetMapping("/process-info")
     public R<ProcessInfoEntity> getProcessInfo(@RequestParam(name = "processId") String processId) {
-        return R.ok(aiImgGeneratorService.findProcessInfo(processId, getUsername()));
+        return R.ok(aiImgGeneratorService.findProcessInfo(processId, String.valueOf(getLoginUser().getUserId())));
     }
 
     @GetMapping("/open-api/process-step-info")
@@ -75,7 +86,7 @@ public class AiImgGeneratorController extends BaseController {
 
     @GetMapping("/process-step-info")
     public R<List<ProcessStepInfo>> getProcessStepInfo(@RequestParam(name = "processId") String processId) {
-        return R.ok(aiImgGeneratorService.findStepInfoByProcessId(processId, getUsername()));
+        return R.ok(aiImgGeneratorService.findStepInfoByProcessId(processId, String.valueOf(getLoginUser().getUserId())));
     }
 
 

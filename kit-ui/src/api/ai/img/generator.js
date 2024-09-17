@@ -31,3 +31,15 @@ export function myGeneratorStepInfo(processId) {
     method: 'get'
   })
 }
+export function remainingUsageTimes() {
+  return request({
+    url: '/ai/img/open-api/remaining-usage-times',
+    method: 'get'
+  })
+}
+export function remainingUsageTimesSelf() {
+  return request({
+    url: '/ai/img/remaining-usage-times',
+    method: 'get'
+  })
+}

@@ -1,20 +1,21 @@
 <template>
   <div ref="vantaRef" class="input-container">
     <div class="form-con">
-      <el-form class="login-form">
-        <el-form-item>
+      <div class="info-form">
+        <div>
           <div class="block">
             <el-input placeholder="描述一下你的想法, 30字以内喔"
                       class="custom-input"
                       maxlength="30"
                       show-word-limit
                       :disabled="inLoading"
+                      @keydown.enter="submit"
                       v-model="inputValue">
               <el-button slot="append" icon="el-icon-search" :disabled="inLoading" class="search" @click="submit" :loading="inLoading"/>
             </el-input>
           </div>
-        </el-form-item>
-        <el-form-item>
+        </div>
+        <div>
           <el-progress :percentage="percentage"
                        v-if="startGenerator"
                        :status="percentageStatus"
@@ -26,25 +27,25 @@
           <div class="unable-select-element tip-msg" v-if="startGenerator">
             <span>{{message}}</span>
           </div>
-        </el-form-item>
-        <el-form-item>
+        </div>
+        <div>
           <el-image :src="src" class="img" v-if="imgCanBeShow && src">
             <div slot="placeholder" class="image-slot">
               加载中<span class="dot">...</span>
             </div>
           </el-image>
-        </el-form-item>
-      </el-form>
+        </div>
+      </div>
     </div>
     <div class="el-login-footer unable-select-element">
-      <span>Copyright © 2024.8-* seeuagain.vip All Rights Reserved 服务器资源有限，生成过程可能要等待一定时间哦</span>
+      <span>Copyright © 服务器资源有限，生成过程可能要等待一定时间哦</span>
     </div>
   </div>
 </template>
 <script>
   import * as THREE from 'three'
   import RINGS from 'vanta/src/vanta.rings'
-  import {generator, generatorInfo, generatorStepInfo} from '@/api/ai/img/generator';
+  import {generator, generatorInfo, generatorStepInfo, remainingUsageTimes} from '@/api/ai/img/generator';
   export default {
     name: 'SelfInput',
     data() {
@@ -63,10 +64,23 @@
 
         vantaEffect: null,
         message: '',
-        timer: null // 用于存储定时器 ID
+        timer: null, // 用于存储定时器 ID,
+
+
+        remainingUsage: {
+          usage: 10,
+          maxTimes: 10,
+          message: ''
+        }
       };
     },
     mounted() {
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          this.submit();
+        }
+      });
+
       this.vantaEffect = RINGS({
         el: this.$refs.vantaRef,
         THREE: THREE
@@ -87,6 +101,24 @@
           this.$message.warning("描述一下你的idea, 30字以内喔");
           return ;
         }
+        this.message = "初始化检查，核对您的配额情况...";
+        remainingUsageTimes().then(r => {
+          if (r.code === 200) {
+            this.remainingUsage.usage = r.data.remainingUsageTimes;
+            this.remainingUsage.maxTimes = r.data.maxTimes;
+            this.remainingUsage.message = r.data.message;
+          }
+
+          if (this.remainingUsage.usage > 0) {
+            this.message = "检查结果表示：您的配额情况正常, " + this.remainingUsage.message;
+            this.doGenerator();
+          } else {
+            this.message = "检查结果表示：您的配额情况异常，" + this.remainingUsage.message;
+            this.$message.warning(this.remainingUsage.message);
+          }
+        });
+      },
+      doGenerator() {
         this.inLoading = true;
         this.percentage = 0;
         this.percentage1 = 0;
@@ -94,15 +126,17 @@
         this.percentageStatus1 = 'warn';
         this.startGenerator = true;
         this.imgCanBeShow = false;
+        this.message = "正在申请服务器资源...";
         generator({
           text: this.inputValue,
           width: 512,
           height: 512
         }).then(res => {
           if (res.code !== 200) {
-            this.reset()
+            this.reset();
             return;
           }
+          this.message = "服务器正在初始化，连接获取中...";
           this.processId = res.data.processId;
           this.startGenerator = true;
           this.timer = setInterval(() => {
@@ -116,8 +150,12 @@
         }
         generatorStepInfo(this.processId).then(res => {
           if (200 !== res.code) {
-            this.reset();
-            return
+            this.message = "获取实时执行进度失败，3秒后重试，请稍后...";
+            return;
+          }
+          if (!res.data || res.data.lengths <= 0) {
+            this.message = "远程正在服务器等待处理机接管，请稍后...";
+            return;
           }
           let data = this.groupAndSort(res.data);
 
@@ -144,7 +182,7 @@
 
           let message = '';
           if (topOne) {
-            message = `${topOne.title}, 进度: ${topOne.percentage}(${topOne.currentStep}/${topOne.totalSteps}), 预计剩余时间：${topOne.estimatedTime}，执行时间：${topOne.elapsedTime}, 当前：${this.formatTimestamp(topOne.time)}，${topOne.mark}`
+            message = `正在执行[${topOne.title}]阶段, ${topOne.percentage}(${topOne.currentStep}/${topOne.totalSteps}), 预计剩余：${topOne.estimatedTime}，已执行：${topOne.elapsedTime}, ${this.formatTimestamp(topOne.time)}，${topOne.mark}`
           } else {
             message = "图像生成中，请稍后...";
           }
@@ -153,7 +191,7 @@
           if (succeed) {
             let topOne = succeed[0];
             if (topOne) {
-              this.message = "生成已完成";
+              this.message = "生成已完成，服务器资源已释放，正在拉取生成结果，请稍后";
               this.stopSearch();
               generatorInfo(this.processId).then(resData => {
                 this.percentage = 100;
@@ -161,12 +199,14 @@
                 this.percentageStatus = 'success';
                 this.percentageStatus1 = 'success';
                  if (200 !== resData.code) {
+                   this.message = "正在拉取生成结果拉取失败：" + resData.message;
                    return;
                  }
+                this.message = "图像获取成功";
                  this.src = process.env.VUE_APP_BASE_API +  resData.data.imgUrl;
                  this.imgCanBeShow = true;
                  this.inLoading = false;
-              }).catch(e => this.reset());
+              });
             }
 
             return;
@@ -181,7 +221,7 @@
             if (this.percentage1 < 100) {
               this.percentageStatus1 = 'exception';
             }
-            this.message = "生成失败， " + topOne.mark;
+            this.message = "生成失败 " + topOne.mark;
             this.inLoading = false;
             this.stopSearch();
             return;
@@ -259,7 +299,7 @@
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
   }
-  .login-form {
+  .info-form {
     width: 100%;
     height: 100%;
     border-radius: 6px;
@@ -335,6 +375,7 @@
   }
 
   .img {
+    margin-top: 5px;
     max-width: 384px;
     max-height: 384px;
     /*object-fit: cover;*/

@@ -56,6 +56,22 @@ public class AiImgGeneratorService {
         return text.matches(regex);
     }
 
+    public Map<Object, Object> remainingUsageTimes(String userIdOrIp) {
+        int myProcess = imageGeneratorMapper.countMyProcess(userIdOrIp);
+        int times = Math.max(0, maxTimes - myProcess);
+        String message;
+        if (times > 0) {
+            message = String.format("您当前已使用%d次，今日剩余使用次数%d", myProcess, times);
+        } else {
+            message = String.format("您当前已使用%d次，今日额度已用完明天在来吧", myProcess);
+        }
+        return MapUtil.builder()
+                .put("maxTimes", maxTimes)
+                .put("remainingUsageTimes", times)
+                .put("message", message)
+                .build();
+    }
+
     public GeneratorVo generator(GeneratorParam param, String userIdOrIp, LoginUser loginUser) {
         String hash = Md5Utils.hash(param.getText());
         String redisKey = key(hash, userIdOrIp);
