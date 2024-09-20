@@ -4,15 +4,20 @@
       <div class="info-form">
         <div>
           <div class="block">
-            <el-input placeholder="描述一下你的想法, 30字以内喔"
-                      class="custom-input"
-                      maxlength="30"
-                      show-word-limit
-                      :disabled="inLoading"
-                      @keydown.enter="submit"
-                      v-model="inputValue">
-              <el-button slot="append" icon="el-icon-search" :disabled="inLoading" class="search" @click="submit" :loading="inLoading"/>
-            </el-input>
+            <my-input placeholder="描述一下你的想法, 30字以内喔"
+                      :show-word-limit="true"
+                      @enter-pressed="submit"
+                      :value="inputValue"
+                      :disabled="inLoading"/>
+<!--            <el-input placeholder="描述一下你的想法, 30字以内喔"-->
+<!--                      class="custom-input"-->
+<!--                      maxlength="30"-->
+<!--                      show-word-limit-->
+<!--                      :disabled="inLoading"-->
+<!--                      @keydown.enter="submit"-->
+<!--                      v-model="inputValue">-->
+<!--              <el-button slot="append" icon="el-icon-search" :disabled="inLoading" class="search" @click="submit" :loading="inLoading"/>-->
+<!--            </el-input>-->
           </div>
         </div>
         <div>
@@ -46,8 +51,10 @@
   import * as THREE from 'three'
   import RINGS from 'vanta/src/vanta.rings'
   import {generator, generatorInfo, generatorStepInfo, remainingUsageTimes} from '@/api/ai/img/generator';
+  import MyInput from "../../../components/Kit/Default/MyInput";
   export default {
     name: 'SelfInput',
+    components: {MyInput},
     data() {
       return {
         inputValue: '',
@@ -96,7 +103,8 @@
         this.startGenerator = false;
         this.imgCanBeShow = false;
       },
-      submit() {
+      submit(value) {
+        this.inputValue = value;
         if ('' === this.inputValue) {
           this.$message.warning("描述一下你的idea, 30字以内喔");
           return ;

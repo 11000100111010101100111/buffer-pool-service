@@ -20,6 +20,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,10 @@ public class AiImgGeneratorService {
 
     @Autowired
     private BaiDuTranslate translate;
+
+    public List<Object> page(String userIdOrIp) {
+        return imageGeneratorMapper.page(userIdOrIp);
+    }
 
     public boolean isChinese(String text) {
         String regex = "[\\u4e00-\\u9fa5]+";
@@ -145,5 +150,13 @@ public class AiImgGeneratorService {
 
     protected String key(String hash, String userId) {
         return String.format("%s:%s:%s", "ai_img", hash, userId);
+    }
+
+    @Transactional
+    public void deleteOne(String processId) {
+        //删除信息
+        imageGeneratorMapper.deleteInfo(processId);
+        //删除进度
+        imageGeneratorMapper.deleteStepInfo(processId);
     }
 }

@@ -13,6 +13,7 @@
         <result property="width" column="width"/>
         <result property="height" column="height"/>
         <result property="imgUrl" column="img_url"/>
+        <result property="createTime" column="createTime"/>
     </resultMap>
 
     <select id="findByProcessId" parameterType="java.lang.String" resultMap="ProcessInfoSimple">
@@ -24,7 +25,8 @@
             `text`,
             `width`,
             `height`,
-            `img_url`
+            `img_url`,
+            `createTime`
         FROM `ai_img_wait_queue_info`
         WHERE `process_id` = #{processId} AND `ip_or_user_id` = #{ipOrUserId} AND `delete` = '0'
     </select>
@@ -91,5 +93,27 @@
             and (select count(`id`) from `ai_img_wait_queue_info` where `process_id` = #{processId} and `ip_or_user_id` = #{ipOrUserId} and `delete` = 0) > 0
     </select>
 
+    <select id="page" parameterType="java.lang.String" resultMap="ProcessInfoSimple">
+        select
+            `ip_or_user_id`,
+            `process_id`,
+            `result`,
+            `result_message`,
+            `text`,
+            `width`,
+            `height`,
+            `img_url`,
+            `createTime`
+        from  `ai_img_wait_queue_info`
+        where  `ip_or_user_id` = #{userIdOrIp} AND `delete` = '0'
+            ORDER BY updateTime DESC
+    </select>
 
+    <delete id="deleteInfo" parameterType="java.lang.String">
+        delete from `ai_img_wait_queue_info` where `process_id`=#{processId}
+    </delete>
+
+    <delete id="deleteStepInfo" parameterType="java.lang.String">
+        delete from `ai_img_wait_queue_step_info` where `process_id`=#{processId}
+    </delete>
 </mapper>

@@ -100,7 +100,7 @@ export const constantRoutes = [
   },
   {
     path: '/ai-gc/image',
-    component: () => import('@/public/aigc/img/index'),
+    component: () => import('@/public/aigc/index'),
     hidden: true,
     meta: {requiresAuth: false}
   },
