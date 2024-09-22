@@ -63,14 +63,20 @@ export const constantRoutes = [
   },
   {
     path: '',
-    redirect: '/home',
-    component: () => import('@/public/home'),
+    redirect: '/index',
+    component: () => import('@/public/index'),
+    hidden: true,
+    meta: {requiresAuth: false}
+  },
+  {
+    path: '/index',
+    component: () => import('@/public/index'),
     hidden: true,
     meta: {requiresAuth: false}
   },
   {
     path: '/home',
-    component: () => import('@/public/home'),
+    component: () => import('@/public/index'),
     hidden: true,
     meta: {requiresAuth: false}
   },
@@ -100,7 +106,7 @@ export const constantRoutes = [
   },
   {
     path: '/ai-gc/image',
-    component: () => import('@/public/aigc/img/index'),
+    component: () => import('@/public/aigc/index'),
     hidden: true,
     meta: {requiresAuth: false}
   },

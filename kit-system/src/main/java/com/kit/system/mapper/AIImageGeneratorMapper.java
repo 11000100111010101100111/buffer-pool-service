@@ -24,4 +24,10 @@ public interface AIImageGeneratorMapper {
                           @Param("url") String ipOrUserId,
                           @Param("result") String result,
                           @Param("resultMessage") String resultMessage);
+
+    List<Object> page(String userIdOrIp);
+
+    int deleteInfo(String processId);
+
+    int deleteStepInfo(String processId);
 }

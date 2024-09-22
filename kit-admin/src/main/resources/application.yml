@@ -1,12 +1,12 @@
 # 项目相关配置
 kit:
   # 名称
-  name: 天天查
+  name: Buffer'Pool
   # 版本
   version: 1.0.0
   # 版权年份
   copyrightYear: 2024
-  profile: D:/kit/idea/uploadPath
+  profile: /apps/kit/files/ # D:/kit/idea/uploadPath
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数字计算 char 字符验证
@@ -107,8 +107,8 @@ spring:
     port: 465
     protocol: smtp
     default-encoding: UTF-8
-    username: xxxxx
-    password: xxxxx
+    username: xxx@xxx.com
+    password: xxx
     properties:
       mail:
         smtp:
@@ -122,10 +122,10 @@ spring:
             enable: true
             required: true
   rabbitmq:
-    host: xxxxx
+    host: 127.0.0.1
     port: 5672
-    username: xxxxx
-    password: xxxxx
+    username: xxx
+    password: xxx
 
 mail:
   cacheSuffix: email_code_key_
@@ -179,12 +179,12 @@ map:
   baidu:
     expire: 20
     async: 5
-    ak: xxxxx
+    ak: xxx
 
 translate:
   baidu:
-    appId: xxxxx
-    appKey: xxxxx
+    appId: xxx
+    appKey: xxx
     redisKeySuffix: translate_
     expire: 20
 
@@ -196,3 +196,5 @@ mq:
   queue: test_queue
   exchange: test_exchange
   routing: my_vhost
+  generator:
+    maxTimes: 30

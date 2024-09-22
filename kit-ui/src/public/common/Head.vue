@@ -9,7 +9,7 @@
     :active-text-color="activeTextColor">
     <el-menu-item index="1" class="el-icon-s-home" @click="homePage">首页</el-menu-item>
     <el-submenu index="2">
-      <template slot="title">工具包</template>
+      <template slot="title">猜你喜欢</template>
       <el-submenu index="2-1">
         <template slot="title" class="iconfont icon-kaifagongju">开发工具</template>
         <el-menu-item index="2-1-1" class="iconfont el-icon-map-location" @click="handleBaiDuAPIMap">实时天气地图</el-menu-item>

@@ -1,8 +1,14 @@
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">欢迎加入! Welcome to join</h1>
 
-<h4 align="center">一个开源的兴趣平台</h4>
+<h4 align="center">一个开源的兴趣平台 - Buffer'Pool</h4>
 
-&nbsp;&nbsp;在线体验：[http://seeuagain.vip](http://1.12.74.15/) 
+&nbsp;&nbsp;在线体验：[http://seeuagain.vip](http://8.134.183.234//) 
+
+&nbsp;&nbsp;我们的首页
+
+![system-pic/HOME_PAGE1.png](system-pic/HOME_PAGE1.png)
+
+![system-pic/HOME_PAGE2.png](system-pic/HOME_PAGE2.png)
 
 &nbsp;&nbsp;至少现在已经包括了下面的内容：
 
