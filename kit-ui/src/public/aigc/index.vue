@@ -93,44 +93,7 @@
             pageSize: 10
           },
           total: 0,
-          processInfo: [{
-              processId: "1",
-              src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-              description:"小鸟站在树枝上看着远方,我正在思恋他乡",
-              status: 'OK', //已完成, 等待处理, 处理中，失败
-              message: '[XXX]正在处理中',
-              process: 80,
-              startTime: '2024-09-20 19:5400.032', //处理时间
-              class: 'Height', //图像级别: Upper(50, ...), Height[40, 50)，Middle[30, 40), Low[20, 30), Lower(0, 20)
-            },{
-            processId: "2",
-            src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-            description:"小鸟站在树枝上看着远方，她在眺望故乡",
-            status: 'OK', //已完成, 等待处理, 处理中，失败
-            message: '[XXX]正在处理中',
-            process: 80,
-            startTime: '2024-09-20 19:5400.032', //处理时间
-            class: 'Height', //图像级别: Upper(50, ...), Height[40, 50)，Middle[30, 40), Low[20, 30), Lower(0, 20)
-          },{
-            processId: "3",
-            src: 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
-            description:"白毛猴子一边在水池里洗澡另一边用手趴在石头上",
-            status: 'OK', //已完成, 等待处理, 处理中，失败
-            message: '[XXX]正在处理中',
-            process: 80,
-            startTime: '2024-09-20 19:5400.032', //处理时间
-            class: 'Height', //图像级别: Upper(50, ...), Height[40, 50)，Middle[30, 40), Low[20, 30), Lower(0, 20)
-          },{
-            processId: "4",
-            src: 'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
-            description:"小鸟站在树枝上看着远方小鸟站在树枝上看着远方,我正在思恋他乡小鸟站在树枝上看着远方,我正在思恋他乡小鸟站在树枝上看着远方,我正在思恋他乡小鸟站在树枝上看着远方,我正在思恋他乡",
-            status: 'OK', //已完成, 等待处理, 处理中，失败
-            message: '[XXX]正在处理中',
-            process: 80,
-            startTime: '2024-09-20 19:5400.032', //处理时间
-            class: 'Height', //图像级别: Upper(50, ...), Height[40, 50)，Middle[30, 40), Low[20, 30), Lower(0, 20)
-          }
-          ]
+          processInfo: []
         }
       },
       methods: {
