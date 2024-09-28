@@ -57,16 +57,6 @@ public class AiImgGeneratorController extends BaseController {
        return R.ok();
     }
 
-    public String getUserIdOrIp(HttpServletRequest request) {
-        String userIdOrIp;
-        try {
-            userIdOrIp = String.valueOf(getLoginUser().getUserId());
-        } catch (Exception e) {
-            userIdOrIp = IpUtils.getIpAddr(request);
-        }
-        return userIdOrIp;
-    }
-
     @PostMapping("/open-api/generator")
     //@RateLimiter(key = "#ip", count = 1, time = 60)
     public R<GeneratorVo> generator(HttpServletRequest request, @RequestBody GeneratorParam text) {

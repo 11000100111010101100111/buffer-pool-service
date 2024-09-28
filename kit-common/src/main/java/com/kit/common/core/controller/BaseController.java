@@ -4,6 +4,7 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
 
+import com.kit.common.utils.ip.IpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -21,6 +22,8 @@ import com.kit.common.utils.PageUtils;
 import com.kit.common.utils.SecurityUtils;
 import com.kit.common.utils.StringUtils;
 import com.kit.common.utils.sql.SqlUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * web层通用数据处理
@@ -177,5 +180,18 @@ public class BaseController {
      */
     public String getUsername() {
         return getLoginUser().getUsername();
+    }
+
+    /**
+     * 获取登录用户名或登陆的IP
+     */
+    public String getUserIdOrIp(HttpServletRequest request) {
+        String userIdOrIp;
+        try {
+            userIdOrIp = String.valueOf(getLoginUser().getUserId());
+        } catch (Exception e) {
+            userIdOrIp = IpUtils.getIpAddr(request);
+        }
+        return userIdOrIp;
     }
 }

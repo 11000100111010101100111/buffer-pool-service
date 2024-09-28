@@ -18,6 +18,7 @@
         <module>translate-core</module>
         <module>service-common</module>
         <module>message-core</module>
+        <module>file-core</module>
     </modules>
 
     <dependencies>
