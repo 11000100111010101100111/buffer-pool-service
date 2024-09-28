@@ -31,6 +31,8 @@ public class SystemConfig {
      */
     private static String profile;
 
+    private static String videoPath;
+
     /**
      * 获取地址开关
      */
@@ -69,8 +71,16 @@ public class SystemConfig {
         return profile;
     }
 
+    public static String getVideoPath() {
+        return videoPath;
+    }
+
     public void setProfile(String profile) {
         SystemConfig.profile = profile;
+    }
+
+    public void setVideoPath(String videoPath) {
+        SystemConfig.videoPath = videoPath;
     }
 
     public static boolean isAddressEnabled() {

@@ -61,6 +61,12 @@
             <groupId>com.kit</groupId>
             <artifactId>kit-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>file-core</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
