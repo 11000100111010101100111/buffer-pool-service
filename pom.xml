@@ -156,53 +156,14 @@
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
             </dependency>
-
-            <!-- 定时任务-->
-            <dependency>
-                <groupId>com.kit</groupId>
-                <artifactId>kit-quartz</artifactId>
-                <version>${kit.version}</version>
-            </dependency>
-
-            <!-- 代码生成-->
-            <dependency>
-                <groupId>com.kit</groupId>
-                <artifactId>kit-generator</artifactId>
-                <version>${kit.version}</version>
-            </dependency>
-
-            <!-- 核心模块-->
-            <dependency>
-                <groupId>com.kit</groupId>
-                <artifactId>kit-framework</artifactId>
-                <version>${kit.version}</version>
-            </dependency>
-
-            <!-- 系统模块-->
-            <dependency>
-                <groupId>com.kit</groupId>
-                <artifactId>kit-system</artifactId>
-                <version>${kit.version}</version>
-            </dependency>
-
-            <!-- 通用工具-->
-            <dependency>
-                <groupId>com.kit</groupId>
-                <artifactId>kit-common</artifactId>
-                <version>${kit.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>kit-admin</module>
-        <module>kit-framework</module>
-        <module>kit-system</module>
-        <module>kit-quartz</module>
-        <module>kit-generator</module>
-        <module>kit-common</module>
         <module>server-core</module>
+        <module>buffer-pool-base</module>
+        <module>server-modules</module>
+        <module>buffer-pool-application</module>
     </modules>
     <packaging>pom</packaging>
 

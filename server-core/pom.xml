@@ -26,6 +26,7 @@
         <dependency>
             <groupId>com.kit</groupId>
             <artifactId>kit-common</artifactId>
+            <version>${kit.version}</version>
         </dependency>
         <!-- SLF4J API -->
         <dependency>
