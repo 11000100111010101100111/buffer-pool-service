@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.kit</groupId>
             <artifactId>service-common</artifactId>
-            <version>1.0.0</version>
+            <version>${kit.version}</version>
         </dependency>
     </dependencies>
 
