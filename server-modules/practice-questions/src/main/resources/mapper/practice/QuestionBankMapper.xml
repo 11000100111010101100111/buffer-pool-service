@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.practice.mapper.QuestionBankMapper">
+
+    <!--创建表-->
+    <update id="createTable" parameterType="java.util.List">
+        CREATE TABLE `${tableName}` (
+        <foreach collection="columns" separator="," item="item">
+            `${item.name}` ${item.sqlType} <if test="item.isPk != null">PRIMARY KEY</if>
+            <if test="item.defaultValue != null">DEFAULT ${item.defaultValue}</if> COMMENT '${item.mark}'
+        </foreach>
+        ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT =
+        #{originName} ROW_FORMAT = Dynamic
+    </update>
+
+    <sql id="values">
+        <foreach item="item" collection="list" separator=",">
+            <foreach collection="item" item="detailItem" index="index" open="("
+                     close=")" separator=",">
+                #{detailItem}
+            </foreach>
+        </foreach>
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO ${tableName} (
+        <foreach collection="columns" item="columnItem" separator=",">
+            `${columnItem}`
+        </foreach>)
+        VALUES
+        <include refid="values"></include>
+    </insert>
+
+    <resultMap type="com.kit.practice.domian.library.CountTableMap" id="CountMap">
+        <result property="tableName" column="tableName"/>
+        <result property="count" column="count"/>
+    </resultMap>
+    <select id="findTableCountByTableIds" parameterType="list" resultMap="CountMap">
+        SELECT
+        `table_name` as tableName,
+        `table_rows` as `count`
+        FROM
+        `information_schema`.tables
+        WHERE
+        `table_name` IN (
+        <foreach collection="tables" item="table" separator=",">
+            #{table}
+        </foreach>
+        )
+    </select>
+</mapper>

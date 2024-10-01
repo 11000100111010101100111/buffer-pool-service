@@ -161,8 +161,8 @@
 
     <modules>
         <module>server-core</module>
-        <module>buffer-pool-base</module>
         <module>server-modules</module>
+        <module>buffer-pool-base</module>
         <module>buffer-pool-application</module>
     </modules>
     <packaging>pom</packaging>

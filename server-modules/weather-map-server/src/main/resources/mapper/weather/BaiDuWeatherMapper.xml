@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.weather.mapper.BaiDuWeatherMapper">
+
+    <resultMap id="CityInfo" type="com.kit.weather.domain.entity.CityInfo">
+        <id property="id" column="id"/>
+        <result property="tableName" column="tableName"/>
+        <result property="adCode" column="adCode"/>
+        <result property="name" column="name"/>
+        <result property="lon" column="lon"/>
+        <result property="lat" column="lat"/>
+    </resultMap>
+
+    <select id="cityLocationInfo"
+            parameterType="com.kit.weather.domain.param.QueryCityLocationParam"
+            resultMap="CityInfo">
+        select
+        `id`,district_geo_code as adCode,`district` as name,`lon`,`lat`
+        from weather_district_info as ci
+        where ST_Contains(POLYGON(ST_GeomFromText(CONCAT('LINESTRING(', #{lonMin}, ' ', #{latMin},',', #{lonMin}, ' ',
+        #{latMax},',', #{lonMax}, ' ', #{latMax},',', #{lonMax}, ' ', #{latMin},',', #{lonMin}, ' ', #{latMin},
+        ')'))),POINT(ci.lon, ci.lat)) = 1
+        <if test="queryTypes != null">
+            AND ci.type in (
+            <foreach collection="queryTypes" separator="," item="item">
+                ${item}
+            </foreach>
+            )
+        </if>
+    </select>
+
+    <select id="queryCityLocationCount"
+            parameterType="com.kit.weather.domain.param.QueryCityLocationParam"
+            resultType="com.kit.weather.domain.vo.QueryCityLocationCountVo">
+        select
+        SUM(CASE WHEN ci.type IN ('0', '1', '2') THEN 1 ELSE 0 END) AS provinceCount,
+        SUM(CASE WHEN ci.type IN ('3', '2') THEN 1 ELSE 0 END) AS cityCount,
+        SUM(CASE WHEN ci.type IN ('4', '5') THEN 1 ELSE 0 END) AS countyCount
+        from weather_district_info as ci
+        where ST_Contains(POLYGON(ST_GeomFromText(CONCAT('LINESTRING(', #{lonMin}, ' ', #{latMin},',', #{lonMin}, ' ',
+        #{latMax},',', #{lonMax}, ' ', #{latMax},',', #{lonMax}, ' ', #{latMin},',', #{lonMin}, ' ', #{latMin},
+        ')'))),POINT(ci.lon, ci.lat)) = 1
+    </select>
+
+    <select id="getWeatherPicPath" parameterType="java.util.Set" resultType="java.util.Map">
+        select code, path from weather_type_pic_mapping where `delete` = '0'
+    </select>
+    <select id="getWeatherPicPathByCodes" parameterType="java.lang.String" resultType="java.util.Map">
+        select code, path from weather_type_pic_mapping where `delete` = '0' AND code in (
+        <foreach collection="array" item="item" separator=",">
+            ${item}
+        </foreach>
+        )
+    </select>
+</mapper>

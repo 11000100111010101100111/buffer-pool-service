@@ -14,7 +14,11 @@
 
     <modules>
         <module>video-server</module>
-        <module>weater-map-server</module>
+        <module>weather-map-server</module>
+        <module>translate-server</module>
+        <module>website-server</module>
+        <module>practice-questions</module>
+        <module>image-generation-server</module>
     </modules>
 
     <dependencies>
