@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.practice.mapper.LibraryInfoMapper">
+    <resultMap id="libraryInfoVo" type="com.kit.practice.domian.vo.LibraryInfoVo">
+        <id property="id" column="id"/>
+        <result property="tableName" column="tableName"/>
+        <result property="originName" column="originName"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="createBy"/>
+        <result property="createUserName" column="createUserName"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateBy" column="updateBy"/>
+        <result property="updateUserName" column="updateUserName"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="selectLibraryInfoList" parameterType="com.kit.practice.domian.entity.LibraryInfo"
+            resultMap="libraryInfoVo">
+        select
+        library.id as id,
+        library.originName as originName,
+        library.status as status,
+        library.tableName as tableName,
+        library.createBy as createBy,
+        suc.nick_name as createUserName,
+        library.createTime as createTime,
+        library.updateTime as updateTime,
+        library.updateBy as updateBy,
+        suu.nick_name as updateUserName,
+        library.remark as remark
+        from library_table_info library
+        left join sys_user suc ON suc.user_name = library.createBy
+        left join sys_user suu ON suu.user_name = library.updateBy
+        where `delete` = '0'
+        <if test="id != null and id != 0">
+            AND library.id = #{id}
+        </if>
+        <if test="originName != null and originName != ''">
+            AND library.originName like concat('%', #{originName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND library.status = #{status}
+        </if>
+    </select>
+
+    <insert id="addLibraryInfo" parameterType="com.kit.practice.domian.entity.LibraryInfo" useGeneratedKeys="true">
+        insert into `library_table_info` (
+        `tableName`, `originName`,`createBy`,`updateBy`,`remark`
+        ) value (
+        #{tableName},#{originName},#{createBy},#{updateBy},#{remark}
+        )
+    </insert>
+
+</mapper>

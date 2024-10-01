@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.generation.mapper.AIImageGeneratorMapper">
+
+    <resultMap id="ProcessInfoSimple" type="com.kit.generation.domain.entity.ProcessInfoEntity">
+        <result property="ipOrUserId" column="ip_or_user_id"/>
+        <result property="processId" column="process_id"/>
+        <result property="result" column="result"/>
+        <result property="resultMessage" column="result_message"/>
+        <result property="text" column="text"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+
+    <select id="findByProcessId" parameterType="java.lang.String" resultMap="ProcessInfoSimple">
+        SELECT
+            `ip_or_user_id`,
+            `process_id`,
+            `result`,
+            `result_message`,
+            `text`,
+            `width`,
+            `height`,
+            `img_url`,
+            `createTime`
+        FROM `ai_img_wait_queue_info`
+        WHERE `process_id` = #{processId} AND `ip_or_user_id` = #{ipOrUserId} AND `delete` = '0'
+    </select>
+
+    <select id="countMyProcess" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT
+            count(`id`)
+        FROM `ai_img_wait_queue_info`
+        WHERE `ip_or_user_id` = #{ipOrUserId} AND `delete` = '0' AND DATE(`createTime`) = CURDATE();
+    </select>
+
+
+    <resultMap id="ProcessStepInfoSimple" type="com.kit.generation.domain.entity.ProcessStepInfo">
+        <result property="processId" column="process_id"/>
+        <result property="type" column="type"/>
+        <result property="title" column="title"/>
+        <result property="percentage" column="percentage"/>
+        <result property="mark" column="mark"/>
+        <result property="currentStep" column="currentStep"/>
+        <result property="totalSteps" column="totalSteps"/>
+        <result property="estimatedTime" column="estimatedTime"/>
+        <result property="elapsedTime" column="elapsedTime"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <insert id="saveProcessInfo"
+            parameterType="com.kit.generation.domain.entity.ProcessInfoEntity">
+       insert into `ai_img_wait_queue_info` (
+            `ip_or_user_id`, `process_id`, `result`, `result_message`, `text`, `width`, `height`, `createBy`
+       ) values (
+            #{ipOrUserId}, #{processId},#{result},#{resultMessage},#{text},#{width},#{height},#{createBy}
+       )
+    </insert>
+
+    <update id="updateUrl"
+            parameterType="java.lang.String">
+        update `ai_img_wait_queue_info` set `img_url` = #{url}, `result`=#{result}, `result_message`=#{resultMessage} where `process_id` = #{processId}
+    </update>
+
+    <insert id="deployProcessStepInfo" parameterType="com.kit.generation.domain.entity.ProcessStepInfo">
+        insert into `ai_img_wait_queue_step_info` (
+            `process_id`, `type`, `title`, `percentage`, `mark`, `currentStep`, `totalSteps`, `estimatedTime`,`elapsedTime`,`time`
+       ) values (
+            #{processId}, #{type},#{title},#{percentage},#{mark},#{currentStep},#{totalSteps},#{estimatedTime},#{elapsedTime},#{time}
+       )
+    </insert>
+
+
+    <select id="findStepInfoByProcessId" parameterType="java.lang.String" resultMap="ProcessStepInfoSimple">
+        select
+        `process_id`,
+         `type`,
+         `title`,
+         `percentage`,
+          `mark`,
+          `currentStep`,
+          `totalSteps`,
+          `estimatedTime`,
+          `elapsedTime`,
+          `time`
+         from `ai_img_wait_queue_step_info`
+            where `process_id` = #{processId}
+            and `delete` = 0
+            and (select count(`id`) from `ai_img_wait_queue_info` where `process_id` = #{processId} and `ip_or_user_id` = #{ipOrUserId} and `delete` = 0) > 0
+    </select>
+
+    <select id="page" parameterType="java.lang.String" resultMap="ProcessInfoSimple">
+        select
+            `ip_or_user_id`,
+            `process_id`,
+            `result`,
+            `result_message`,
+            `text`,
+            `width`,
+            `height`,
+            `img_url`,
+            `createTime`
+        from  `ai_img_wait_queue_info`
+        where  `ip_or_user_id` = #{userIdOrIp} AND `delete` = '0'
+            ORDER BY updateTime DESC
+    </select>
+
+    <delete id="deleteInfo" parameterType="java.lang.String">
+        delete from `ai_img_wait_queue_info` where `process_id`=#{processId}
+    </delete>
+
+    <delete id="deleteStepInfo" parameterType="java.lang.String">
+        delete from `ai_img_wait_queue_step_info` where `process_id`=#{processId}
+    </delete>
+</mapper>

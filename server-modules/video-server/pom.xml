@@ -9,6 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <artifactId>video-server</artifactId>
+
+    <description>看看小视频</description>
+
     <dependencies>
         <dependency>
             <groupId>com.kit</groupId>
@@ -23,11 +28,5 @@
             </exclusions>
         </dependency>
     </dependencies>
-    <artifactId>video-server</artifactId>
-    <packaging>pom</packaging>
-
-    <description>
-        看看短视频
-    </description>
 
 </project>

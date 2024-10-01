@@ -83,6 +83,41 @@
             <version>${kit.version}</version>
             <scope>compile</scope>
         </dependency>
+
+
+        <!--START    显示声明扩展服务的依赖-->
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>image-generation-server</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>practice-questions</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>translate-server</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>video-server</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>weather-map-server</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kit</groupId>
+            <artifactId>website-server</artifactId>
+            <version>${kit.version}</version>
+        </dependency>
+        <!--END   显示声明扩展服务的依赖-->
+
     </dependencies>
 
     <build>
