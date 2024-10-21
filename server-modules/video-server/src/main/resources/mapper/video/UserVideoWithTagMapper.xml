@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoWithTagMapper">
+
+    <resultMap type="UserVideoWithTag" id="UserVideoWithTagResult">
+            <result property="id" column="id"/>
+            <result property="videoId" column="video_id"/>
+            <result property="tagId" column="tag_id"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoWithTagVo">
+        select id, video_id, tag_id, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_video_with_tag
+    </sql>
+
+    <select id="selectUserVideoWithTagList" parameterType="UserVideoWithTag" resultMap="UserVideoWithTagResult">
+        <include refid="selectUserVideoWithTagVo"/>
+        <where>
+                        <if test="videoId != null  and videoId != ''">
+                            and video_id = #{videoId}
+                        </if>
+                        <if test="tagId != null  and tagId != ''">
+                            and tag_id = #{tagId}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoWithTagById" parameterType="Long"
+            resultMap="UserVideoWithTagResult">
+            <include refid="selectUserVideoWithTagVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoWithTag" parameterType="UserVideoWithTag" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into user_video_with_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="videoId != null">video_id,
+                    </if>
+                    <if test="tagId != null">tag_id,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="videoId != null">#{videoId},
+                    </if>
+                    <if test="tagId != null">#{tagId},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoWithTag" parameterType="UserVideoWithTag">
+        update user_video_with_tag
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="videoId != null">video_id =
+                        #{videoId},
+                    </if>
+                    <if test="tagId != null">tag_id =
+                        #{tagId},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoWithTagById" parameterType="Long">
+        delete from user_video_with_tag where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoWithTagByIds" parameterType="String">
+        delete from user_video_with_tag where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

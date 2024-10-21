@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoLikeInfoMapper">
+
+    <resultMap type="UserVideoLikeInfo" id="UserVideoLikeInfoResult">
+            <result property="id" column="id"/>
+            <result property="videoId" column="video_id"/>
+            <result property="likeUserId" column="like_user_id"/>
+            <result property="likeItem" column="like_item"/>
+            <result property="likeType" column="like_type"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoLikeInfoVo">
+        select id, video_id, like_user_id, like_item, like_type, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_video_like_info
+    </sql>
+
+    <select id="selectUserVideoLikeInfoList" parameterType="UserVideoLikeInfo" resultMap="UserVideoLikeInfoResult">
+        <include refid="selectUserVideoLikeInfoVo"/>
+        <where>
+                        <if test="videoId != null  and videoId != ''">
+                            and video_id = #{videoId}
+                        </if>
+                        <if test="likeUserId != null  and likeUserId != ''">
+                            and like_user_id = #{likeUserId}
+                        </if>
+                        <if test="likeItem != null  and likeItem != ''">
+                            and like_item = #{likeItem}
+                        </if>
+                        <if test="likeType != null  and likeType != ''">
+                            and like_type = #{likeType}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoLikeInfoById" parameterType="String"
+            resultMap="UserVideoLikeInfoResult">
+            <include refid="selectUserVideoLikeInfoVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoLikeInfo" parameterType="UserVideoLikeInfo">
+        insert into user_video_like_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="id != null">id,
+                    </if>
+                    <if test="videoId != null">video_id,
+                    </if>
+                    <if test="likeUserId != null">like_user_id,
+                    </if>
+                    <if test="likeItem != null">like_item,
+                    </if>
+                    <if test="likeType != null">like_type,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="id != null">#{id},
+                    </if>
+                    <if test="videoId != null">#{videoId},
+                    </if>
+                    <if test="likeUserId != null">#{likeUserId},
+                    </if>
+                    <if test="likeItem != null">#{likeItem},
+                    </if>
+                    <if test="likeType != null">#{likeType},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoLikeInfo" parameterType="UserVideoLikeInfo">
+        update user_video_like_info
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="videoId != null">video_id =
+                        #{videoId},
+                    </if>
+                    <if test="likeUserId != null">like_user_id =
+                        #{likeUserId},
+                    </if>
+                    <if test="likeItem != null">like_item =
+                        #{likeItem},
+                    </if>
+                    <if test="likeType != null">like_type =
+                        #{likeType},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoLikeInfoById" parameterType="String">
+        delete from user_video_like_info where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoLikeInfoByIds" parameterType="String">
+        delete from user_video_like_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

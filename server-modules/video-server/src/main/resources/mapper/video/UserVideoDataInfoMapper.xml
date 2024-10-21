@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoDataInfoMapper">
+
+    <resultMap type="UserVideoDataInfo" id="UserVideoDataInfoResult">
+            <result property="id" column="id"/>
+            <result property="videoId" column="video_id"/>
+            <result property="likeTimes" column="like_times"/>
+            <result property="dislikeTimes" column="dislike_times"/>
+            <result property="browseTimes" column="browse_times"/>
+            <result property="commentTimes" column="comment_times"/>
+            <result property="collectTimes" column="collect_times"/>
+            <result property="forwardTimes" column="forward_times"/>
+            <result property="reportTimes" column="report_times"/>
+            <result property="description" column="description"/>
+            <result property="belong" column="belong"/>
+            <result property="examineStatus" column="examine_status"/>
+            <result property="examineMessage" column="examine_message"/>
+            <result property="examineUser" column="examine_user"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoDataInfoVo">
+        select id, video_id, like_times, dislike_times, browse_times, comment_times, collect_times, forward_times, report_times, description, belong, examine_status, examine_message, examine_user, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_video_data_info
+    </sql>
+
+    <select id="selectUserVideoDataInfoList" parameterType="UserVideoDataInfo" resultMap="UserVideoDataInfoResult">
+        <include refid="selectUserVideoDataInfoVo"/>
+        <where>
+                        <if test="videoId != null  and videoId != ''">
+                            and video_id = #{videoId}
+                        </if>
+                        <if test="likeTimes != null ">
+                            and like_times = #{likeTimes}
+                        </if>
+                        <if test="dislikeTimes != null ">
+                            and dislike_times = #{dislikeTimes}
+                        </if>
+                        <if test="browseTimes != null ">
+                            and browse_times = #{browseTimes}
+                        </if>
+                        <if test="commentTimes != null ">
+                            and comment_times = #{commentTimes}
+                        </if>
+                        <if test="collectTimes != null ">
+                            and collect_times = #{collectTimes}
+                        </if>
+                        <if test="forwardTimes != null ">
+                            and forward_times = #{forwardTimes}
+                        </if>
+                        <if test="reportTimes != null ">
+                            and report_times = #{reportTimes}
+                        </if>
+                        <if test="description != null  and description != ''">
+                            and description = #{description}
+                        </if>
+                        <if test="belong != null  and belong != ''">
+                            and belong = #{belong}
+                        </if>
+                        <if test="examineStatus != null  and examineStatus != ''">
+                            and examine_status = #{examineStatus}
+                        </if>
+                        <if test="examineMessage != null  and examineMessage != ''">
+                            and examine_message = #{examineMessage}
+                        </if>
+                        <if test="examineUser != null  and examineUser != ''">
+                            and examine_user = #{examineUser}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoDataInfoById" parameterType="Long"
+            resultMap="UserVideoDataInfoResult">
+            <include refid="selectUserVideoDataInfoVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoDataInfo" parameterType="UserVideoDataInfo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into user_video_data_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="videoId != null">video_id,
+                    </if>
+                    <if test="likeTimes != null">like_times,
+                    </if>
+                    <if test="dislikeTimes != null">dislike_times,
+                    </if>
+                    <if test="browseTimes != null">browse_times,
+                    </if>
+                    <if test="commentTimes != null">comment_times,
+                    </if>
+                    <if test="collectTimes != null">collect_times,
+                    </if>
+                    <if test="forwardTimes != null">forward_times,
+                    </if>
+                    <if test="reportTimes != null">report_times,
+                    </if>
+                    <if test="description != null">description,
+                    </if>
+                    <if test="belong != null">belong,
+                    </if>
+                    <if test="examineStatus != null">examine_status,
+                    </if>
+                    <if test="examineMessage != null">examine_message,
+                    </if>
+                    <if test="examineUser != null">examine_user,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="videoId != null">#{videoId},
+                    </if>
+                    <if test="likeTimes != null">#{likeTimes},
+                    </if>
+                    <if test="dislikeTimes != null">#{dislikeTimes},
+                    </if>
+                    <if test="browseTimes != null">#{browseTimes},
+                    </if>
+                    <if test="commentTimes != null">#{commentTimes},
+                    </if>
+                    <if test="collectTimes != null">#{collectTimes},
+                    </if>
+                    <if test="forwardTimes != null">#{forwardTimes},
+                    </if>
+                    <if test="reportTimes != null">#{reportTimes},
+                    </if>
+                    <if test="description != null">#{description},
+                    </if>
+                    <if test="belong != null">#{belong},
+                    </if>
+                    <if test="examineStatus != null">#{examineStatus},
+                    </if>
+                    <if test="examineMessage != null">#{examineMessage},
+                    </if>
+                    <if test="examineUser != null">#{examineUser},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoDataInfo" parameterType="UserVideoDataInfo">
+        update user_video_data_info
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="videoId != null">video_id =
+                        #{videoId},
+                    </if>
+                    <if test="likeTimes != null">like_times =
+                        #{likeTimes},
+                    </if>
+                    <if test="dislikeTimes != null">dislike_times =
+                        #{dislikeTimes},
+                    </if>
+                    <if test="browseTimes != null">browse_times =
+                        #{browseTimes},
+                    </if>
+                    <if test="commentTimes != null">comment_times =
+                        #{commentTimes},
+                    </if>
+                    <if test="collectTimes != null">collect_times =
+                        #{collectTimes},
+                    </if>
+                    <if test="forwardTimes != null">forward_times =
+                        #{forwardTimes},
+                    </if>
+                    <if test="reportTimes != null">report_times =
+                        #{reportTimes},
+                    </if>
+                    <if test="description != null">description =
+                        #{description},
+                    </if>
+                    <if test="belong != null">belong =
+                        #{belong},
+                    </if>
+                    <if test="examineStatus != null">examine_status =
+                        #{examineStatus},
+                    </if>
+                    <if test="examineMessage != null">examine_message =
+                        #{examineMessage},
+                    </if>
+                    <if test="examineUser != null">examine_user =
+                        #{examineUser},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoDataInfoById" parameterType="Long">
+        delete from user_video_data_info where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoDataInfoByIds" parameterType="String">
+        delete from user_video_data_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

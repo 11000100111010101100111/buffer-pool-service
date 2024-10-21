@@ -79,7 +79,7 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host:
+    host: 8.134.183.234
     # 端口，默认为6379
     port: 6379 #1968
     # 数据库索引
@@ -108,12 +108,12 @@ spring:
       hibernate:
         format_sql: true
   mail:
-    host:
+    host: smtp.qq.com
     port: 465
     protocol: smtp
     default-encoding: UTF-8
-    username:
-    password:
+    username: 2749984520@qq.com
+    password: qvszitgbisbgdhab
     properties:
       mail:
         smtp:
@@ -127,10 +127,10 @@ spring:
             enable: true
             required: true
   rabbitmq:
-    host:
+    host: 139.159.212.237
     port: 5672
-    username:
-    password:
+    username: admin
+    password: xjh13579
 
 mail:
   cacheSuffix: email_code_key_
@@ -184,12 +184,12 @@ map:
   baidu:
     expire: 20
     async: 5
-    ak:
+    ak: EPLNY44yeK71751XeVhKTUDouwzx84DD
 
 translate:
   baidu:
-    appId:
-    appKey:
+    appId: 20240910002146343
+    appKey: YAMgJ8j4ggWv_T1ZkcwU
     redisKeySuffix: translate_
     expire: 20
 

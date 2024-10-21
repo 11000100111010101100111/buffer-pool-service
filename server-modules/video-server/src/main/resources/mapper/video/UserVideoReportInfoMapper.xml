@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoReportInfoMapper">
+
+    <resultMap type="UserVideoReportInfo" id="UserVideoReportInfoResult">
+            <result property="id" column="id"/>
+            <result property="videoId" column="video_id"/>
+            <result property="reportUserId" column="report_user_id"/>
+            <result property="reportItem" column="report_item"/>
+            <result property="reportTypeId" column="report_type_id"/>
+            <result property="reportMessage" column="report_message"/>
+            <result property="reportResult" column="report_result"/>
+            <result property="reportResultMessage" column="report_result_message"/>
+            <result property="reportResultUser" column="report_result_user"/>
+            <result property="reportResultTime" column="report_result_time"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoReportInfoVo">
+        select id, video_id, report_user_id, report_item, report_type_id, report_message, report_result, report_result_message, report_result_user, report_result_time, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_video_report_info
+    </sql>
+
+    <select id="selectUserVideoReportInfoList" parameterType="UserVideoReportInfo" resultMap="UserVideoReportInfoResult">
+        <include refid="selectUserVideoReportInfoVo"/>
+        <where>
+                        <if test="videoId != null  and videoId != ''">
+                            and video_id = #{videoId}
+                        </if>
+                        <if test="reportUserId != null  and reportUserId != ''">
+                            and report_user_id = #{reportUserId}
+                        </if>
+                        <if test="reportItem != null  and reportItem != ''">
+                            and report_item = #{reportItem}
+                        </if>
+                        <if test="reportTypeId != null ">
+                            and report_type_id = #{reportTypeId}
+                        </if>
+                        <if test="reportMessage != null  and reportMessage != ''">
+                            and report_message = #{reportMessage}
+                        </if>
+                        <if test="reportResult != null  and reportResult != ''">
+                            and report_result = #{reportResult}
+                        </if>
+                        <if test="reportResultMessage != null  and reportResultMessage != ''">
+                            and report_result_message = #{reportResultMessage}
+                        </if>
+                        <if test="reportResultUser != null  and reportResultUser != ''">
+                            and report_result_user = #{reportResultUser}
+                        </if>
+                        <if test="reportResultTime != null ">
+                            and report_result_time = #{reportResultTime}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoReportInfoById" parameterType="String"
+            resultMap="UserVideoReportInfoResult">
+            <include refid="selectUserVideoReportInfoVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoReportInfo" parameterType="UserVideoReportInfo">
+        insert into user_video_report_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="id != null">id,
+                    </if>
+                    <if test="videoId != null">video_id,
+                    </if>
+                    <if test="reportUserId != null">report_user_id,
+                    </if>
+                    <if test="reportItem != null">report_item,
+                    </if>
+                    <if test="reportTypeId != null">report_type_id,
+                    </if>
+                    <if test="reportMessage != null">report_message,
+                    </if>
+                    <if test="reportResult != null">report_result,
+                    </if>
+                    <if test="reportResultMessage != null">report_result_message,
+                    </if>
+                    <if test="reportResultUser != null">report_result_user,
+                    </if>
+                    <if test="reportResultTime != null">report_result_time,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="id != null">#{id},
+                    </if>
+                    <if test="videoId != null">#{videoId},
+                    </if>
+                    <if test="reportUserId != null">#{reportUserId},
+                    </if>
+                    <if test="reportItem != null">#{reportItem},
+                    </if>
+                    <if test="reportTypeId != null">#{reportTypeId},
+                    </if>
+                    <if test="reportMessage != null">#{reportMessage},
+                    </if>
+                    <if test="reportResult != null">#{reportResult},
+                    </if>
+                    <if test="reportResultMessage != null">#{reportResultMessage},
+                    </if>
+                    <if test="reportResultUser != null">#{reportResultUser},
+                    </if>
+                    <if test="reportResultTime != null">#{reportResultTime},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoReportInfo" parameterType="UserVideoReportInfo">
+        update user_video_report_info
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="videoId != null">video_id =
+                        #{videoId},
+                    </if>
+                    <if test="reportUserId != null">report_user_id =
+                        #{reportUserId},
+                    </if>
+                    <if test="reportItem != null">report_item =
+                        #{reportItem},
+                    </if>
+                    <if test="reportTypeId != null">report_type_id =
+                        #{reportTypeId},
+                    </if>
+                    <if test="reportMessage != null">report_message =
+                        #{reportMessage},
+                    </if>
+                    <if test="reportResult != null">report_result =
+                        #{reportResult},
+                    </if>
+                    <if test="reportResultMessage != null">report_result_message =
+                        #{reportResultMessage},
+                    </if>
+                    <if test="reportResultUser != null">report_result_user =
+                        #{reportResultUser},
+                    </if>
+                    <if test="reportResultTime != null">report_result_time =
+                        #{reportResultTime},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoReportInfoById" parameterType="String">
+        delete from user_video_report_info where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoReportInfoByIds" parameterType="String">
+        delete from user_video_report_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
