@@ -2,7 +2,10 @@ package com.kit.video.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kit.video.domain.UserVideoReportType;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 举报类型信息Mapper接口
@@ -10,14 +13,15 @@ import com.kit.video.domain.UserVideoReportType;
  * @author xjh
  * @date 2024-10-20
  */
-public interface UserVideoReportTypeMapper {
+@Mapper
+public interface UserVideoReportTypeMapper extends BaseMapper<UserVideoReportType> {
     /**
      * 查询举报类型信息
      *
      * @param id 举报类型信息主键
      * @return 举报类型信息
      */
-    public UserVideoReportType selectUserVideoReportTypeById(String id);
+    public UserVideoReportType selectUserVideoReportTypeById(@Param("id")String id);
 
     /**
      * 查询举报类型信息列表
@@ -49,7 +53,7 @@ public interface UserVideoReportTypeMapper {
      * @param id 举报类型信息主键
      * @return 结果
      */
-    public int deleteUserVideoReportTypeById(String id);
+    public int deleteUserVideoReportTypeById(@Param("id")String id);
 
     /**
      * 批量删除举报类型信息
@@ -57,5 +61,5 @@ public interface UserVideoReportTypeMapper {
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoReportTypeByIds(String[] ids);
+    public int deleteUserVideoReportTypeByIds(@Param("ids")String[] ids);
 }

@@ -10,9 +10,11 @@ import com.kit.common.utils.sign.Base64;
 import com.kit.common.utils.uuid.IdUtils;
 import com.kit.system.service.ISysConfigService;
 import com.kit.system.service.message.email.EmailServiceImpl;
+import com.kit.system.service.message.phone.PhoneServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +46,9 @@ public class CaptchaController {
 
     @Autowired
     private EmailServiceImpl emailService;
+
+    @Autowired
+    private PhoneServiceImpl phoneService;
 
     /**
      * 生成验证码
@@ -94,9 +99,18 @@ public class CaptchaController {
     /**
      * 根据邮箱发送邮箱验证码
      */
-    @GetMapping("/emailCode")
+    @GetMapping("/valid-code/emailCode")
     public AjaxResult getEmailCode(@RequestParam(name = "email") String email) {
         emailService.sendCode(email);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 根据手机号发送邮箱验证码
+     */
+    @GetMapping("/valid-code/phone-code")
+    public AjaxResult getPhoneCode(@RequestParam(name = "phone") String phone) {
+        phoneService.sendCode(phone);
         return AjaxResult.success();
     }
 }

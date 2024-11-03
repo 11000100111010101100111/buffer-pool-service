@@ -1,5 +1,6 @@
 package com.kit.video.service.open;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kit.video.domain.UserVideoDataInfo;
 
 import java.util.List;
@@ -10,14 +11,16 @@ import java.util.List;
  * @author xjh
  * @date 2024-10-20
  */
-public interface OpenUserVideoDataInfoService {
+public interface OpenUserVideoDataInfoService extends IService<UserVideoDataInfo> {
     /**
      * 查询视频产生的相关数据
      *
      * @param id 视频产生的相关数据主键
      * @return 视频产生的相关数据
      */
-    public UserVideoDataInfo selectUserVideoDataInfoById(Long id);
+    public UserVideoDataInfo selectUserVideoDataInfoById(String id);
+
+    public List<UserVideoDataInfo> selectUserVideoDataInfoById(List<String> ids);
 
     /**
      * 查询视频产生的相关数据列表
@@ -49,7 +52,7 @@ public interface OpenUserVideoDataInfoService {
      * @param ids 需要删除的视频产生的相关数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoDataInfoByIds(Long[] ids);
+    public int deleteUserVideoDataInfoByIds(String[] ids);
 
     /**
      * 删除视频产生的相关数据信息
@@ -57,5 +60,6 @@ public interface OpenUserVideoDataInfoService {
      * @param id 视频产生的相关数据主键
      * @return 结果
      */
-    public int deleteUserVideoDataInfoById(Long id);
+    public int deleteUserVideoDataInfoById(String id);
+
 }

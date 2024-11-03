@@ -1,5 +1,6 @@
 package com.kit.video.controller.video.beta;
 
+import com.alibaba.fastjson.JSON;
 import com.kit.common.core.domain.AjaxResult;
 import com.kit.common.utils.uuid.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,17 +30,58 @@ public class TestVideoController {
             @RequestParam("count") Integer count) {
         if (null == count) count = 20;
         List<Map<String, Object>> result = new ArrayList<>();
+//        File path = new File("/apps/kit/videoInfo");
+        File path = new File("D:\\DeskTop\\video\\local-use");
+        final File[] files = path.listFiles();
+        int size = files.length;
+        final Random random = new Random();
         for (int index = 0; index < count; index++) {
-            result.add(mockOne(index));
+            if (count < 5 || index > size - 1) {
+                int i2 = random.nextInt(size - 1);
+                if (i2 < 0) i2 = 0;
+                final File file = files[i2];
+                try (InputStream stream = new FileInputStream(file)) {
+                    result.add(JSON.parseObject(stream, Map.class));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
+
+            final File file = files[index];
+            try (InputStream stream = new FileInputStream(file)) {
+                result.add(JSON.parseObject(stream, Map.class));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return AjaxResult.success(result);
     }
 
     public static void main(String[] args) {
-        final Map<String, Object> stringObjectMap = mockOne(0);
+//        final Map<String, Object> stringObjectMap = mockOne(0);
+        URLS.forEach((k, v) -> {
+//            System.out.println();
+//            System.out.println(JSON.toJSONString(mockOne(k)));
+            final Map<String, Object> mockOne = mockOne(k);
+            final File file = new File(String.valueOf(mockOne.get("currentVideoIndex")) + ".json");
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                JSON.writeJSONString(outputStream, mockOne);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println(file.getAbsolutePath());
+        });
+//        System.out.println(JSON.toJSONString(stringObjectMap));
     }
 
-    static Map<String, Object> mockOne(int index) {
+    static Map<String, Object> mockOne(Integer index) {
         final Random random = new Random();
         Map<String, Object> one = new HashMap<>();
         one.put("pageSrc", "https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg");
@@ -45,7 +94,7 @@ public class TestVideoController {
 
         List<Map<String, Object>> videoSrc = new ArrayList<>();
         Map<String, Object> srcObject = new HashMap<>();
-        int i2 = random.nextInt(URLS.size() - 1);
+        int i2 = null == index ? random.nextInt(URLS.size() - 1) : index;
         if (i2 < 0) i2 = 0;
         final Map<String, Object> urlObject = URLS.get(i2);
 
@@ -66,11 +115,10 @@ public class TestVideoController {
     }
 
 
-
     public static Map<String, Object> genericTag(int key, String name, String link) {
         Map<String, Object> tag = new HashMap<>();
         tag.put("label", name);
-        tag.put("key",  UUID.randomUUID().toString());
+        tag.put("key", UUID.randomUUID().toString());
         tag.put("link", link);
         return tag;
     }
@@ -82,8 +130,8 @@ public class TestVideoController {
         put("createTime", "2024-9-28 13:03");
         put("authName", "二叉树");
         put("userLink", "http://8.134.183.234:8000/public/head_7.png");
-        put("title", "今朝有酒今朝醉，明早没钱再遭罪");
-        put("description", "反正也就那样吧");
+        put("title", "不知道怎么写标题");
+        put("description", "先随便写吧");
 
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "IKUN", "#"));
@@ -91,7 +139,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_7.png",
-                80401,31,7816,43
+                80401, 31, 7816, 43
         ));
     }};
 
@@ -102,15 +150,15 @@ public class TestVideoController {
         put("createTime", "2024-9-28 13:03");
         put("authName", "二叉树");
         put("userLink", "http://8.134.183.234:8000/public/head_7.png");
-        put("title", "今朝有酒今朝醉，明早没钱再遭罪");
-        put("description", "反正也就那样吧");
+        put("title", "这个标题很简单");
+        put("description", "很艰难地想到了这写文字");
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "坤哥", "#"));
         tags.add(genericTag(1, "厉不厉害我坤哥", "#"));
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_7.png",
-                5201,71,9816,43
+                5201, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o3 = new HashMap<String, Object>() {{
@@ -118,36 +166,36 @@ public class TestVideoController {
         put("pageSrc", "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg");
         put("ipLocal", "西藏拉萨");
         put("createTime", "2024-7-1 15:03");
-        put("authName", "小布丁");
+        put("authName", "南岳");
         put("userLink", "http://8.134.183.234:8000/public/head_2.png");
         put("title", "在路上");
         put("description", "好的风景都在路上");
         List<Map<String, Object>> tags = new ArrayList<>();
-        tags.add(genericTag(0, "看看对面的山", "#"));
-        tags.add(genericTag(1, "出发吧", "#"));
-        tags.add(genericTag(1, "318", "#"));
+        tags.add(genericTag(0, "风景", "#"));
+        tags.add(genericTag(1, "Vlog", "#"));
+        tags.add(genericTag(1, "好天气", "#"));
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_2.png",
-                999,71,86,43
+                999, 71, 86, 43
         ));
     }};
     public static final Map<String, Object> o4 = new HashMap<String, Object>() {{
-        put("src", "http://8.134.183.234:8000/public/video_3mp4");
+        put("src", "http://8.134.183.234:8000/public/video_3.mp4");
         put("pageSrc", "https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg");
         put("ipLocal", "江苏苏州");
         put("createTime", "2024-9-18 8:03");
         put("authName", "沉默的寡言");
         put("userLink", "http://8.134.183.234:8000/public/head_3.png");
-        put("title", "飞芦伴今生");
-        put("description", "我有景色，你有酒吗？");
+        put("title", "一夜入秋");
+        put("description", "再次看见你的时候只能透过秋叶");
         List<Map<String, Object>> tags = new ArrayList<>();
-        tags.add(genericTag(0, "清晨", "#"));
-        tags.add(genericTag(1, "芦苇从中", "#"));
+        tags.add(genericTag(0, "冷空气", "#"));
+        tags.add(genericTag(1, "秋天", "#"));
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_3.png",
-                549,71,51,43
+                549, 71, 51, 43
         ));
     }};
     public static final Map<String, Object> o5 = new HashMap<String, Object>() {{
@@ -157,16 +205,16 @@ public class TestVideoController {
         put("createTime", "2024-8-12 10:23");
         put("authName", "@狗蛋");
         put("userLink", "http://8.134.183.234:8000/public/dog_egg.png");
-        put("title", "都是白云");
-        put("description", "我看到了日照金山");
+        put("title", "长大想做太空人");
+        put("description", "你们仰望的天空就是我俯身窥地的身影");
         List<Map<String, Object>> tags = new ArrayList<>();
-        tags.add(genericTag(0, "日照金山", "#"));
-        tags.add(genericTag(1, "珠穆朗玛峰", "#"));
-        tags.add(genericTag(1, "8843.44", "#"));
+        tags.add(genericTag(0, "万里晴空", "#"));
+        tags.add(genericTag(1, "白中", "#"));
+        tags.add(genericTag(1, "南航", "#"));
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/dog_egg.png",
-                9501,71,73,43
+                9501, 71, 73, 43
         ));
     }};
     public static final Map<String, Object> o6 = new HashMap<String, Object>() {{
@@ -184,7 +232,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/big_bridg.png",
-                30,3,71,92
+                30, 3, 71, 92
         ));
     }};
     public static final Map<String, Object> o7 = new HashMap<String, Object>() {{
@@ -200,9 +248,10 @@ public class TestVideoController {
         tags.add(genericTag(0, "阿勒泰", "#"));
         tags.add(genericTag(1, "牛羊成群", "#"));
         tags.add(genericTag(1, "马上看风景", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_1.png",
-                520,71,666,3
+                520, 71, 666, 3
         ));
     }};
     public static final Map<String, Object> o8 = new HashMap<String, Object>() {{
@@ -217,9 +266,10 @@ public class TestVideoController {
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "澎湃", "#"));
         tags.add(genericTag(1, "我想看看浪花", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_3.png",
-                451,71,52,43
+                451, 71, 52, 43
         ));
     }};
     public static final Map<String, Object> o9 = new HashMap<String, Object>() {{
@@ -235,9 +285,10 @@ public class TestVideoController {
         tags.add(genericTag(0, "来了就是深圳人", "#"));
         tags.add(genericTag(1, "晚霞", "#"));
         tags.add(genericTag(1, "宝安", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_7.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o10 = new HashMap<String, Object>() {{
@@ -252,9 +303,10 @@ public class TestVideoController {
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "抓拍瞬间", "#"));
         tags.add(genericTag(1, "记录美好", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_6.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o11 = new HashMap<String, Object>() {{
@@ -268,9 +320,10 @@ public class TestVideoController {
         put("description", "...");
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "雪山", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_4.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o12 = new HashMap<String, Object>() {{
@@ -285,9 +338,10 @@ public class TestVideoController {
         List<Map<String, Object>> tags = new ArrayList<>();
         tags.add(genericTag(0, "在路上", "#"));
         tags.add(genericTag(1, "找回自己", "#"));
-        put("tags", tags);put("about", genericVideoInfo(
+        put("tags", tags);
+        put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_5.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o13 = new HashMap<String, Object>() {{
@@ -305,7 +359,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_7.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o14 = new HashMap<String, Object>() {{
@@ -323,7 +377,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_7.png",
-                3401,71,9816,43
+                3401, 71, 9816, 43
         ));
     }};
     public static final Map<String, Object> o15 = new HashMap<String, Object>() {{
@@ -340,7 +394,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_6.png",
-                1201,67,3416,23
+                1201, 67, 3416, 23
         ));
     }};
     public static final Map<String, Object> o16 = new HashMap<String, Object>() {{
@@ -358,7 +412,7 @@ public class TestVideoController {
         put("tags", tags);
         put("about", genericVideoInfo(
                 "http://8.134.183.234:8000/public/head_5.png",
-                100,67,3416,23
+                100, 67, 3416, 23
         ));
 
     }};
@@ -368,7 +422,7 @@ public class TestVideoController {
             int like,
             int collection,
             int forward,
-            int comment ) {
+            int comment) {
         Map<String, Object> v1 = new HashMap<>();
         v1.put("url", userLink);
         Map<String, Object> v2 = new HashMap<>();
@@ -384,19 +438,19 @@ public class TestVideoController {
 
     /**
      * authInfo: {
-     *     url: 'http://8.134.183.234/icon/about-auth.jpg'
-     *   },
+     * url: 'http://8.134.183.234/icon/about-auth.jpg'
+     * },
      * data: {
-     *     likeCount: 100,
-     *     collectCount: 99,
-     *     forwardCount: 67,
-     *     commentCount: 1239
-     *  }
+     * likeCount: 100,
+     * collectCount: 99,
+     * forwardCount: 67,
+     * commentCount: 1239
      * }
-     * */
+     * }
+     */
 
 
-    public static final Map<Integer, Map<String, Object>> URLS = new HashMap<Integer, Map<String, Object>>(){{
+    public static final Map<Integer, Map<String, Object>> URLS = new HashMap<Integer, Map<String, Object>>() {{
         put(0, o1);
         put(1, o2);
         put(2, o3);

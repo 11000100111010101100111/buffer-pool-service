@@ -1,7 +1,12 @@
 package com.kit.video.service.manager.impl;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-        import com.kit.common.utils.DateUtils;
+import java.util.Optional;
+
+import com.kit.common.utils.DateUtils;
+import com.kit.video.util.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kit.video.mapper.UserVideoBrowseInfoMapper;
@@ -49,7 +54,7 @@ public class UserVideoBrowseInfoServiceImpl implements IUserVideoBrowseInfoServi
      */
     @Override
     public int insertUserVideoBrowseInfo(UserVideoBrowseInfo userVideoBrowseInfo) {
-                userVideoBrowseInfo.setCreateTime(DateUtils.getNowDate());
+                userVideoBrowseInfo.setCreateTime(LocalDateTime.now());
             return userVideoBrowseInfoMapper.insertUserVideoBrowseInfo(userVideoBrowseInfo);
     }
 
@@ -61,7 +66,7 @@ public class UserVideoBrowseInfoServiceImpl implements IUserVideoBrowseInfoServi
      */
     @Override
     public int updateUserVideoBrowseInfo(UserVideoBrowseInfo userVideoBrowseInfo) {
-                userVideoBrowseInfo.setUpdateTime(DateUtils.getNowDate());
+                userVideoBrowseInfo.setUpdateTime(LocalDateTime.now());
         return userVideoBrowseInfoMapper.updateUserVideoBrowseInfo(userVideoBrowseInfo);
     }
 
@@ -85,5 +90,20 @@ public class UserVideoBrowseInfoServiceImpl implements IUserVideoBrowseInfoServi
     @Override
     public int deleteUserVideoBrowseInfoById(String id) {
         return userVideoBrowseInfoMapper.deleteUserVideoBrowseInfoById(id);
+    }
+
+    @Override
+    public List<String> queryVideoIdsByRecommended(List<String> filterVideoIds, int count) {
+        final String userId = AuthUtils.getUserId();
+        final List<String> ids = userVideoBrowseInfoMapper.queryVideoIdsByRecommended(userId, filterVideoIds, count);
+        if (null != userId && ids.isEmpty() || ids.size() < count) {
+            if (null == filterVideoIds) {
+                filterVideoIds = new ArrayList<>(ids);
+            } else {
+                filterVideoIds.addAll(ids);
+            }
+            ids.addAll(userVideoBrowseInfoMapper.queryVideoIdsByRecommended(null, filterVideoIds, count));
+        }
+        return ids;
     }
 }

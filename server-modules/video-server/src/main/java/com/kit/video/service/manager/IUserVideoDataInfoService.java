@@ -1,8 +1,8 @@
 package com.kit.video.service.manager;
 
-import java.util.List;
-
 import com.kit.video.domain.UserVideoDataInfo;
+
+import java.util.List;
 
 /**
  * 视频产生的相关数据Service接口
@@ -17,7 +17,7 @@ public interface IUserVideoDataInfoService {
      * @param id 视频产生的相关数据主键
      * @return 视频产生的相关数据
      */
-    public UserVideoDataInfo selectUserVideoDataInfoById(Long id);
+    public UserVideoDataInfo selectUserVideoDataInfoById(String id);
 
     /**
      * 查询视频产生的相关数据列表
@@ -49,7 +49,7 @@ public interface IUserVideoDataInfoService {
      * @param ids 需要删除的视频产生的相关数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoDataInfoByIds(Long[] ids);
+    public int deleteUserVideoDataInfoByIds(String[] ids);
 
     /**
      * 删除视频产生的相关数据信息
@@ -57,5 +57,5 @@ public interface IUserVideoDataInfoService {
      * @param id 视频产生的相关数据主键
      * @return 结果
      */
-    public int deleteUserVideoDataInfoById(Long id);
+    public int deleteUserVideoDataInfoById(String id);
 }

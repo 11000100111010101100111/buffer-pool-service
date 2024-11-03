@@ -1,10 +1,11 @@
 package com.kit.common.core.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,29 +22,34 @@ public class BaseEntity implements Serializable {
      * 搜索值
      */
     @JsonIgnore
+    @TableField(exist = false)
     private String searchValue;
 
     /**
      * 创建者
      */
+    @TableField("createBy")
     private String createBy;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    @TableField("createTime")
+    private LocalDateTime createTime;
 
     /**
      * 更新者
      */
+    @TableField("updateBy")
     private String updateBy;
 
     /**
      * 更新时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    @TableField("updateTime")
+    private LocalDateTime updateTime;
 
     /**
      * 备注
@@ -53,6 +59,7 @@ public class BaseEntity implements Serializable {
     /**
      * 请求参数
      */
+    @TableField(exist = false)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> params;
 
@@ -72,11 +79,11 @@ public class BaseEntity implements Serializable {
         this.createBy = createBy;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 
@@ -88,11 +95,11 @@ public class BaseEntity implements Serializable {
         this.updateBy = updateBy;
     }
 
-    public Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 

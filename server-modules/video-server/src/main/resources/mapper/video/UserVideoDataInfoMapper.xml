@@ -5,7 +5,6 @@
 <mapper namespace="com.kit.video.mapper.UserVideoDataInfoMapper">
 
     <resultMap type="UserVideoDataInfo" id="UserVideoDataInfoResult">
-            <result property="id" column="id"/>
             <result property="videoId" column="video_id"/>
             <result property="likeTimes" column="like_times"/>
             <result property="dislikeTimes" column="dislike_times"/>
@@ -14,6 +13,8 @@
             <result property="collectTimes" column="collect_times"/>
             <result property="forwardTimes" column="forward_times"/>
             <result property="reportTimes" column="report_times"/>
+            <result property="title" column="title"/>
+            <result property="location" column="location"/>
             <result property="description" column="description"/>
             <result property="belong" column="belong"/>
             <result property="examineStatus" column="examine_status"/>
@@ -29,7 +30,7 @@
     </resultMap>
 
     <sql id="selectUserVideoDataInfoVo">
-        select id, video_id, like_times, dislike_times, browse_times, comment_times, collect_times, forward_times, report_times, description, belong, examine_status, examine_message, examine_user, createBy, createTime, delete, updateTime, updateBy, remark, status
+        select video_id, like_times, dislike_times, browse_times, comment_times, collect_times, forward_times, report_times,title, location, description, belong, examine_status, examine_message, examine_user, createBy, createTime, `delete`, updateTime, updateBy, remark, status
         from user_video_data_info
     </sql>
 
@@ -60,8 +61,14 @@
                         <if test="reportTimes != null ">
                             and report_times = #{reportTimes}
                         </if>
+                        <if test="title != null  and title != ''">
+                            and title = #{title}
+                        </if>
+                        <if test="location != null  and location != ''">
+                            and location = #{location}
+                        </if>
                         <if test="description != null  and description != ''">
-                            and description = #{description}
+                            and description like concat('%', #{description}, '%')
                         </if>
                         <if test="belong != null  and belong != ''">
                             and belong = #{belong}
@@ -99,11 +106,33 @@
     <select id="selectUserVideoDataInfoById" parameterType="Long"
             resultMap="UserVideoDataInfoResult">
             <include refid="selectUserVideoDataInfoVo"/>
-            where id = #{id}
+            where video_id = #{id}
     </select>
 
-    <insert id="insertUserVideoDataInfo" parameterType="UserVideoDataInfo" useGeneratedKeys="true"
-            keyProperty="id">
+    <select id="selectUserVideoDataInfoByIds" parameterType="java.lang.String"
+            resultMap="UserVideoDataInfoResult">
+            <include refid="selectUserVideoDataInfoVo"/>
+            where `delete` != '1' and status != '0'
+             and video_id in
+                <foreach collection="ids" item="id" close=")" open="(" separator=",">
+                    #{id}
+                </foreach>
+    </select>
+
+    <select id="getUserInfoByUserIds" parameterType="java.lang.String"
+            resultType="com.kit.video.domain.vo.open.VideoUserInfoVo">
+            select
+                user_id as userId,
+                nick_name as nickName,
+                avatar
+            from sys_user
+            where user_id in
+                <foreach collection="userIds" item="id" close=")" open="(" separator=",">
+                    #{id}
+                </foreach>
+    </select>
+
+    <insert id="insertUserVideoDataInfo" parameterType="UserVideoDataInfo">
         insert into user_video_data_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
                     <if test="videoId != null">video_id,
@@ -122,6 +151,10 @@
                     </if>
                     <if test="reportTimes != null">report_times,
                     </if>
+                    <if test="title != null">title,
+                    </if>
+                    <if test="location != null">location,
+                    </if>
                     <if test="description != null">description,
                     </if>
                     <if test="belong != null">belong,
@@ -136,7 +169,7 @@
                     </if>
                     <if test="createTime != null">createTime,
                     </if>
-                    <if test="delete != null">delete,
+                    <if test="delete != null">`delete`,
                     </if>
                     <if test="updateTime != null">updateTime,
                     </if>
@@ -163,6 +196,10 @@
                     <if test="forwardTimes != null">#{forwardTimes},
                     </if>
                     <if test="reportTimes != null">#{reportTimes},
+                    </if>
+                    <if test="title != null">#{title},
+                    </if>
+                    <if test="location != null">#{location},
                     </if>
                     <if test="description != null">#{description},
                     </if>
@@ -218,6 +255,12 @@
                     <if test="reportTimes != null">report_times =
                         #{reportTimes},
                     </if>
+                    <if test="title != null">title =
+                        #{description},
+                    </if>
+                    <if test="location != null">location =
+                        #{location},
+                    </if>
                     <if test="description != null">description =
                         #{description},
                     </if>
@@ -239,7 +282,7 @@
                     <if test="createTime != null">createTime =
                         #{createTime},
                     </if>
-                    <if test="delete != null">delete =
+                    <if test="delete != null">`delete` =
                         #{delete},
                     </if>
                     <if test="updateTime != null">updateTime =
@@ -258,14 +301,17 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteUserVideoDataInfoById" parameterType="Long">
-        delete from user_video_data_info where id = #{id}
+    <delete id="deleteUserVideoDataInfoById" parameterType="String">
+        delete from user_video_data_info where video_id = #{id}
     </delete>
 
     <delete id="deleteUserVideoDataInfoByIds" parameterType="String">
-        delete from user_video_data_info where id in
+        delete from user_video_data_info where video_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+
+
+
 </mapper>

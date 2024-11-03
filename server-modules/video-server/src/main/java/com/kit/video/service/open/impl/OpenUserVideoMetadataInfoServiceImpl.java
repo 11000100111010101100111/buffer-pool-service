@@ -1,6 +1,8 @@
 package com.kit.video.service.open.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kit.video.domain.UserVideoMetadataInfo;
+import com.kit.video.mapper.UserVideoMetadataInfoMapper;
 import com.kit.video.service.open.OpenUserVideoMetadataInfoService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,9 @@ import java.util.List;
 
 @Service
 @Log4j
-public class OpenUserVideoMetadataInfoServiceImpl implements OpenUserVideoMetadataInfoService {
+public class OpenUserVideoMetadataInfoServiceImpl
+        extends ServiceImpl<UserVideoMetadataInfoMapper, UserVideoMetadataInfo>
+        implements OpenUserVideoMetadataInfoService {
     @Override
     public UserVideoMetadataInfo selectUserVideoMetadataInfoById(String id) {
         return null;

@@ -1,12 +1,13 @@
 package com.kit.video.service.manager.impl;
 
-import java.util.List;
-        import com.kit.common.utils.DateUtils;
+import com.kit.video.domain.UserVideoDataInfo;
+import com.kit.video.mapper.UserVideoDataInfoMapper;
+import com.kit.video.service.manager.IUserVideoDataInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kit.video.mapper.UserVideoDataInfoMapper;
-import com.kit.video.domain.UserVideoDataInfo;
-import com.kit.video.service.manager.IUserVideoDataInfoService;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 视频产生的相关数据Service业务层处理
@@ -26,7 +27,7 @@ public class UserVideoDataInfoServiceImpl implements IUserVideoDataInfoService {
      * @return 视频产生的相关数据
      */
     @Override
-    public UserVideoDataInfo selectUserVideoDataInfoById(Long id) {
+    public UserVideoDataInfo selectUserVideoDataInfoById(String id) {
         return userVideoDataInfoMapper.selectUserVideoDataInfoById(id);
     }
 
@@ -49,8 +50,8 @@ public class UserVideoDataInfoServiceImpl implements IUserVideoDataInfoService {
      */
     @Override
     public int insertUserVideoDataInfo(UserVideoDataInfo userVideoDataInfo) {
-                userVideoDataInfo.setCreateTime(DateUtils.getNowDate());
-            return userVideoDataInfoMapper.insertUserVideoDataInfo(userVideoDataInfo);
+        userVideoDataInfo.setCreateTime(LocalDateTime.now());
+        return userVideoDataInfoMapper.insertUserVideoDataInfo(userVideoDataInfo);
     }
 
     /**
@@ -61,7 +62,7 @@ public class UserVideoDataInfoServiceImpl implements IUserVideoDataInfoService {
      */
     @Override
     public int updateUserVideoDataInfo(UserVideoDataInfo userVideoDataInfo) {
-                userVideoDataInfo.setUpdateTime(DateUtils.getNowDate());
+        userVideoDataInfo.setUpdateTime(LocalDateTime.now());
         return userVideoDataInfoMapper.updateUserVideoDataInfo(userVideoDataInfo);
     }
 
@@ -72,7 +73,7 @@ public class UserVideoDataInfoServiceImpl implements IUserVideoDataInfoService {
      * @return 结果
      */
     @Override
-    public int deleteUserVideoDataInfoByIds(Long[] ids) {
+    public int deleteUserVideoDataInfoByIds(String[] ids) {
         return userVideoDataInfoMapper.deleteUserVideoDataInfoByIds(ids);
     }
 
@@ -83,7 +84,7 @@ public class UserVideoDataInfoServiceImpl implements IUserVideoDataInfoService {
      * @return 结果
      */
     @Override
-    public int deleteUserVideoDataInfoById(Long id) {
+    public int deleteUserVideoDataInfoById(String id) {
         return userVideoDataInfoMapper.deleteUserVideoDataInfoById(id);
     }
 }

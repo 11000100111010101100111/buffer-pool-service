@@ -2,7 +2,10 @@ package com.kit.video.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kit.video.domain.UserVideoMetadataInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 视频原始信息Mapper接口
@@ -10,14 +13,22 @@ import com.kit.video.domain.UserVideoMetadataInfo;
  * @author xjh
  * @date 2024-10-20
  */
-public interface UserVideoMetadataInfoMapper {
+@Mapper
+public interface UserVideoMetadataInfoMapper extends BaseMapper<UserVideoMetadataInfo> {
     /**
      * 查询视频原始信息
      *
      * @param id 视频原始信息主键
      * @return 视频原始信息
      */
-    public UserVideoMetadataInfo selectUserVideoMetadataInfoById(String id);
+    public UserVideoMetadataInfo selectUserVideoMetadataInfoById(@Param("id") String id);
+    /**
+     * 查询视频原始信息
+     *
+     * @param ids 视频原始信息主键
+     * @return 视频原始信息
+     */
+    public List<UserVideoMetadataInfo> selectUserVideoMetadataInfoByIds(@Param("ids") List<String> ids);
 
     /**
      * 查询视频原始信息列表
@@ -49,7 +60,7 @@ public interface UserVideoMetadataInfoMapper {
      * @param id 视频原始信息主键
      * @return 结果
      */
-    public int deleteUserVideoMetadataInfoById(String id);
+    public int deleteUserVideoMetadataInfoById(@Param("id") String id);
 
     /**
      * 批量删除视频原始信息
@@ -57,5 +68,5 @@ public interface UserVideoMetadataInfoMapper {
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoMetadataInfoByIds(String[] ids);
+    public int deleteUserVideoMetadataInfoByIds(@Param("ids") String[] ids);
 }

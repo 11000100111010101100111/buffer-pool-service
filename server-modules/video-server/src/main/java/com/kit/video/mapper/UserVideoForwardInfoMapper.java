@@ -2,7 +2,10 @@ package com.kit.video.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kit.video.domain.UserVideoForwardInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 视频的转发信息Mapper接口
@@ -10,14 +13,15 @@ import com.kit.video.domain.UserVideoForwardInfo;
  * @author xjh
  * @date 2024-10-20
  */
-public interface UserVideoForwardInfoMapper {
+@Mapper
+public interface UserVideoForwardInfoMapper extends BaseMapper<UserVideoForwardInfo> {
     /**
      * 查询视频的转发信息
      *
      * @param id 视频的转发信息主键
      * @return 视频的转发信息
      */
-    public UserVideoForwardInfo selectUserVideoForwardInfoById(String id);
+    public UserVideoForwardInfo selectUserVideoForwardInfoById(@Param("id")String id);
 
     /**
      * 查询视频的转发信息列表
@@ -49,7 +53,7 @@ public interface UserVideoForwardInfoMapper {
      * @param id 视频的转发信息主键
      * @return 结果
      */
-    public int deleteUserVideoForwardInfoById(String id);
+    public int deleteUserVideoForwardInfoById(@Param("id")String id);
 
     /**
      * 批量删除视频的转发信息
@@ -57,5 +61,5 @@ public interface UserVideoForwardInfoMapper {
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoForwardInfoByIds(String[] ids);
+    public int deleteUserVideoForwardInfoByIds(@Param("ids")String[] ids);
 }

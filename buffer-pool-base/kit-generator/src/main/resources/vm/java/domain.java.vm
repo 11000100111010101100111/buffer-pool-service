@@ -23,8 +23,7 @@ import com.kit.common.core.domain.TreeEntity;
 #elseif($table.tree)
     #set($Entity="TreeEntity")
 #end
-public class ${ClassName} extends ${Entity}
-        {
+public class ${ClassName} extends ${Entity} {
 private static final long serialVersionUID=1L;
 
 #foreach ($column in $columns)
@@ -102,4 +101,4 @@ public String toString(){
     #end
         .toString();
         }
-        }
+}

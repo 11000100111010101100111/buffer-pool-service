@@ -2,7 +2,10 @@ package com.kit.video.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kit.video.domain.UserVideoCommentInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 视频的评论信息Mapper接口
@@ -10,14 +13,15 @@ import com.kit.video.domain.UserVideoCommentInfo;
  * @author xjh
  * @date 2024-10-20
  */
-public interface UserVideoCommentInfoMapper {
+@Mapper
+public interface UserVideoCommentInfoMapper extends BaseMapper<UserVideoCommentInfo> {
     /**
      * 查询视频的评论信息
      *
      * @param id 视频的评论信息主键
      * @return 视频的评论信息
      */
-    public UserVideoCommentInfo selectUserVideoCommentInfoById(String id);
+    public UserVideoCommentInfo selectUserVideoCommentInfoById(@Param("id")String id);
 
     /**
      * 查询视频的评论信息列表
@@ -49,7 +53,7 @@ public interface UserVideoCommentInfoMapper {
      * @param id 视频的评论信息主键
      * @return 结果
      */
-    public int deleteUserVideoCommentInfoById(String id);
+    public int deleteUserVideoCommentInfoById(@Param("id")String id);
 
     /**
      * 批量删除视频的评论信息
@@ -57,5 +61,5 @@ public interface UserVideoCommentInfoMapper {
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoCommentInfoByIds(String[] ids);
+    public int deleteUserVideoCommentInfoByIds(@Param("ids")String[] ids);
 }

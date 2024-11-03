@@ -1,5 +1,6 @@
 package com.kit.video.service.manager.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
         import com.kit.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserVideoLikeInfoServiceImpl implements IUserVideoLikeInfoService {
      */
     @Override
     public int insertUserVideoLikeInfo(UserVideoLikeInfo userVideoLikeInfo) {
-                userVideoLikeInfo.setCreateTime(DateUtils.getNowDate());
+                userVideoLikeInfo.setCreateTime(LocalDateTime.now());
             return userVideoLikeInfoMapper.insertUserVideoLikeInfo(userVideoLikeInfo);
     }
 
@@ -61,7 +62,7 @@ public class UserVideoLikeInfoServiceImpl implements IUserVideoLikeInfoService {
      */
     @Override
     public int updateUserVideoLikeInfo(UserVideoLikeInfo userVideoLikeInfo) {
-                userVideoLikeInfo.setUpdateTime(DateUtils.getNowDate());
+                userVideoLikeInfo.setUpdateTime(LocalDateTime.now());
         return userVideoLikeInfoMapper.updateUserVideoLikeInfo(userVideoLikeInfo);
     }
 

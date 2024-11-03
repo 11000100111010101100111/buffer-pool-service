@@ -58,4 +58,13 @@ public interface IUserVideoBrowseInfoService {
      * @return 结果
      */
     public int deleteUserVideoBrowseInfoById(String id);
+
+    /**
+     * 查询推荐视频列表，根据视频积分排序，过滤已经看过的视频，未登录不需要过滤
+     *
+     * @param filterVideoIds 需要过滤的视频ID
+     * @param count 查询数目
+     * @return 结果 视频ID列表
+     */
+    public List<String> queryVideoIdsByRecommended(List<String> filterVideoIds, int count);
 }

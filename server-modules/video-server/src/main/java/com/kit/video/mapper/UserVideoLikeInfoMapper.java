@@ -2,7 +2,10 @@ package com.kit.video.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kit.video.domain.UserVideoLikeInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 视频的点赞信息Mapper接口
@@ -10,14 +13,15 @@ import com.kit.video.domain.UserVideoLikeInfo;
  * @author xjh
  * @date 2024-10-20
  */
-public interface UserVideoLikeInfoMapper {
+@Mapper
+public interface UserVideoLikeInfoMapper extends BaseMapper<UserVideoLikeInfo> {
     /**
      * 查询视频的点赞信息
      *
      * @param id 视频的点赞信息主键
      * @return 视频的点赞信息
      */
-    public UserVideoLikeInfo selectUserVideoLikeInfoById(String id);
+    public UserVideoLikeInfo selectUserVideoLikeInfoById(@Param("id")String id);
 
     /**
      * 查询视频的点赞信息列表
@@ -49,7 +53,7 @@ public interface UserVideoLikeInfoMapper {
      * @param id 视频的点赞信息主键
      * @return 结果
      */
-    public int deleteUserVideoLikeInfoById(String id);
+    public int deleteUserVideoLikeInfoById(@Param("id")String id);
 
     /**
      * 批量删除视频的点赞信息
@@ -57,5 +61,5 @@ public interface UserVideoLikeInfoMapper {
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteUserVideoLikeInfoByIds(String[] ids);
+    public int deleteUserVideoLikeInfoByIds(@Param("ids")String[] ids);
 }

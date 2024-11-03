@@ -1,5 +1,6 @@
 package com.kit.video.service.manager.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
         import com.kit.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserVideoForwardInfoServiceImpl implements IUserVideoForwardInfoSer
      */
     @Override
     public int insertUserVideoForwardInfo(UserVideoForwardInfo userVideoForwardInfo) {
-                userVideoForwardInfo.setCreateTime(DateUtils.getNowDate());
+                userVideoForwardInfo.setCreateTime(LocalDateTime.now());
             return userVideoForwardInfoMapper.insertUserVideoForwardInfo(userVideoForwardInfo);
     }
 
@@ -61,7 +62,7 @@ public class UserVideoForwardInfoServiceImpl implements IUserVideoForwardInfoSer
      */
     @Override
     public int updateUserVideoForwardInfo(UserVideoForwardInfo userVideoForwardInfo) {
-                userVideoForwardInfo.setUpdateTime(DateUtils.getNowDate());
+                userVideoForwardInfo.setUpdateTime(LocalDateTime.now());
         return userVideoForwardInfoMapper.updateUserVideoForwardInfo(userVideoForwardInfo);
     }
 

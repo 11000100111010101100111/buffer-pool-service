@@ -1,5 +1,6 @@
 package com.kit.video.service.manager.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
         import com.kit.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserVideoTagServiceImpl implements IUserVideoTagService {
      */
     @Override
     public int insertUserVideoTag(UserVideoTag userVideoTag) {
-                userVideoTag.setCreateTime(DateUtils.getNowDate());
+                userVideoTag.setCreateTime(LocalDateTime.now());
             return userVideoTagMapper.insertUserVideoTag(userVideoTag);
     }
 
@@ -61,7 +62,7 @@ public class UserVideoTagServiceImpl implements IUserVideoTagService {
      */
     @Override
     public int updateUserVideoTag(UserVideoTag userVideoTag) {
-                userVideoTag.setUpdateTime(DateUtils.getNowDate());
+                userVideoTag.setUpdateTime(LocalDateTime.now());
         return userVideoTagMapper.updateUserVideoTag(userVideoTag);
     }
 

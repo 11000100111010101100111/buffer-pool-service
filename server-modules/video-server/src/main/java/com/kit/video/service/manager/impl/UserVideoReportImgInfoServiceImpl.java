@@ -1,5 +1,6 @@
 package com.kit.video.service.manager.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
         import com.kit.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserVideoReportImgInfoServiceImpl implements IUserVideoReportImgInf
      */
     @Override
     public int insertUserVideoReportImgInfo(UserVideoReportImgInfo userVideoReportImgInfo) {
-                userVideoReportImgInfo.setCreateTime(DateUtils.getNowDate());
+                userVideoReportImgInfo.setCreateTime(LocalDateTime.now());
             return userVideoReportImgInfoMapper.insertUserVideoReportImgInfo(userVideoReportImgInfo);
     }
 
@@ -61,7 +62,7 @@ public class UserVideoReportImgInfoServiceImpl implements IUserVideoReportImgInf
      */
     @Override
     public int updateUserVideoReportImgInfo(UserVideoReportImgInfo userVideoReportImgInfo) {
-                userVideoReportImgInfo.setUpdateTime(DateUtils.getNowDate());
+                userVideoReportImgInfo.setUpdateTime(LocalDateTime.now());
         return userVideoReportImgInfoMapper.updateUserVideoReportImgInfo(userVideoReportImgInfo);
     }
 

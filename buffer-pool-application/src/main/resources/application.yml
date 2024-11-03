@@ -7,7 +7,8 @@ kit:
   # 版权年份
   copyrightYear: 2024
   profile: /apps/kit/files/ # D:/kit/idea/uploadPath
-  videoPath: /apps/kit/video
+  videoPath: /apps/home/video/public/ # /apps/home/video/public # /apps/kit/video D:\DeskTop\video\10-26 #
+  videoDomain: http://xxx.xxx.xxx.xxx:8000/xxx
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数字计算 char 字符验证
@@ -68,9 +69,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size: 10MB
+      max-file-size: 50MB
       # 设置总上传的文件大小
-      max-request-size: 20MB
+      max-request-size: 100MB
   # 服务模块
   devtools:
     restart:
@@ -79,9 +80,9 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 8.134.183.234
+    host: xxx
     # 端口，默认为6379
-    port: 6379 #1968
+    port: xxx #1968
     # 数据库索引
     database: 0
     # 密码
@@ -112,8 +113,8 @@ spring:
     port: 465
     protocol: smtp
     default-encoding: UTF-8
-    username: 2749984520@qq.com
-    password: qvszitgbisbgdhab
+    username: xxx@qq.com
+    password: xxx
     properties:
       mail:
         smtp:
@@ -127,14 +128,21 @@ spring:
             enable: true
             required: true
   rabbitmq:
-    host: 139.159.212.237
-    port: 5672
-    username: admin
-    password: xjh13579
+    host: xxx.xxx.xxx.xxx
+    port: xxx
+    username: xxx
+    password: xxx
 
 mail:
   cacheSuffix: email_code_key_
   cacheMin: 10
+sms:
+  apiUrl: https://xxx.xxx.xxx
+  appId: xxx
+  appSecret: xxx-xxx-xxx-xxx-xxx
+  templateId: xxx
+  timeout: 5 #min
+  cacheKey: phone_code_key_
 
 # token配置
 token:
@@ -184,12 +192,12 @@ map:
   baidu:
     expire: 20
     async: 5
-    ak: EPLNY44yeK71751XeVhKTUDouwzx84DD
+    ak: xxx
 
 translate:
   baidu:
-    appId: 20240910002146343
-    appKey: YAMgJ8j4ggWv_T1ZkcwU
+    appId: xxx
+    appKey: xxx
     redisKeySuffix: translate_
     expire: 20
 

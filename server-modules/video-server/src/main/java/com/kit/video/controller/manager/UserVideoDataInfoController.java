@@ -62,7 +62,7 @@ public class UserVideoDataInfoController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('video:data:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id) {
+    public AjaxResult getInfo(@PathVariable("id") String id) {
         return success(userVideoDataInfoService.selectUserVideoDataInfoById(id));
     }
 
@@ -92,7 +92,7 @@ public class UserVideoDataInfoController extends BaseController {
     @PreAuthorize("@ss.hasPermi('video:data:remove')")
     @Log(title = "视频产生的相关数据", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids) {
+    public AjaxResult remove(@PathVariable String[] ids) {
         return toAjax(userVideoDataInfoService.deleteUserVideoDataInfoByIds(ids));
     }
 }

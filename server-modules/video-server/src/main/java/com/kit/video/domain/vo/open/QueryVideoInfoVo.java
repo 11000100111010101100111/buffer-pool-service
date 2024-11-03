@@ -17,17 +17,28 @@ public class QueryVideoInfoVo {
     int duration;
     String ipLocal;
     LocalDateTime createTime;
+    LocalDateTime publishTime;
     String authName;
     String userLink;
     String title;
     String description;
+    String userAvatar;
 
     VideoAboutInfoVo about;
     List<VideoSrcInfoVo> videoSrc;
     List<VideoTagInfoVo> tags;
 
+    public void addTag(VideoTagInfoVo tag) {
+        if (null == tag) return;
+        if (null == this.tags) this.tags = new ArrayList<>();
+        this.tags.add(tag);
+    }
+
     @Data
     public static class VideoSrcInfoVo {
+        String id;
+        Integer index;
+        String type;
         String src;
 
         public static List<VideoSrcInfoVo> generic(String ...url) {
@@ -54,6 +65,7 @@ public class QueryVideoInfoVo {
         @Data
         public static class VideoInfoVo {
             int likeCount;
+            int dislikeCount;
             int collectCount;
             int forwardCount;
             int commentCount;
@@ -61,14 +73,16 @@ public class QueryVideoInfoVo {
 
         public static VideoAboutInfoVo genericVideoAboutInfo(
                 int like,
+                int dislikeCount,
                 int collection,
                 int forward,
                 int comment,
-                String userLink ) {
+                String userLink) {
             UrlInfoVo urlInfoVo = new UrlInfoVo();
             urlInfoVo.setUrl(userLink);
             VideoInfoVo videoInfoVo = new VideoInfoVo();
             videoInfoVo.setLikeCount(like);
+            videoInfoVo.setDislikeCount(dislikeCount);
             videoInfoVo.setCollectCount(collection);
             videoInfoVo.setForwardCount(forward);
             videoInfoVo.setCommentCount(comment);
@@ -83,13 +97,13 @@ public class QueryVideoInfoVo {
     public static class VideoTagInfoVo {
         String label;
         String key;
-        String link;
+        int useTimes;
 
-        public static VideoTagInfoVo genericTag(String key, String name, String link) {
+        public static VideoTagInfoVo genericTag(String key, String name, int useTimes) {
             VideoTagInfoVo tag = new VideoTagInfoVo();
             tag.setLabel(name);
             tag.setKey(key);
-            tag.setLink(link);
+            tag.setUseTimes(useTimes);
             return tag;
         }
     }

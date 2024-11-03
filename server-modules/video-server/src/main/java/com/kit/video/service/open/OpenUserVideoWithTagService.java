@@ -1,5 +1,6 @@
 package com.kit.video.service.open;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kit.video.domain.UserVideoWithTag;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author xjh
  * @date 2024-10-20
  */
-public interface OpenUserVideoWithTagService {
+public interface OpenUserVideoWithTagService extends IService<UserVideoWithTag> {
     /**
      * 查询视频与话题（标签）信息的关联
      *

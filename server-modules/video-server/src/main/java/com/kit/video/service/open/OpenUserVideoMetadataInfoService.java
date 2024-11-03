@@ -1,5 +1,6 @@
 package com.kit.video.service.open;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kit.video.domain.UserVideoMetadataInfo;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author xjh
  * @date 2024-10-20
  */
-public interface OpenUserVideoMetadataInfoService {
+public interface OpenUserVideoMetadataInfoService extends IService<UserVideoMetadataInfo> {
     /**
      * 查询视频原始信息
      *

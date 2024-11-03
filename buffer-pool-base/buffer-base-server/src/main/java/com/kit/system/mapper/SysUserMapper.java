@@ -126,4 +126,6 @@ public interface SysUserMapper {
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    SysUser selectUserByPhone(@Param("phone") String phone);
 }

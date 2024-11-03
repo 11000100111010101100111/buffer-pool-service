@@ -150,4 +150,20 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectVideoTagsByVideoIds" parameterType="java.lang.String"
+            resultType="com.kit.video.domain.vo.open.VideoWithTagInfoVo">
+        select
+            vwt.video_id as videoId,
+            vwt.tag_id as tagId,
+            vt.name as tagName,
+            vt.use_times as useTimes
+        from user_video_with_tag vwt
+            LEFT JOIN user_video_tag vt on vt.id = vwt.tag_id
+            where vt.`delete` != '1' and vt.status != '0' and vwt.`delete` != '1' and vt.status != '0'
+        and vwt.video_id in
+                <foreach collection="videoIds" item="id" close=")" open="(" separator=",">
+                    #{id}
+                </foreach>
+    </select>
 </mapper>

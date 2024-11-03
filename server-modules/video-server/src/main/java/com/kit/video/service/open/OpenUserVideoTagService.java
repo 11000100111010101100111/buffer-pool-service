@@ -1,6 +1,9 @@
 package com.kit.video.service.open;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kit.video.domain.UserVideoTag;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +13,7 @@ import java.util.List;
  * @author xjh
  * @date 2024-10-20
  */
-public interface OpenUserVideoTagService {
+public interface OpenUserVideoTagService extends IService<UserVideoTag> {
     /**
      * 查询视频相关的话题（标签）信息
      *
@@ -58,4 +61,6 @@ public interface OpenUserVideoTagService {
      * @return 结果
      */
     public int deleteUserVideoTagById(String id);
+
+    public void saveOrUpdate(List<UserVideoTag> entities);
 }

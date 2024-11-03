@@ -72,6 +72,14 @@
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
         </dependency>
+
+        <!--榛子云短信服务 -->
+        <dependency>
+            <groupId>com.zhenzikj</groupId>
+            <artifactId>zhenzisms</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>

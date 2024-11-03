@@ -172,4 +172,25 @@
             #{id}
         </foreach>
     </delete>
+
+
+    <select id="queryVideoIdsByRecommended" resultType="java.lang.String">
+        select video_id as videoId from user_video_integration
+             where integration > 0 AND `delete` != '1' and `status` = '1'
+             <if test="null != userId">
+                 AND video_id not in (
+                    select video_id from user_video_browse_info where
+                        browse_user_id = #{userId}
+                        and `delete` != '1'
+                 )
+             </if>
+            <if test="null != filterVideoIds and !filterVideoIds.isEmpty()">
+                AND video_id not in
+                <foreach collection="filterVideoIds" separator="," open="(" close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+             order by integration DESC
+             limit 0, #{count}
+    </select>
 </mapper>
