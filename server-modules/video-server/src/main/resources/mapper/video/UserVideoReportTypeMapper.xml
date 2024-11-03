@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoReportTypeMapper">
+
+    <resultMap type="UserVideoReportType" id="UserVideoReportTypeResult">
+            <result property="id" column="id"/>
+            <result property="fatherType" column="father_type"/>
+            <result property="type" column="type"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoReportTypeVo">
+        select id, father_type, type, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_report_type
+    </sql>
+
+    <select id="selectUserVideoReportTypeList" parameterType="UserVideoReportType" resultMap="UserVideoReportTypeResult">
+        <include refid="selectUserVideoReportTypeVo"/>
+        <where>
+                        <if test="fatherType != null  and fatherType != ''">
+                            and father_type = #{fatherType}
+                        </if>
+                        <if test="type != null  and type != ''">
+                            and type = #{type}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoReportTypeById" parameterType="String"
+            resultMap="UserVideoReportTypeResult">
+            <include refid="selectUserVideoReportTypeVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoReportType" parameterType="UserVideoReportType">
+        insert into user_report_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="id != null">id,
+                    </if>
+                    <if test="fatherType != null">father_type,
+                    </if>
+                    <if test="type != null">type,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="id != null">#{id},
+                    </if>
+                    <if test="fatherType != null">#{fatherType},
+                    </if>
+                    <if test="type != null">#{type},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoReportType" parameterType="UserVideoReportType">
+        update user_report_type
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="fatherType != null">father_type =
+                        #{fatherType},
+                    </if>
+                    <if test="type != null">type =
+                        #{type},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoReportTypeById" parameterType="String">
+        delete from user_report_type where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoReportTypeByIds" parameterType="String">
+        delete from user_report_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

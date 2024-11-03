@@ -16,5 +16,4 @@
         <!-- 使用驼峰命名法转换字段 -->
         <!-- <setting name="mapUnderscoreToCamelCase" value="true"/> -->
     </settings>
-
 </configuration>

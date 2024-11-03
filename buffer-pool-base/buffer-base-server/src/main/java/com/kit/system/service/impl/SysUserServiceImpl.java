@@ -117,6 +117,11 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.selectUserByEmail(email);
     }
 
+    @Override
+    public SysUser selectUserByPhone(String phone) {
+        return userMapper.selectUserByPhone(phone);
+    }
+
     /**
      * 通过用户ID查询用户
      *

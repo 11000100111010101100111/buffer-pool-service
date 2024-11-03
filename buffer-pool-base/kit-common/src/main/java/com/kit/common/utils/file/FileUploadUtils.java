@@ -75,6 +75,13 @@ public class FileUploadUtils {
             throw new IOException(e.getMessage(), e);
         }
     }
+    public static final String uploadVideo(String baseDir, MultipartFile file) throws IOException {
+        try {
+            return uploadVideo(baseDir, file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
+        } catch (Exception e) {
+            throw new IOException(e.getMessage(), e);
+        }
+    }
 
     /**
      * 文件上传
@@ -105,6 +112,23 @@ public class FileUploadUtils {
         return getPathFileName(baseDir, fileName);
     }
 
+    public static final String uploadVideo(String baseDir, MultipartFile file, String[] allowedExtension)
+            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException,
+            InvalidExtensionException {
+        int fileNamelength = Objects.requireNonNull(file.getOriginalFilename()).length();
+        if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
+            throw new FileNameLengthLimitExceededException(FileUploadUtils.DEFAULT_FILE_NAME_LENGTH);
+        }
+
+        assertAllowed(file, allowedExtension);
+
+        String fileName = extractFilename(file);
+
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
+        return getPathFileNameForVideo(baseDir, fileName);
+    }
+
     /**
      * 编码文件名
      */
@@ -128,6 +152,12 @@ public class FileUploadUtils {
         int dirLastIndex = SystemConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
         return Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
+    }
+
+    public static final String getPathFileNameForVideo(String uploadDir, String fileName) throws IOException {
+        int dirLastIndex = SystemConfig.getVideoPath().length() + 1;
+        String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
+        return currentDir + "/" + fileName;
     }
 
     /**

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoForwardInfoMapper">
+
+    <resultMap type="UserVideoForwardInfo" id="UserVideoForwardInfoResult">
+            <result property="id" column="id"/>
+            <result property="videoId" column="video_id"/>
+            <result property="forwardUserId" column="forward_user_id"/>
+            <result property="forwardToUserId" column="forward_to_user_id"/>
+            <result property="forwardTyp" column="forward_typ"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoForwardInfoVo">
+        select id, video_id, forward_user_id, forward_to_user_id, forward_typ, createBy, createTime, delete, updateTime, updateBy, remark, status
+        from user_video_forward_info
+    </sql>
+
+    <select id="selectUserVideoForwardInfoList" parameterType="UserVideoForwardInfo" resultMap="UserVideoForwardInfoResult">
+        <include refid="selectUserVideoForwardInfoVo"/>
+        <where>
+                        <if test="videoId != null  and videoId != ''">
+                            and video_id = #{videoId}
+                        </if>
+                        <if test="forwardUserId != null  and forwardUserId != ''">
+                            and forward_user_id = #{forwardUserId}
+                        </if>
+                        <if test="forwardToUserId != null  and forwardToUserId != ''">
+                            and forward_to_user_id = #{forwardToUserId}
+                        </if>
+                        <if test="forwardTyp != null  and forwardTyp != ''">
+                            and forward_typ = #{forwardTyp}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and delete = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoForwardInfoById" parameterType="String"
+            resultMap="UserVideoForwardInfoResult">
+            <include refid="selectUserVideoForwardInfoVo"/>
+            where id = #{id}
+    </select>
+
+    <insert id="insertUserVideoForwardInfo" parameterType="UserVideoForwardInfo">
+        insert into user_video_forward_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="id != null">id,
+                    </if>
+                    <if test="videoId != null">video_id,
+                    </if>
+                    <if test="forwardUserId != null">forward_user_id,
+                    </if>
+                    <if test="forwardToUserId != null">forward_to_user_id,
+                    </if>
+                    <if test="forwardTyp != null">forward_typ,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">delete,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="id != null">#{id},
+                    </if>
+                    <if test="videoId != null">#{videoId},
+                    </if>
+                    <if test="forwardUserId != null">#{forwardUserId},
+                    </if>
+                    <if test="forwardToUserId != null">#{forwardToUserId},
+                    </if>
+                    <if test="forwardTyp != null">#{forwardTyp},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoForwardInfo" parameterType="UserVideoForwardInfo">
+        update user_video_forward_info
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="videoId != null">video_id =
+                        #{videoId},
+                    </if>
+                    <if test="forwardUserId != null">forward_user_id =
+                        #{forwardUserId},
+                    </if>
+                    <if test="forwardToUserId != null">forward_to_user_id =
+                        #{forwardToUserId},
+                    </if>
+                    <if test="forwardTyp != null">forward_typ =
+                        #{forwardTyp},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">delete =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoForwardInfoById" parameterType="String">
+        delete from user_video_forward_info where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoForwardInfoByIds" parameterType="String">
+        delete from user_video_forward_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

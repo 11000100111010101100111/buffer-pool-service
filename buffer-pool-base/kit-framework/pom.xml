@@ -70,7 +70,6 @@
             <version>${kit.version}</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
 </project>

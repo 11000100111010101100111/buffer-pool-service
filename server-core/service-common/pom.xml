@@ -11,5 +11,7 @@
     <packaging>pom</packaging>
     <artifactId>service-common</artifactId>
 
+    <dependencies>
 
+    </dependencies>
 </project>

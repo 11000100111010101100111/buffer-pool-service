@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kit.video.mapper.UserVideoMetadataInfoMapper">
+
+    <resultMap type="com.kit.video.domain.UserVideoMetadataInfo" id="UserVideoMetadataInfoResult">
+            <result property="id" column="id"/>
+            <result property="userId" column="user_id"/>
+            <result property="src" column="src"/>
+            <result property="localDir" column="local_dir"/>
+            <result property="compressed" column="compressed"/>
+            <result property="name" column="name"/>
+            <result property="fileType" column="file_type"/>
+            <result property="width" column="width"/>
+            <result property="height" column="height"/>
+            <result property="byteCount" column="byte"/>
+            <result property="originByte" column="origin_byte"/>
+            <result property="frame" column="frame"/>
+            <result property="originFrame" column="origin_frame"/>
+            <result property="videoDuration" column="video_duration"/>
+            <result property="createBy" column="createBy"/>
+            <result property="createTime" column="createTime"/>
+            <result property="delete" column="delete"/>
+            <result property="updateTime" column="updateTime"/>
+            <result property="updateBy" column="updateBy"/>
+            <result property="remark" column="remark"/>
+            <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectUserVideoMetadataInfoVo">
+        select id, user_id, src, local_dir, compressed, `name`, file_type, width, height, byte as byteCount, origin_byte, frame, origin_frame, video_duration, createBy, createTime, `delete`, updateTime, updateBy, remark, status
+        from user_video_metadata_info
+    </sql>
+
+    <select id="selectUserVideoMetadataInfoList" parameterType="com.kit.video.domain.UserVideoMetadataInfo" resultMap="UserVideoMetadataInfoResult">
+        <include refid="selectUserVideoMetadataInfoVo"/>
+        <where>
+                        <if test="userId != null  and userId != ''">
+                            and user_id = #{userId}
+                        </if>
+                        <if test="src != null  and src != ''">
+                            and src = #{src}
+                        </if>
+                        <if test="localDir != null  and localDir != ''">
+                            and local_dir = #{localDir}
+                        </if>
+                        <if test="compressed != null  and compressed != ''">
+                            and compressed = #{compressed}
+                        </if>
+                        <if test="name != null  and name != ''">
+                            and `name` like concat('%', #{name}, '%')
+                        </if>
+                        <if test="fileType != null  and fileType != ''">
+                            and file_type = #{fileType}
+                        </if>
+                        <if test="width != null ">
+                            and width = #{width}
+                        </if>
+                        <if test="height != null ">
+                            and height = #{height}
+                        </if>
+                        <if test="byteCount != null ">
+                            and byte = #{byteCount}
+                        </if>
+                        <if test="originByte != null ">
+                            and origin_byte = #{originByte}
+                        </if>
+                        <if test="frame != null ">
+                            and frame = #{frame}
+                        </if>
+                        <if test="originFrame != null ">
+                            and origin_frame = #{originFrame}
+                        </if>
+                        <if test="videoDuration != null ">
+                            and video_duration = #{videoDuration}
+                        </if>
+                        <if test="createBy != null  and createBy != ''">
+                            and createBy = #{createBy}
+                        </if>
+                        <if test="createTime != null ">
+                            and createTime = #{createTime}
+                        </if>
+                        <if test="delete != null  and delete != ''">
+                            and `delete` = #{delete}
+                        </if>
+                        <if test="updateTime != null ">
+                            and updateTime = #{updateTime}
+                        </if>
+                        <if test="updateBy != null  and updateBy != ''">
+                            and updateBy = #{updateBy}
+                        </if>
+                        <if test="status != null  and status != ''">
+                            and status = #{status}
+                        </if>
+        </where>
+    </select>
+
+    <select id="selectUserVideoMetadataInfoById" parameterType="String"
+            resultMap="UserVideoMetadataInfoResult">
+            <include refid="selectUserVideoMetadataInfoVo"/>
+            where id = #{id}
+    </select>
+
+    <select id="selectUserVideoMetadataInfoByIds" parameterType="String"
+            resultMap="UserVideoMetadataInfoResult">
+            <include refid="selectUserVideoMetadataInfoVo"/>
+            where `delete` != '1' and status != '0'
+            and id in
+            <foreach collection="ids" item="id" close=")" open="(" separator=",">
+                #{id}
+            </foreach>
+    </select>
+
+    <insert id="insertUserVideoMetadataInfo" parameterType="com.kit.video.domain.UserVideoMetadataInfo">
+        insert into user_video_metadata_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <if test="id != null">id,
+                    </if>
+                    <if test="userId != null and userId != ''">user_id,
+                    </if>
+                    <if test="src != null">src,
+                    </if>
+                    <if test="localDir != null">local_dir,
+                    </if>
+                    <if test="compressed != null">compressed,
+                    </if>
+                    <if test="name != null">`name`,
+                    </if>
+                    <if test="fileType != null">file_type,
+                    </if>
+                    <if test="width != null">width,
+                    </if>
+                    <if test="height != null">height,
+                    </if>
+                    <if test="byteCount != null">byte,
+                    </if>
+                    <if test="originByte != null">origin_byte,
+                    </if>
+                    <if test="frame != null">frame,
+                    </if>
+                    <if test="originFrame != null">origin_frame,
+                    </if>
+                    <if test="videoDuration != null">video_duration,
+                    </if>
+                    <if test="createBy != null">createBy,
+                    </if>
+                    <if test="createTime != null">createTime,
+                    </if>
+                    <if test="delete != null">`delete`,
+                    </if>
+                    <if test="updateTime != null">updateTime,
+                    </if>
+                    <if test="updateBy != null">updateBy,
+                    </if>
+                    <if test="remark != null">remark,
+                    </if>
+                    <if test="status != null">status,
+                    </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                    <if test="id != null">#{id},
+                    </if>
+                    <if test="userId != null and userId != ''">#{userId},
+                    </if>
+                    <if test="src != null">#{src},
+                    </if>
+                    <if test="localDir != null">#{localDir},
+                    </if>
+                    <if test="compressed != null">#{compressed},
+                    </if>
+                    <if test="name != null">#{name},
+                    </if>
+                    <if test="fileType != null">#{fileType},
+                    </if>
+                    <if test="width != null">#{width},
+                    </if>
+                    <if test="height != null">#{height},
+                    </if>
+                    <if test="byteCount != null">#{byteCount},
+                    </if>
+                    <if test="originByte != null">#{originByte},
+                    </if>
+                    <if test="frame != null">#{frame},
+                    </if>
+                    <if test="originFrame != null">#{originFrame},
+                    </if>
+                    <if test="videoDuration != null">#{videoDuration},
+                    </if>
+                    <if test="createBy != null">#{createBy},
+                    </if>
+                    <if test="createTime != null">#{createTime},
+                    </if>
+                    <if test="delete != null">#{delete},
+                    </if>
+                    <if test="updateTime != null">#{updateTime},
+                    </if>
+                    <if test="updateBy != null">#{updateBy},
+                    </if>
+                    <if test="remark != null">#{remark},
+                    </if>
+                    <if test="status != null">#{status},
+                    </if>
+        </trim>
+    </insert>
+
+    <update id="updateUserVideoMetadataInfo" parameterType="com.kit.video.domain.UserVideoMetadataInfo">
+        update user_video_metadata_info
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="userId != null and userId != ''">user_id =
+                        #{userId},
+                    </if>
+                    <if test="src != null">src =
+                        #{src},
+                    </if>
+                    <if test="localDir != null">local_dir =
+                        #{localDir},
+                    </if>
+                    <if test="compressed != null">compressed =
+                        #{compressed},
+                    </if>
+                    <if test="name != null">`name` =
+                        #{name},
+                    </if>
+                    <if test="fileType != null">file_type =
+                        #{fileType},
+                    </if>
+                    <if test="width != null">width =
+                        #{width},
+                    </if>
+                    <if test="height != null">height =
+                        #{height},
+                    </if>
+                    <if test="byteCount != null">byte =
+                        #{byteCount},
+                    </if>
+                    <if test="originByte != null">origin_byte =
+                        #{originByte},
+                    </if>
+                    <if test="frame != null">frame =
+                        #{frame},
+                    </if>
+                    <if test="originFrame != null">origin_frame =
+                        #{originFrame},
+                    </if>
+                    <if test="videoDuration != null">video_duration =
+                        #{videoDuration},
+                    </if>
+                    <if test="createBy != null">createBy =
+                        #{createBy},
+                    </if>
+                    <if test="createTime != null">createTime =
+                        #{createTime},
+                    </if>
+                    <if test="delete != null">`delete` =
+                        #{delete},
+                    </if>
+                    <if test="updateTime != null">updateTime =
+                        #{updateTime},
+                    </if>
+                    <if test="updateBy != null">updateBy =
+                        #{updateBy},
+                    </if>
+                    <if test="remark != null">remark =
+                        #{remark},
+                    </if>
+                    <if test="status != null">status =
+                        #{status},
+                    </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserVideoMetadataInfoById" parameterType="String">
+        delete from user_video_metadata_info where id = #{id}
+    </delete>
+
+    <delete id="deleteUserVideoMetadataInfoByIds" parameterType="String">
+        delete from user_video_metadata_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

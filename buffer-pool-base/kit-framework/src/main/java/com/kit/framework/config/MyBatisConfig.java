@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import javax.sql.DataSource;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.io.VFS;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -93,18 +96,40 @@ public class MyBatisConfig {
     }
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+    public MybatisSqlSessionFactoryBean sqlSessionFactory(DataSource dataSource) throws Exception {
         String typeAliasesPackage = env.getProperty("mybatis.typeAliasesPackage");
         String mapperLocations = env.getProperty("mybatis.mapperLocations");
         String configLocation = env.getProperty("mybatis.configLocation");
         typeAliasesPackage = setTypeAliasesPackage(typeAliasesPackage);
         VFS.addImplClass(SpringBootVFS.class);
 
-        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
-        sessionFactory.setMapperLocations(resolveMapperLocations(StringUtils.split(mapperLocations, ",")));
-        sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(configLocation));
-        return sessionFactory.getObject();
+//        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+//        sessionFactory.setDataSource(dataSource);
+//        sessionFactory.setTypeAliasesPackage(typeAliasesPackage);
+//        sessionFactory.setMapperLocations(resolveMapperLocations(StringUtils.split(mapperLocations, ",")));
+//        sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(configLocation));
+//        return sessionFactory.getObject();
+
+
+
+        MybatisConfiguration configuration = new MybatisConfiguration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        configuration.addInterceptor(new MybatisPlusInterceptor());
+        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setConfiguration(configuration);
+        bean.setTypeAliasesPackage(typeAliasesPackage);
+        //bean.setConfigLocation(new DefaultResourceLoader().getResource(configLocation));
+        bean.setMapperLocations(resolveMapperLocations(StringUtils.split(mapperLocations, ",")));
+        return bean;
+
+        //nested exception is org.apache.ibatis.exceptions.PersistenceException:
+        // ### Error updating database. Cause: java.lang.IllegalStateException: Type handler was null on parameter mapping for property 'params'.
+        // It was either not specified and/or could not be found for the javaType (java.util.Map) : jdbcType (null) combination.
+        // ### The error may exist in com/kit/video/mapper/UserVideoMetadataInfoMapper.java (best guess)
+        // ### The error may involve com.kit.video.mapper.UserVideoMetadataInfoMapper.insert
+        // ### The error occurred while executing an update
+        // ### Cause: java.lang.IllegalStateException: Type handler was null on parameter mapping for property 'params'.
+        // It was either not specified and/or could not be found for the javaType (java.util.Map) : jdbcType (null) combination.
     }
 }

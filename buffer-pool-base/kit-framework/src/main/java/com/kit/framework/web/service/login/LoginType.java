@@ -1,8 +1,10 @@
 package com.kit.framework.web.service.login;
 
 import com.kit.framework.web.service.login.auth.EmailAuthentication;
+import com.kit.framework.web.service.login.auth.PhoneAuthentication;
 import com.kit.framework.web.service.login.validate.UserEmailValidate;
 import com.kit.framework.web.service.login.validate.UserPasswordValidate;
+import com.kit.framework.web.service.login.validate.UserPhoneValidate;
 import com.kit.framework.web.service.login.validate.UserValidate;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +13,7 @@ import org.springframework.security.core.Authentication;
 public enum LoginType {
     DEFAULT("default", SysLoginService.class, UsernamePasswordAuthenticationToken.class, UserPasswordValidate.class),
     EMAIL("email", EmailLoginService.class, EmailAuthentication.class, UserEmailValidate.class),
+    PHONE("phone", PhoneLoginService.class, PhoneAuthentication.class, UserPhoneValidate.class),
 //    GITHUB("github"),
 //    GOOGLE("google"),
 //    WECHAT("wechat"),
